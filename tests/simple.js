@@ -9,9 +9,10 @@ const chai = require('chai'),
   should = chai.should(),
   request = require("supertest-as-promised")(Promise),
   kronos = require('kronos-service-manager'),
-  ks = require('../koa-service');
+  ks = require('../koa-service'),
+  route = require('koa-route');
 
-chai.use(require("chai-as-promised"));
+//chai.use(require("chai-as-promised"));
 
 describe('koa-service', function () {
   function initManager() {
@@ -29,20 +30,26 @@ describe('koa-service', function () {
 
   describe('koa', function () {
     it('GET /', function (done) {
-      initManager().then(function (manager) {
+      initManager().then(manager => {
         const ks = manager.services.koa;
+        ks.start().then(x => {
+          try {
 
-        try {
-          request(ks.server.listen())
-            .get('/')
-            .expect(200)
-            .expect(function (res) {
-              if (res.text !== 'OK') throw Error("not OK");
-            })
-            .end(done);
-        } catch (e) {
-          done(e);
-        }
+            ks.koa.use(route.get('/', ctx => {
+              ctx.body = "OK";
+            }));
+            console.log(`STARTED: ${ks}`);
+            request(ks.server.listen())
+              .get('/')
+              .expect(200)
+              .expect(function (res) {
+                if (res.text !== 'OK') throw Error("not OK");
+              })
+              .end(done);
+          } catch (e) {
+            done(e);
+          }
+        });
       }, done);
     });
   });
