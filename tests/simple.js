@@ -34,18 +34,18 @@ describe('koa-service', function () {
         const ks = manager.services.koa;
         ks.start().then(x => {
           try {
-
             ks.koa.use(route.get('/', ctx => {
               ctx.body = "OK";
             }));
-            console.log(`STARTED: ${ks}`);
             request(ks.server.listen())
               .get('/')
               .expect(200)
               .expect(function (res) {
                 if (res.text !== 'OK') throw Error("not OK");
               })
-              .end(done);
+              .end(() => {
+                ks.stop().then(() => done());
+              });
           } catch (e) {
             done(e);
           }
