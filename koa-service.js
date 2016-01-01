@@ -34,9 +34,6 @@ function createService(name, values) {
         } catch (e) {
           this.error(e);
         }
-
-      }).catch(function (e) {
-        this.error(e);
       });
     }
 
