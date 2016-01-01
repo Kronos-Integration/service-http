@@ -65,5 +65,5 @@ function createService(name, values) {
 };
 
 module.exports.registerWithManager = function (manager) {
-  manager.serviceRegister(createService('koa-service', {}));
+  manager.serviceRegister(createService('koa', {}));
 }
