@@ -12,14 +12,13 @@ const chai = require('chai'),
   ks = require('../koa-service'),
   route = require('koa-route');
 
-//chai.use(require("chai-as-promised"));
-
 describe('koa-service', function () {
   function initManager() {
     return kronos.manager({
       services: {
         'koa': {
-          logLevel: "error"
+          logLevel: "error",
+          port: 1234
         }
       }
     }).then(manager => {
@@ -29,6 +28,13 @@ describe('koa-service', function () {
   }
 
   describe('koa', function () {
+
+    /*
+        describe('default values', function () {
+          assert.equal(ks.port, 9898);
+        });
+    */
+
     it('GET /', function (done) {
       initManager().then(manager => {
         const ks = manager.services.koa;

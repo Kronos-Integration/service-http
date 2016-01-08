@@ -9,6 +9,7 @@
 [![devDependency Status](https://david-dm.org/Kronos-Integration/kronos-koa-service/dev-status.svg)](https://david-dm.org/Kronos-Integration/kronos-koa-service#info=devDependencies)
 [![docs](http://inch-ci.org/github/Kronos-Integration/kronos-koa-service.svg?branch=master)](http://inch-ci.org/github/Kronos-Integration/kronos-koa-service)
 [![downloads](http://img.shields.io/npm/dm/kronos-koa-service.svg?style=flat-square)](https://npmjs.org/package/kronos-koa-service)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 install
 =======
