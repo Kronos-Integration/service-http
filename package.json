@@ -1,5 +1,5 @@
 {
-  "name": "kronos-koa-service",
+  "name": "kronos-service-koa",
   "version": "0.0.0-semantic-release",
   "description": "koa web service",
   "keywords": [
@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kronos-Integration/kronos-koa-service.git"
+    "url": "git+https://github.com/Kronos-Integration/kronos-service-koa.git"
   },
   "bugs": {
-    "url": "https://github.com/Kronos-Integration/kronos-koa-service/issues"
+    "url": "https://github.com/Kronos-Integration/kronos-service-koa/issues"
   },
-  "homepage": "https://github.com/Kronos-Integration/kronos-koa-service#readme",
+  "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
     "kronos-koa": "^1.0.0",
     "kronos-service": "1.6.3"
