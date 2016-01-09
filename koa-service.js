@@ -9,6 +9,11 @@ const http = require('http'),
 // The under the configuration is registered
 const DEFAULT_PORT = 9898;
 
+/**
+ * Start the HTTP server
+ * @param name A name for this services
+ * @param values The configuration for this koa service
+ */
 function createService(name, values) {
   if (!values) values = {};
 
@@ -63,4 +68,4 @@ function createService(name, values) {
 
 module.exports.registerWithManager = function (manager) {
   manager.serviceRegister(createService('koa', {}));
-}
+};
