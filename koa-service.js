@@ -37,6 +37,10 @@ class ServiceKOA extends Service {
     Object.defineProperties(this, props);
   }
 
+  get url() {
+    return `http://localhost:${port}`;
+  }
+
   _start() {
     if (!this.server) {
       this.server = http.createServer(this.koa.callback());
