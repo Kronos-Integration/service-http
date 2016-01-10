@@ -30,7 +30,7 @@ class ServiceKOA extends Service {
 
     const props = {
       port: {
-        value: config.port ||  DEFAULT_PORT;
+        value: config.port ||  DEFAULT_PORT
       },
     };
 
@@ -81,6 +81,8 @@ class ServiceKOA extends Service {
   }
 
 }
+
+module.exports.ServiceKOA = ServiceKOA;
 
 module.exports.registerWithManager = function (manager) {
   manager.serviceRegister(ServiceKOA);
