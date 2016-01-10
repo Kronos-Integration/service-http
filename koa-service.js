@@ -4,7 +4,7 @@
 const http = require('http'),
   https = require('https'),
   Koa = require('kronos-koa'),
-  service = require('kronos-service');
+  Service = require('kronos-service').Service;
 
 // The under the configuration is registered
 const DEFAULT_PORT = 9898;
@@ -14,13 +14,30 @@ const DEFAULT_PORT = 9898;
  * @param name A name for this services
  * @param values The configuration for this koa service
  */
-function createService(name, values) {
-  if (!values) values = {};
+class ServiceKOA extends Service {
 
-  values.koa = new Koa();
-  if (!values.port) values.port = DEFAULT_PORT;
+  static get type() {
+    return "koa";
+  }
+  get type() {
+    return ServiceKOA.type;
+  }
 
-  values._start = function () {
+  constructor(config) {
+    super(config);
+
+    this.koa = new Koa();
+
+    const props = {
+      port: {
+        value: config.port ||  DEFAULT_PORT;
+      },
+    };
+
+    Object.defineProperties(this, props);
+  }
+
+  _start() {
     if (!this.server) {
       this.server = http.createServer(this.koa.callback());
 
@@ -43,9 +60,9 @@ function createService(name, values) {
     }
 
     return Promise.resolve(this);
-  };
+  }
 
-  values._stop = function () {
+  _stop() {
     if (this.koa.hasMiddleware() || !this.server) return Promise.resolve(this);
 
     return new Promise((fulfill, reject) => {
@@ -61,11 +78,10 @@ function createService(name, values) {
         }
       });
     });
-  };
+  }
 
-  return service.createService(name, values);
 }
 
 module.exports.registerWithManager = function (manager) {
-  manager.serviceRegister(createService('koa', {}));
+  manager.serviceRegister(ServiceKOA);
 };
