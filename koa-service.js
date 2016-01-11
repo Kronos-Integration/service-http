@@ -67,8 +67,6 @@ class ServiceKOA extends Service {
   }
 
   _stop() {
-    if (this.koa.hasMiddleware() || !this.server) return Promise.resolve(this);
-
     return new Promise((fulfill, reject) => {
       // no more middleware registered. Stop the http server
       this.info("Stopping http server");
