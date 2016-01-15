@@ -9,3 +9,4 @@ build
 .gitignore
 .npmrc
 .travis.yml
+.npmignore
