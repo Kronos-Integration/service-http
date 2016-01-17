@@ -63,12 +63,11 @@ class ServiceKOA extends Service {
       });
     }
 
-    return Promise.resolve(this);
+    return Promise.resolve();
   }
 
   _stop() {
     return new Promise((fulfill, reject) => {
-      // no more middleware registered. Stop the http server
       this.info("Stopping http server");
 
       this.server.close(err => {
@@ -76,7 +75,7 @@ class ServiceKOA extends Service {
           reject(err);
         } else {
           this.server = undefined;
-          fulfill(this);
+          fulfill();
         }
       });
     });
@@ -85,7 +84,3 @@ class ServiceKOA extends Service {
 }
 
 module.exports.ServiceKOA = ServiceKOA;
-
-module.exports.registerWithManager = function (manager) {
-  manager.serviceRegister(ServiceKOA);
-};

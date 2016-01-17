@@ -2,9 +2,7 @@
   "name": "kronos-service-koa",
   "version": "0.0.0-semantic-release",
   "description": "koa web service",
-  "keywords": [
-    "kronos-service"
-  ],
+  "keywords": [],
   "main": "koa-service.js",
   "scripts": {
     "cover": "node ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests",
