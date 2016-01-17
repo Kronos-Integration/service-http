@@ -16,11 +16,11 @@ const DEFAULT_PORT = 9898;
  */
 class ServiceKOA extends Service {
 
-  static get type() {
+  static get name() {
     return "koa";
   }
   get type() {
-    return ServiceKOA.type;
+    return ServiceKOA.name;
   }
 
   constructor(config) {
@@ -92,7 +92,6 @@ class ServiceKOA extends Service {
       });
     });
   }
-
 }
 
 module.exports.ServiceKOA = ServiceKOA;
