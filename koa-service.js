@@ -30,7 +30,7 @@ class ServiceKOA extends Service {
 
     const props = {
       port: {
-        value: config.port ||  DEFAULT_PORT
+        value: config.port || DEFAULT_PORT
       },
     };
 
@@ -39,6 +39,18 @@ class ServiceKOA extends Service {
 
   get url() {
     return `http://localhost:${port}`;
+  }
+
+  /**
+   * use new configuration
+   */
+  configure(config) {
+    if (this.port !== config.port) {
+      this.port = config.port;
+      return this.restartIfRunning();
+    }
+
+    return Promise.resolve();
   }
 
   _start() {
@@ -54,7 +66,7 @@ class ServiceKOA extends Service {
               this.server = undefined;
               reject(err);
             } else {
-              fullfill(this);
+              fullfill();
             }
           });
         } catch (e) {
