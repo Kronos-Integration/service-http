@@ -10,8 +10,7 @@ const http = require('http'),
 const DEFAULT_PORT = 9898;
 
 /**
- * Start the HTTP server
- * @param name A name for this services
+ * HTTP server
  * @param values The configuration for this koa service
  */
 class ServiceKOA extends Service {
@@ -94,4 +93,4 @@ class ServiceKOA extends Service {
   }
 }
 
-module.exports.ServiceKOA = ServiceKOA;
+module.exports = ServiceKOA;
