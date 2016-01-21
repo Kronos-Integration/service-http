@@ -37,7 +37,7 @@ class ServiceKOA extends Service {
   }
 
   get url() {
-    return `http://localhost:${port}`;
+    return `http://localhost:${this.port}`;
   }
 
   /**

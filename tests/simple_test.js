@@ -22,6 +22,18 @@ describe('koa-service', () => {
     port: 1234
   });
 
+  describe('config', () => {
+    it('has port', () => {
+      assert.equal(ks.port, 1234);
+    });
+
+    it('has url', () => {
+      assert.equal(ks.url, 'http://localhost:1234');
+    });
+
+  });
+
+
   it('GET /', done => {
     ks.start().then(x => {
       try {
@@ -32,7 +44,7 @@ describe('koa-service', () => {
           .get('/')
           .expect(200)
           .expect(res => {
-            if (res.text !== 'OK') throw Error("not OK");
+            if (res.text !== 'OK') done(Error("not OK"));
           })
           .end(() => {
             ks.stop().then(() => done());
