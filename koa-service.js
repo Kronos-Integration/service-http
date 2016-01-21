@@ -29,7 +29,9 @@ class ServiceKOA extends Service {
 
     const props = {
       port: {
-        value: config.port || DEFAULT_PORT
+        get() {
+          return config.port ||  DEFAULT_PORT;
+        }
       },
     };
 
@@ -45,7 +47,7 @@ class ServiceKOA extends Service {
    */
   configure(config) {
     if (this.port !== config.port) {
-      this.port = config.port;
+      this.config.port = config.port;
       return this.restartIfRunning();
     }
 

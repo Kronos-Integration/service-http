@@ -31,6 +31,18 @@ describe('koa-service', () => {
       assert.equal(ks.url, 'http://localhost:1234');
     });
 
+    describe('configure', () => {
+      it('can change port', done => {
+        ks.configure({
+          port: 1235
+        }).then(
+          () => {
+            assert.equal(ks.port, 1235);
+            done();
+          }
+        );
+      });
+    });
   });
 
 
