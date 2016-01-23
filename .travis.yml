@@ -5,6 +5,7 @@ sudo: false
 branches:
   only:
     - master
+    - api_rework
 cache:
   directories:
     - node_modules
@@ -20,7 +21,6 @@ before_script:
 script:
   - npm run-script cover
 after_script:
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - codecov
 after_success:
   - npm run semantic-release
