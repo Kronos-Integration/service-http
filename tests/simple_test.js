@@ -14,8 +14,9 @@ const chai = require('chai'),
   ServiceProviderMixin = service.ServiceProviderMixin,
   ServiceConfig = service.ServiceConfig;
 
-class _ServiceProvider {}
-class ServiceProvider extends service.ServiceProviderMixin(_ServiceProvider) {}
+class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
+
+let sp = new ServiceProvider();
 
 describe('koa-service', () => {
   const ks = new ServiceKOA({
