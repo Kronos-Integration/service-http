@@ -95,4 +95,8 @@ class ServiceKOA extends Service {
   }
 }
 
-module.exports = ServiceKOA;
+module.exports.Service = ServiceKOA;
+
+module.exports.registerWithManager = manager => {
+  manager.registerServiceFactory(ServiceKOA);
+};
