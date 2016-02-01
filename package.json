@@ -20,14 +20,14 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
     "kronos-koa": "^1.0.0",
-    "kronos-service": "git+https://github.com/Kronos-Integration/kronos-service.git#api_rework"
+    "kronos-service": "2.0.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "cz-conventional-changelog": "^1.1.5",
     "istanbul": "^0.4.2",
     "koa-route": "^3.0.0",
-    "mocha": "^2.4.2",
+    "mocha": "^2.4.5",
     "semantic-release": "6.2.0",
     "supertest": "^1.1.0",
     "supertest-as-promised": "^2.0.2"
