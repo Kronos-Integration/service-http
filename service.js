@@ -97,4 +97,4 @@ class ServiceKOA extends Service {
 
 module.exports.Service = ServiceKOA;
 
-module.exports.registerWithManager = manager => manager.registerServiceFactory(ServiceKOA)
+module.exports.registerWithManager = manager => manager.registerServiceFactory(ServiceKOA);
