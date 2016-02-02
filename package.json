@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
     "kronos-koa": "^1.0.0",
-    "kronos-service": "^2.0.3"
+    "kronos-service": "^2.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
