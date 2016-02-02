@@ -2,7 +2,9 @@
   "name": "kronos-service-koa",
   "version": "0.0.0-semantic-release",
   "description": "koa web service",
-  "keywords": ["kronos-service"],
+  "keywords": [
+    "kronos-service"
+  ],
   "main": "service.js",
   "scripts": {
     "cover": "node ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests",
@@ -20,7 +22,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
     "kronos-koa": "^1.0.0",
-    "kronos-service": "2.0.1"
+    "kronos-service": "^2.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
