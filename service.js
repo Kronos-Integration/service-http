@@ -6,12 +6,10 @@ const http = require('http'),
   Koa = require('kronos-koa'),
   Service = require('kronos-service').Service;
 
-// The under the configuration is registered
 const DEFAULT_PORT = 9898;
 
 /**
  * HTTP server
- * @param values The configuration for this koa service
  */
 class ServiceKOA extends Service {
 
@@ -30,7 +28,7 @@ class ServiceKOA extends Service {
     const props = {
       port: {
         get() {
-          return config.port ||  DEFAULT_PORT;
+          return config.port || DEFAULT_PORT;
         }
       },
     };
@@ -59,7 +57,9 @@ class ServiceKOA extends Service {
       this.server = http.createServer(this.koa.callback());
 
       return new Promise((fullfill, reject) => {
-        this.info(level => `Starting http server on port ${this.port}`);
+        // TODO
+        //console.log(`${this.endpoints.log.receive}`);
+        //this.info(level => `Starting http server on port ${this.port}`);
 
         try {
           this.server.listen(this.port, err => {
