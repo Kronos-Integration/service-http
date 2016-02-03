@@ -11,8 +11,7 @@ const chai = require('chai'),
   service = require('kronos-service'),
   ServiceKOA = require('../service').Service,
   route = require('koa-route'),
-  ServiceProviderMixin = service.ServiceProviderMixin,
-  ServiceConfig = service.ServiceConfig;
+  ServiceProviderMixin = service.ServiceProviderMixin;
 
 class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
 
@@ -20,17 +19,15 @@ let sp = new ServiceProvider();
 
 describe('koa-service', () => {
   const ks = new ServiceKOA({
+    type: "xxx",
+    name: "my-name",
     port: 1234
   });
 
   describe('config', () => {
-    it('has port', () => {
-      assert.equal(ks.port, 1234);
-    });
-
-    it('has url', () => {
-      assert.equal(ks.url, 'http://localhost:1234');
-    });
+    it('has name', () => assert.equal(ks.name, 'my-name'));
+    it('has port', () => assert.equal(ks.port, 1234));
+    it('has url', () => assert.equal(ks.url, 'http://localhost:1234'));
 
     describe('configure', () => {
       it('can change port', done => {
