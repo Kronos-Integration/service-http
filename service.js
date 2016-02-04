@@ -57,9 +57,7 @@ class ServiceKOA extends Service {
       this.server = http.createServer(this.koa.callback());
 
       return new Promise((fullfill, reject) => {
-        // TODO
-        //console.log(`${this.endpoints.log.receive}`);
-        //this.info(level => `Starting http server on port ${this.port}`);
+        this.info(level => `Starting http server on port ${this.port}`);
 
         try {
           this.server.listen(this.port, err => {
