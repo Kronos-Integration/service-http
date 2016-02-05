@@ -41,15 +41,18 @@ class ServiceKOA extends Service {
   }
 
   /**
-   * use new configuration
+   * apply new configuration.
+   * if required restarts the server
    */
   configure(config) {
+    let needsRestart = false;
+
     if (this.port !== config.port) {
       this.config.port = config.port;
-      return this.restartIfRunning();
+      needsRestart = true;
     }
 
-    return Promise.resolve();
+    return needsRestart ? this.restartIfRunning() : Promise.resolve();
   }
 
   _start() {
