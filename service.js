@@ -20,8 +20,8 @@ class ServiceKOA extends Service {
     return ServiceKOA.name;
   }
 
-  constructor(config) {
-    super(config);
+  constructor(config, owner) {
+    super(config, owner);
 
     this.koa = new Koa();
 
