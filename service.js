@@ -53,7 +53,10 @@ class ServiceKOA extends Service {
 
   get serverOptions() {
     if (this.isSecure) {
-      return {};
+      return {
+        key: this.key,
+        cert: this.cert
+      };
     }
 
     return undefined;
