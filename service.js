@@ -16,6 +16,7 @@ class ServiceKOA extends Service {
   static get name() {
     return "koa";
   }
+
   get type() {
     return ServiceKOA.name;
   }
@@ -31,13 +32,39 @@ class ServiceKOA extends Service {
           return config.port || DEFAULT_PORT;
         }
       },
+      key: {
+        get() {
+          return config.key;
+        }
+      },
+      cert: {
+        get() {
+          return config.cert;
+        }
+      }
     };
 
     Object.defineProperties(this, props);
   }
 
+  get isSecure() {
+    return this.key !== undefined;
+  }
+
+  get serverOptions() {
+    if (this.isSecure) {
+      return {};
+    }
+
+    return undefined;
+  }
+
+  get scheme() {
+    return this.isSecure ? 'https' : 'http';
+  }
+
   get url() {
-    return `http://localhost:${this.port}`;
+    return `${this.scheme}://localhost:${this.port}`;
   }
 
   /**
@@ -57,10 +84,14 @@ class ServiceKOA extends Service {
 
   _start() {
     if (!this.server) {
-      this.server = http.createServer(this.koa.callback());
+      if (this.isSecure) {
+        this.server = https.createServer(this.serverOptions, this.koa.callback());
+      } else {
+        this.server = http.createServer(this.koa.callback());
+      }
 
       return new Promise((fullfill, reject) => {
-        this.info(level => `Starting http server on port ${this.port}`);
+        this.info(level => `Starting ${this.scheme} server on port ${this.port}`);
 
         try {
           this.server.listen(this.port, err => {
