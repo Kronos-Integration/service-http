@@ -3,6 +3,7 @@
 
 const http = require('http'),
   https = require('https'),
+  address = require('network-address'),
   Koa = require('kronos-koa'),
   Service = require('kronos-service').Service;
 
@@ -13,7 +14,7 @@ const configAttributes = {
   },
   hostname: {
     needsRestart: true,
-    default: 'localhost'
+    default: address()
   }
 };
 

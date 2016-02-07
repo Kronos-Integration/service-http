@@ -9,6 +9,7 @@ const chai = require('chai'),
   should = chai.should(),
   fs = require('fs'),
   path = require('path'),
+  address = require('network-address'),
   request = require("supertest-as-promised")(Promise),
   service = require('kronos-service'),
   ServiceKOA = require('../service').Service,
@@ -31,8 +32,8 @@ describe('koa-service', () => {
     it('is not secure', () => assert.equal(ks.isSecure, false));
 
     it('has port', () => assert.equal(ks.port, 1234));
-    it('has hostname', () => assert.equal(ks.hostname, 'localhost'));
-    it('has url', () => assert.equal(ks.url, 'http://localhost:1234'));
+    it('has hostname', () => assert.equal(ks.hostname, address()));
+    it('has url', () => assert.equal(ks.url, `http://${address()}:1234`));
 
     describe('configure', () => {
       it('can change port', done => {
@@ -70,7 +71,7 @@ describe('koa-service', () => {
 
     it('is secure', () => assert.equal(ks.isSecure, true));
     it('has port', () => assert.equal(ks.port, 1234));
-    it('has url', () => assert.equal(ks.url, 'https://localhost:1234'));
+    it('has url', () => assert.equal(ks.url, `https://${address()}:1234`));
 
     describe('configure', () => {
       it('can change port', done => {
