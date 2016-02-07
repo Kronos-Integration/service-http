@@ -6,7 +6,15 @@ const http = require('http'),
   Koa = require('kronos-koa'),
   Service = require('kronos-service').Service;
 
-const DEFAULT_PORT = 9898;
+const configAttributes = {
+  port: {
+    needsRestart: true,
+    default: 9898
+  },
+  host: {
+    default: 'localhost'
+  }
+};
 
 /**
  * HTTP server
@@ -29,7 +37,12 @@ class ServiceKOA extends Service {
     const props = {
       port: {
         get() {
-          return config.port || DEFAULT_PORT;
+          return config.port || configAttributes.port.default;
+        }
+      },
+      host: {
+        get() {
+          return config.host || configAttributes.host.default;
         }
       },
       key: {
@@ -67,7 +80,7 @@ class ServiceKOA extends Service {
   }
 
   get url() {
-    return `${this.scheme}://localhost:${this.port}`;
+    return `${this.scheme}://${this.host}:${this.port}`;
   }
 
   /**
@@ -77,10 +90,12 @@ class ServiceKOA extends Service {
   configure(config) {
     let needsRestart = false;
 
-    if (this.port !== config.port) {
-      this.config.port = config.port;
-      needsRestart = true;
-    }
+    Object.keys(configAttributes).forEach(name => {
+      if (config[name] !== undefined && this[name] !== config[name]) {
+        needsRestart |= configAttributes[name].needsRestart;
+        this.config[name] = config[name];
+      }
+    });
 
     return needsRestart ? this.restartIfRunning() : Promise.resolve();
   }
