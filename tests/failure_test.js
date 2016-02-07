@@ -19,12 +19,12 @@ describe('koa-service failures', () => {
   describe('with already in use port', () => {
     const ks1 = new ServiceKOA({
       name: "my-name1",
-      port: 1234
+      port: 1235
     });
 
     const ks2 = new ServiceKOA({
       name: "my-name2",
-      port: 1234
+      port: 1235
     });
 
     it('can start', () => {
