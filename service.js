@@ -15,6 +15,12 @@ const configAttributes = {
   hostname: {
     needsRestart: true,
     default: address()
+  },
+  key: {
+    needsRestart: true
+  },
+  cert: {
+    needsRestart: true
   }
 };
 
@@ -36,28 +42,14 @@ class ServiceKOA extends Service {
 
     this.koa = new Koa();
 
-    const props = {
-      port: {
+    const props = {};
+
+    Object.keys(configAttributes).forEach(name =>
+      props[name] = {
         get() {
-          return config.port || configAttributes.port.default;
+          return config[name] || configAttributes[name].default
         }
-      },
-      hostname: {
-        get() {
-          return config.hostname || configAttributes.hostname.default;
-        }
-      },
-      key: {
-        get() {
-          return config.key;
-        }
-      },
-      cert: {
-        get() {
-          return config.cert;
-        }
-      }
-    };
+      });
 
     Object.defineProperties(this, props);
   }
