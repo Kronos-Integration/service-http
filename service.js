@@ -116,6 +116,7 @@ class ServiceKOA extends Service {
           });
         } catch (e) {
           this.error(e);
+          reject(e);
         }
       });
     }
