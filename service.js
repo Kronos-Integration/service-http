@@ -103,7 +103,7 @@ class ServiceKOA extends Service {
       }
 
       return new Promise((fullfill, reject) => {
-        this.info(level => `Starting ${this.scheme} server on port ${this.port}`);
+        this.info(level => `Starting ${this.url}`);
 
         try {
           this.server.listen(this.port, this.hostname, err => {
