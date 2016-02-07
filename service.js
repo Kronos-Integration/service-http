@@ -11,7 +11,8 @@ const configAttributes = {
     needsRestart: true,
     default: 9898
   },
-  host: {
+  hostname: {
+    needsRestart: true,
     default: 'localhost'
   }
 };
@@ -40,9 +41,9 @@ class ServiceKOA extends Service {
           return config.port || configAttributes.port.default;
         }
       },
-      host: {
+      hostname: {
         get() {
-          return config.host || configAttributes.host.default;
+          return config.hostname || configAttributes.hostname.default;
         }
       },
       key: {
@@ -80,7 +81,7 @@ class ServiceKOA extends Service {
   }
 
   get url() {
-    return `${this.scheme}://${this.host}:${this.port}`;
+    return `${this.scheme}://${this.hostname}:${this.port}`;
   }
 
   /**
@@ -112,7 +113,7 @@ class ServiceKOA extends Service {
         this.info(level => `Starting ${this.scheme} server on port ${this.port}`);
 
         try {
-          this.server.listen(this.port, err => {
+          this.server.listen(this.port, this.hostname, err => {
             if (err) {
               this.server = undefined;
               reject(err);

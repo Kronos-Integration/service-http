@@ -31,7 +31,7 @@ describe('koa-service', () => {
     it('is not secure', () => assert.equal(ks.isSecure, false));
 
     it('has port', () => assert.equal(ks.port, 1234));
-    it('has host', () => assert.equal(ks.host, 'localhost'));
+    it('has hostname', () => assert.equal(ks.hostname, 'localhost'));
     it('has url', () => assert.equal(ks.url, 'http://localhost:1234'));
 
     describe('configure', () => {
@@ -76,11 +76,11 @@ describe('koa-service', () => {
       it('can change port', done => {
         ks.configure({
           port: 1235,
-          host: 'www.example.com'
+          hostname: 'www.example.com'
         }).then(
           () => {
             assert.equal(ks.port, 1235);
-            assert.equal(ks.host, 'www.example.com');
+            assert.equal(ks.hostname, 'www.example.com');
             assert.equal(ks.url, 'https://www.example.com:1235');
             done();
           }
