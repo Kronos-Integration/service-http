@@ -54,9 +54,7 @@ describe('koa-service', () => {
         request(ks.server.listen())
           .get('/')
           .expect(200)
-          .expect(res => {
-            if (res.text !== 'OK') done(Error("not OK"));
-          })
+          .expect(res => assert.equal(res.text, "OK"))
           .end(() => ks.stop());
       }));
   });
@@ -94,9 +92,7 @@ describe('koa-service', () => {
         request(ks.server.listen())
           .get('/')
           .expect(200)
-          .expect(res => {
-            if (res.text !== 'OK') done(Error("not OK"));
-          })
+          .expect(res => assert.equal(res.text, "OK"))
           .end(() => ks.stop());
       }));
   });

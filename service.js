@@ -47,7 +47,7 @@ class ServiceKOA extends Service {
     Object.keys(configAttributes).forEach(name =>
       props[name] = {
         get() {
-          return config[name] || configAttributes[name].default
+          return config[name] || configAttributes[name].default;
         }
       });
 
