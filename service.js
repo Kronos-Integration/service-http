@@ -126,7 +126,7 @@ class ServiceKOA extends Service {
 
   _stop() {
     return new Promise((fulfill, reject) => {
-      this.info("Stopping http server");
+      this.info(`Stopping ${this.server}`);
 
       this.server.close(err => {
         if (err) {
