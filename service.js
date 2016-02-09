@@ -21,6 +21,9 @@ const configAttributes = {
   },
   cert: {
     needsRestart: true
+  },
+  timeout: {
+    default: 120000
   }
 };
 
@@ -84,6 +87,10 @@ class ServiceKOA extends Service {
   configure(config) {
     let needsRestart = false;
 
+    if (config.timeout) {
+      this.server.setTimeout(config.timeout);
+    }
+
     Object.keys(configAttributes).forEach(name => {
       if (config[name] !== undefined && this[name] !== config[name]) {
         needsRestart |= configAttributes[name].needsRestart;
@@ -100,6 +107,10 @@ class ServiceKOA extends Service {
         this.server = https.createServer(this.serverOptions, this.koa.callback());
       } else {
         this.server = http.createServer(this.koa.callback());
+      }
+
+      if (this.timeout) {
+        this.server.setTimeout(this.timeout);
       }
 
       return new Promise((fullfill, reject) => {
