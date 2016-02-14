@@ -63,7 +63,9 @@ class ServiceKOA extends Service {
 
     const io = new ReceiveEndpoint('io');
     io.receive = request => {
-      this.koa.io.broadcast(request.event, request.data);
+      if (this.koa.io) {
+        this.koa.io.broadcast(request.event, request.data);
+      }
       return Promise.resolve();
     };
 
