@@ -5,7 +5,9 @@ const http = require('http'),
   https = require('https'),
   address = require('network-address'),
   Koa = require('kronos-koa'),
-  Service = require('kronos-service').Service;
+  IO = require('koa-socket'),
+  Service = require('kronos-service').Service,
+  ReceiveEndpoint = require('kronos-endpoint').ReceiveEndpoint;
 
 const configAttributes = {
   port: {
@@ -24,6 +26,9 @@ const configAttributes = {
   },
   timeout: {
     default: 120000
+  },
+  io: {
+    needsRestart: true
   }
 };
 
@@ -55,6 +60,14 @@ class ServiceKOA extends Service {
       });
 
     Object.defineProperties(this, props);
+
+    const io = new ReceiveEndpoint('io');
+    io.receive = request => {
+      this.koa.io.broadcast(request.event, request.data);
+      return Promise.resolve();
+    };
+
+    this.addEndpoint(io);
   }
 
   get isSecure() {
@@ -97,6 +110,11 @@ class ServiceKOA extends Service {
         this.config[name] = config[name];
       }
     });
+
+    if (config.io) {
+      const io = new IO();
+      io.attach(this.koa);
+    }
 
     return needsRestart ? this.restartIfRunning() : Promise.resolve();
   }
