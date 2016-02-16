@@ -134,7 +134,7 @@ class ServiceKOA extends Service {
       }
 
       return new Promise((fullfill, reject) => {
-        this.info(level => `Starting ${this.url}`);
+        this.trace(level => `starting ${this.url}`);
 
         try {
           this.server.listen(this.port, this.hostname, err => {
@@ -157,7 +157,7 @@ class ServiceKOA extends Service {
 
   _stop() {
     return new Promise((fulfill, reject) => {
-      this.info(`Stopping ${this.server}`);
+      this.trace(level => `stopping ${this.url}`);
 
       this.server.close(err => {
         if (err) {
