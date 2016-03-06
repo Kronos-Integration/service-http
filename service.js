@@ -100,6 +100,7 @@ class ServiceKOA extends Service {
    * if required restarts the server
    */
   configure(config) {
+  	const sp = super.configure(config);
     let needsRestart = false;
 
     if (config.timeout) {
@@ -118,7 +119,7 @@ class ServiceKOA extends Service {
       io.attach(this.koa);
     }
 
-    return needsRestart ? this.restartIfRunning() : Promise.resolve();
+    return needsRestart ? sp.then( p => this.restartIfRunning()) : sp;
   }
 
   _start() {
