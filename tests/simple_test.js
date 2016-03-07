@@ -18,7 +18,7 @@ const chai = require('chai'),
 
 class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
 
-let sp = new ServiceProvider();
+const sp = new ServiceProvider();
 
 describe('koa-service', () => {
   describe('plain http', () => {
@@ -26,7 +26,7 @@ describe('koa-service', () => {
       type: "xxx",
       name: "my-name",
       port: 1234
-    });
+    }, sp);
 
     it('has name', () => assert.equal(ks.name, 'my-name'));
     it('is not secure', () => assert.equal(ks.isSecure, false));
@@ -65,7 +65,7 @@ describe('koa-service', () => {
       key: fs.readFileSync(path.join(__dirname, 'fixtures', 'www.example.com.key')),
       cert: fs.readFileSync(path.join(__dirname, 'fixtures', 'www.example.com.cert')),
       port: 1234
-    });
+    }, sp);
 
     it('is secure', () => assert.equal(ks.isSecure, true));
     it('has port', () => assert.equal(ks.port, 1234));
