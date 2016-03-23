@@ -33,7 +33,7 @@ const configAttributes = {
 };
 
 /**
- * HTTP server
+ * HTTP server with koa
  */
 class ServiceKOA extends Service {
 
@@ -100,10 +100,10 @@ class ServiceKOA extends Service {
    * if required restarts the server
    */
   configure(config) {
-  	const sp = super.configure(config);
+    const sp = super.configure(config);
     let needsRestart = false;
 
-    if (config.timeout) {
+    if (config.timeout && this.server) {
       this.server.setTimeout(config.timeout);
     }
 
@@ -119,7 +119,7 @@ class ServiceKOA extends Service {
       io.attach(this.koa);
     }
 
-    return needsRestart ? sp.then( p => this.restartIfRunning()) : sp;
+    return needsRestart ? sp.then(p => this.restartIfRunning()) : sp;
   }
 
   _start() {
@@ -173,5 +173,4 @@ class ServiceKOA extends Service {
 }
 
 module.exports.Service = ServiceKOA;
-
 module.exports.registerWithManager = manager => manager.registerServiceFactory(ServiceKOA);
