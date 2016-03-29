@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
-    "koa-socket": "^4.2.1",
+    "koa-socket": "^4.3.0",
     "kronos-koa": "1.0.1",
     "kronos-service": "2.13.0",
     "network-address": "1.1.0"
