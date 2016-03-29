@@ -23,7 +23,7 @@
   "dependencies": {
     "koa-socket": "^4.3.0",
     "kronos-koa": "1.0.1",
-    "kronos-service": "2.13.1",
+    "kronos-service": "2.13.2",
     "network-address": "1.1.0"
   },
   "devDependencies": {
