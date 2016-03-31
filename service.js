@@ -63,7 +63,7 @@ class ServiceKOA extends Service {
 
     const io = new ReceiveEndpoint('io');
     io.receive = request => {
-      this.trace(level => `broadcast ${request.data} to io`);
+      this.trace(level => `broadcast ${JSON.stringify(request.data)} to io`);
       if (this.koa.io) {
         this.koa.io.broadcast(request.event, request.data);
       }
@@ -118,6 +118,18 @@ class ServiceKOA extends Service {
     if (config.io) {
       const io = new IO();
       io.attach(this.koa);
+
+      io.on('message', (ctx, data) => {
+        console.log(`message: ${ data }`);
+      });
+
+      io.on('join', (ctx, data) => {
+        console.log('join', data);
+      });
+
+      this.koa._io.on('connection', sock => {
+        console.log('connection', sock);
+      });
     }
 
     return needsRestart ? sp.then(p => this.restartIfRunning()) : sp;
