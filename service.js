@@ -115,9 +115,20 @@ class ServiceKOA extends Service {
       }
     });
 
-    if (config.io) {
+    //    if (config.io) {
+    try {
       const io = new IO();
       io.attach(this.koa);
+
+      console.log(`io.attach ${JSON.stringify(config)}`);
+
+      this.koa._io.on('connection', sock => {
+        console.log('RAW connection', sock);
+      });
+
+      io.on('error', (ctx, data) => {
+        console.log(`error: ${ data }`);
+      });
 
       io.on('message', (ctx, data) => {
         console.log(`message: ${ data }`);
@@ -130,7 +141,10 @@ class ServiceKOA extends Service {
       this.koa._io.on('connection', sock => {
         console.log('connection', sock);
       });
+    } catch (e) {
+      console.log(e);
     }
+    //    }
 
     return needsRestart ? sp.then(p => this.restartIfRunning()) : sp;
   }
