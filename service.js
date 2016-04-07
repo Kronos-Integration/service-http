@@ -122,6 +122,16 @@ class ServiceKOA extends Service {
 
       console.log(`io.attach ${JSON.stringify(config)}`);
 
+      io.on('connection', ctx => {
+        console.log('Join event', ctx.socket.id);
+        io.broadcast('connections', {
+          numConnections: io.connections.size
+        });
+        // app.io.broadcast( 'connections', {
+        //   numConnections: socket.connections.size
+        // })
+      });
+
       this.koa._io.on('connection', sock => {
         console.log('RAW connection', sock);
       });
@@ -136,10 +146,6 @@ class ServiceKOA extends Service {
 
       io.on('join', (ctx, data) => {
         console.log('join', data);
-      });
-
-      this.koa._io.on('connection', sock => {
-        console.log('connection', sock);
       });
     } catch (e) {
       console.log(e);

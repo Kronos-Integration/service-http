@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global describe, it, xit, before, beforeEach, after, afterEach */
 /* jslint node: true, esnext: true */
 
 "use strict";
@@ -16,7 +16,11 @@ class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
 
 const sp = new ServiceProvider();
 
-describe('service-koa socket', () => {
+
+describe('service-koa socket', function () {
+
+  this.timeout(2000);
+
   const ks1 = new ServiceKOA({
     name: "my-name1",
     port: 1235,
