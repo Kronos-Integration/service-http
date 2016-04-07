@@ -20,7 +20,7 @@ class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
 
 const sp = new ServiceProvider();
 
-describe('koa-service', () => {
+describe('service-koa', () => {
   describe('plain http', () => {
     const ks = new ServiceKOA({
       type: "xxx",

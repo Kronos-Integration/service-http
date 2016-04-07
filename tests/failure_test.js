@@ -15,7 +15,7 @@ class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
 
 const sp = new ServiceProvider();
 
-describe('koa-service failures', () => {
+describe('service-koa failures', () => {
   describe('with already in use port', () => {
     const ks1 = new ServiceKOA({
       name: "my-name1",
