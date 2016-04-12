@@ -117,7 +117,7 @@ class ServiceKOA extends Service {
 
     //    if (config.io) {
     try {
-      const io = new IO();
+      const io = new IO('chat');
       io.attach(this.koa);
 
       console.log(`io.attach ${JSON.stringify(config)}`);

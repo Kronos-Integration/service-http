@@ -7,6 +7,8 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
+  fs = require('fs'),
+  path = require('path'),
   io = require('socket.io-client'),
   service = require('kronos-service'),
   ServiceKOA = require('../service').Service,
@@ -19,20 +21,27 @@ const sp = new ServiceProvider();
 
 describe('service-koa socket', function () {
 
-  this.timeout(2000);
+  this.timeout(200000);
 
   const ks1 = new ServiceKOA({
     name: "my-name1",
+    hostname: 'localhost',
     port: 1235,
     io: {}
   }, sp);
 
-  var socketUrl = 'http://localhost:1235';
+  let socketUrl = 'http://localhost:1235/';
 
-  it('socket', (done) => {
+  it('socket', done => {
     ks1.configure({}).then(() => ks1.start().then(() => {
 
-      console.log('A1');
+      console.log('A');
+      ks1.koa.use(ctx => {
+        ctx.type = 'text/html';
+        ctx.body = fs.createReadStream(path.join(__dirname, 'fixtures', 'index.html'));
+      });
+
+      console.log('B');
 
       const socket = io(socketUrl);
       socket.on('connect', () => {
