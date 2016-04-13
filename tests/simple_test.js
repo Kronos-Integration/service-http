@@ -1,7 +1,7 @@
-/* global describe, it */
+/* global describe, it, xit, before, beforeEach, after, afterEach */
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const chai = require('chai'),
   assert = chai.assert,
@@ -10,7 +10,7 @@ const chai = require('chai'),
   fs = require('fs'),
   path = require('path'),
   address = require('network-address'),
-  request = require("supertest-as-promised")(Promise),
+  request = require('supertest-as-promised')(Promise),
   service = require('kronos-service'),
   ServiceKOA = require('../service').Service,
   route = require('koa-route'),
@@ -23,8 +23,8 @@ const sp = new ServiceProvider();
 describe('service-koa', () => {
   describe('plain http', () => {
     const ks = new ServiceKOA({
-      type: "xxx",
-      name: "my-name",
+      type: 'xxx',
+      name: 'my-name',
       port: 1234
     }, sp);
 
@@ -88,11 +88,11 @@ describe('service-koa', () => {
     });
     it('GET /', () =>
       ks.start().then(() => {
-        ks.koa.use(route.get('/', ctx => ctx.body = "OK"));
+        ks.koa.use(route.get('/', ctx => ctx.body = 'OK'));
         request(ks.server.listen())
           .get('/')
           .expect(200)
-          .expect(res => assert.equal(res.text, "OK"))
+          .expect(res => assert.equal(res.text, 'OK'))
           .end(() => ks.stop());
       }));
   });

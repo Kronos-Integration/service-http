@@ -1,5 +1,5 @@
 /* jslint node: true, esnext: true */
-"use strict";
+'use strict';
 
 const http = require('http'),
   https = require('https'),
@@ -38,7 +38,7 @@ const configAttributes = {
 class ServiceKOA extends Service {
 
   static get name() {
-    return "koa";
+    return 'koa';
   }
 
   get type() {

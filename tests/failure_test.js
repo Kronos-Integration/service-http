@@ -1,7 +1,7 @@
-/* global describe, it */
+/* global describe, it, xit, before, beforeEach, after, afterEach */
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const chai = require('chai'),
   assert = chai.assert,
@@ -18,12 +18,12 @@ const sp = new ServiceProvider();
 describe('service-koa failures', () => {
   describe('with already in use port', () => {
     const ks1 = new ServiceKOA({
-      name: "my-name1",
+      name: 'my-name1',
       port: 1235
     }, sp);
 
     const ks2 = new ServiceKOA({
-      name: "my-name2",
+      name: 'my-name2',
       port: 1235
     }, sp);
 
