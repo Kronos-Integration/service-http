@@ -117,38 +117,65 @@ class ServiceKOA extends Service {
 
     //    if (config.io) {
     try {
-      const io = new IO('chat');
-      io.attach(this.koa);
+      const app = new Koa();
+      this.koa = app;
+      //const app = this.koa;
+      const socket = new IO();
+      const chat = new IO('chat');
 
-      console.log(`io.attach ${JSON.stringify(config)}`);
+      socket.attach(app);
+      chat.attach(app);
 
-      io.on('connection', ctx => {
+      /**
+       * Socket handlers
+       */
+      socket.on('connection', ctx => {
         console.log('Join event', ctx.socket.id);
-        io.broadcast('connections', {
-          numConnections: io.connections.size
+        socket.broadcast('connections', {
+          numConnections: socket.connections.size
         });
         // app.io.broadcast( 'connections', {
         //   numConnections: socket.connections.size
         // })
       });
 
-      this.koa._io.on('connection', sock => {
-        console.log('RAW connection', sock);
+      socket.on('disconnect', ctx => {
+        console.log('leave event', ctx.socket.id);
+        socket.broadcast('connections', {
+          numConnections: socket.connections.size
+        });
+      });
+      socket.on('data', (ctx, data) => {
+        console.log('data event', data);
+        console.log('ctx:', ctx.event, ctx.data, ctx.socket.id);
+        console.log('ctx.teststring:', ctx.teststring);
+        ctx.socket.emit('response', {
+          message: 'response from server'
+        });
+      });
+      socket.on('ack', (ctx, data) => {
+        console.log('data event with acknowledgement', data);
+        ctx.acknowledge('received');
+      });
+      socket.on('numConnections', packet => {
+        console.log(`Number of connections: ${ socket.connections.size }`);
       });
 
-      io.on('error', (ctx, data) => {
-        console.log(`error: ${ data }`);
+
+      /**
+       * Chat handlers
+       */
+      chat.on('connection', ctx => {
+        console.log('Joining chat namespace', ctx.socket.id);
+      });
+      chat.on('message', ctx => {
+        console.log('chat message received', ctx.data);
+        // app.chat.broadcast( 'message', 'yo connections, lets chat' )
+        chat.broadcast('message', 'ok connections:chat');
       });
 
-      io.on('message', (ctx, data) => {
-        console.log(`message: ${ data }`);
-      });
-
-      io.on('join', (ctx, data) => {
-        console.log('join', data);
-      });
     } catch (e) {
-      console.log(e);
+      console.log(`catch: ${e}`);
     }
     //    }
 

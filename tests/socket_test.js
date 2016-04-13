@@ -35,13 +35,10 @@ describe('service-koa socket', function () {
   it('socket', done => {
     ks1.configure({}).then(() => ks1.start().then(() => {
 
-      console.log('A');
       ks1.koa.use(ctx => {
         ctx.type = 'text/html';
         ctx.body = fs.createReadStream(path.join(__dirname, 'fixtures', 'index.html'));
       });
-
-      console.log('B');
 
       const socket = io(socketUrl);
       socket.on('connect', () => {
