@@ -4,7 +4,10 @@
 const http = require('http'),
   https = require('https'),
   address = require('network-address'),
-  Koa = require('kronos-koa'),
+  //  Koa = require('kronos-koa'),
+  Koa = require('koa'),
+  co = require('co'),
+
   IO = require('koa-socket'),
   Service = require('kronos-service').Service,
   ReceiveEndpoint = require('kronos-endpoint').ReceiveEndpoint;
@@ -49,6 +52,8 @@ class ServiceKOA extends Service {
     super(config, owner);
 
     this.koa = new Koa();
+
+    this.sockets();
 
     const props = {};
 
@@ -96,35 +101,47 @@ class ServiceKOA extends Service {
     return `${this.scheme}://${this.hostname}:${this.port}`;
   }
 
-  /**
-   * apply new configuration.
-   * if required restarts the server
-   */
-  configure(config) {
-    const sp = super.configure(config);
-    let needsRestart = false;
-
-    if (config.timeout && this.server) {
-      this.server.setTimeout(config.timeout);
-    }
-
-    Object.keys(configAttributes).forEach(name => {
-      if (config[name] !== undefined && this[name] !== config[name]) {
-        needsRestart |= configAttributes[name].needsRestart;
-        this.config[name] = config[name];
-      }
-    });
-
-    //    if (config.io) {
+  sockets() {
     try {
-      const app = new Koa();
-      this.koa = app;
-      //const app = this.koa;
+      const app = this.koa;
+
+      /**
+       * Koa Middlewares
+       */
+      app.use(co.wrap(function* (ctx, next) {
+        const start = new Date();
+        yield next();
+        const ms = new Date() - start;
+        console.log(`${ ctx.method } ${ ctx.url } - ${ ms }ms`);
+      }));
+
+
       const socket = new IO();
       const chat = new IO('chat');
 
+      console.log(`socket: ${socket}`);
+      console.log(`chat: ${chat}`);
+
+      /**
+       * Socket middlewares
+       */
+      socket.use(co.wrap(function* (ctx, next) {
+        console.log('Socket middleware');
+        const start = new Date();
+        yield next();
+        const ms = new Date() - start;
+        console.log(`WS ${ ms }ms`);
+      }));
+      socket.use(co.wrap(function* (ctx, next) {
+        ctx.teststring = 'test';
+        yield next();
+      }));
+
+
       socket.attach(app);
       chat.attach(app);
+
+
 
       /**
        * Socket handlers
@@ -162,9 +179,6 @@ class ServiceKOA extends Service {
       });
 
 
-      /**
-       * Chat handlers
-       */
       chat.on('connection', ctx => {
         console.log('Joining chat namespace', ctx.socket.id);
       });
@@ -174,10 +188,34 @@ class ServiceKOA extends Service {
         chat.broadcast('message', 'ok connections:chat');
       });
 
+
+      app.listen(1235, () => {
+        console.log(`Listening on ${ 1235 }`);
+      });
+
     } catch (e) {
       console.log(`catch: ${e}`);
     }
-    //    }
+  }
+
+  /**
+   * apply new configuration.
+   * if required restarts the server
+   */
+  configure(config) {
+    const sp = super.configure(config);
+    let needsRestart = false;
+
+    if (config.timeout && this.server) {
+      this.server.setTimeout(config.timeout);
+    }
+
+    Object.keys(configAttributes).forEach(name => {
+      if (config[name] !== undefined && this[name] !== config[name]) {
+        needsRestart |= configAttributes[name].needsRestart;
+        this.config[name] = config[name];
+      }
+    });
 
     return needsRestart ? sp.then(p => this.restartIfRunning()) : sp;
   }

@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Koa-Socket Example</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <style>
     body {
       margin: 0;
@@ -89,6 +88,10 @@
 
     socket.on( 'response', function( event ) {
       console.log( 'response:', event.message )
+    })
+
+    socket.on( 'error', function( event ) {
+      console.log( 'error:', event )
     })
 
     var chat = io( 'http://localhost:1235/chat' )
