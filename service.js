@@ -4,11 +4,8 @@
 const http = require('http'),
   https = require('https'),
   address = require('network-address'),
-  //  Koa = require('kronos-koa'),
-  Koa = require('koa'),
-  co = require('co'),
-
-  IO = require('koa-socket'),
+  Koa = require('kronos-koa'),
+  WebSocketServer = require('ws').Server,
   Service = require('kronos-service').Service,
   ReceiveEndpoint = require('kronos-endpoint').ReceiveEndpoint;
 
@@ -53,8 +50,6 @@ class ServiceKOA extends Service {
 
     this.koa = new Koa();
 
-    this.sockets();
-
     const props = {};
 
     Object.keys(configAttributes).forEach(name =>
@@ -66,16 +61,18 @@ class ServiceKOA extends Service {
 
     Object.defineProperties(this, props);
 
-    const io = new ReceiveEndpoint('io');
-    io.receive = request => {
-      this.trace(level => `broadcast ${JSON.stringify(request.data)} to io`);
-      if (this.koa.io) {
-        this.koa.io.broadcast(request.event, request.data);
-      }
+    const ws = new ReceiveEndpoint('ws');
+    ws.receive = request => {
+      this.trace(level => `broadcast ${JSON.stringify(request.data)} to ws`);
+
+      this.wss.clients.forEach(client => {
+        client.send(request.data);
+      });
+
       return Promise.resolve();
     };
 
-    this.addEndpoint(io);
+    this.addEndpoint(ws);
   }
 
   get isSecure() {
@@ -99,103 +96,6 @@ class ServiceKOA extends Service {
 
   get url() {
     return `${this.scheme}://${this.hostname}:${this.port}`;
-  }
-
-  sockets() {
-    try {
-      const app = this.koa;
-
-      /**
-       * Koa Middlewares
-       */
-      app.use(co.wrap(function* (ctx, next) {
-        const start = new Date();
-        yield next();
-        const ms = new Date() - start;
-        console.log(`${ ctx.method } ${ ctx.url } - ${ ms }ms`);
-      }));
-
-
-      const socket = new IO();
-      const chat = new IO('chat');
-
-      console.log(`socket: ${socket}`);
-      console.log(`chat: ${chat}`);
-
-      /**
-       * Socket middlewares
-       */
-      socket.use(co.wrap(function* (ctx, next) {
-        console.log('Socket middleware');
-        const start = new Date();
-        yield next();
-        const ms = new Date() - start;
-        console.log(`WS ${ ms }ms`);
-      }));
-      socket.use(co.wrap(function* (ctx, next) {
-        ctx.teststring = 'test';
-        yield next();
-      }));
-
-
-      socket.attach(app);
-      chat.attach(app);
-
-
-
-      /**
-       * Socket handlers
-       */
-      socket.on('connection', ctx => {
-        console.log('Join event', ctx.socket.id);
-        socket.broadcast('connections', {
-          numConnections: socket.connections.size
-        });
-        // app.io.broadcast( 'connections', {
-        //   numConnections: socket.connections.size
-        // })
-      });
-
-      socket.on('disconnect', ctx => {
-        console.log('leave event', ctx.socket.id);
-        socket.broadcast('connections', {
-          numConnections: socket.connections.size
-        });
-      });
-      socket.on('data', (ctx, data) => {
-        console.log('data event', data);
-        console.log('ctx:', ctx.event, ctx.data, ctx.socket.id);
-        console.log('ctx.teststring:', ctx.teststring);
-        ctx.socket.emit('response', {
-          message: 'response from server'
-        });
-      });
-      socket.on('ack', (ctx, data) => {
-        console.log('data event with acknowledgement', data);
-        ctx.acknowledge('received');
-      });
-      socket.on('numConnections', packet => {
-        console.log(`Number of connections: ${ socket.connections.size }`);
-      });
-
-
-      chat.on('connection', ctx => {
-        console.log('Joining chat namespace', ctx.socket.id);
-      });
-      chat.on('message', ctx => {
-        console.log('chat message received', ctx.data);
-        // app.chat.broadcast( 'message', 'yo connections, lets chat' )
-        chat.broadcast('message', 'ok connections:chat');
-      });
-
-
-      app.listen(1235, () => {
-        console.log(`Listening on ${ 1235 }`);
-      });
-
-    } catch (e) {
-      console.log(`catch: ${e}`);
-    }
   }
 
   /**
@@ -227,6 +127,26 @@ class ServiceKOA extends Service {
       } else {
         this.server = http.createServer(this.koa.callback());
       }
+
+      this.wss = new WebSocketServer({
+        server: this.server
+      });
+
+      this.wss.on('connection', ws => {
+        console.log('connection');
+
+        ws.on('message', message => {
+          console.log('received: %s', message);
+        });
+
+        const id = setInterval(() => {
+          ws.send(JSON.stringify(process.memoryUsage()), () => { /* ignore errors */ });
+        }, 1000);
+        ws.on('close', () => {
+          console.log('stopping client interval');
+          clearInterval(id);
+        });
+      });
 
       if (this.timeout) {
         this.server.setTimeout(this.timeout);

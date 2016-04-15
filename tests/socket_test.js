@@ -9,7 +9,7 @@ const chai = require('chai'),
   should = chai.should(),
   fs = require('fs'),
   path = require('path'),
-  io = require('socket.io-client'),
+  WebSocket = require('ws'),
   service = require('kronos-service'),
   ServiceKOA = require('../service').Service,
   ServiceProviderMixin = service.ServiceProviderMixin;
@@ -18,19 +18,17 @@ class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
 
 const sp = new ServiceProvider();
 
-
 describe('service-koa socket', function () {
 
-  this.timeout(200000);
+  //this.timeout(200000);
 
   const ks1 = new ServiceKOA({
     name: "my-name1",
     hostname: 'localhost',
-    port: 1235,
-    io: {}
+    port: 1235
   }, sp);
 
-  let socketUrl = 'http://localhost:1235/';
+  const socketUrl = 'ws://localhost:1235';
 
   it('socket', done => {
     ks1.configure({}).then(() => ks1.start().then(() => {
@@ -40,16 +38,29 @@ describe('service-koa socket', function () {
         ctx.body = fs.createReadStream(path.join(__dirname, 'fixtures', 'index.html'));
       });
 
-      const socket = io(socketUrl);
-      socket.on('connect', () => {
-        console.log('connect');
+      let ws = new WebSocket(socketUrl, {});
+
+      ws.on('open', function open() {
+        console.log('connected');
+        ws.send(Date.now().toString(), {
+          mask: true
+        });
+      });
+
+      ws.on('close', () => {
+        console.log('disconnected');
+      });
+
+      ws.on('message', (data, flags) => {
+        console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
+
+        setTimeout(() => {
+          ws.send(Date.now().toString(), {
+            mask: true
+          });
+        }, 500);
+
         done();
-      });
-      socket.on('event', (data) => {
-        console.log('event');
-      });
-      socket.on('disconnect', () => {
-        console.log('disconnect');
       });
 
       //assert.equal(ks1.state, 'running');

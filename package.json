@@ -21,11 +21,10 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
-    "co": "^4.6.0",
-    "koa-socket": "^4.3.0",
     "kronos-koa": "1.0.1",
     "kronos-service": "^2.17.0",
-    "network-address": "1.1.0"
+    "network-address": "1.1.0",
+    "ws": "^1.1.0"
   },
   "devDependencies": {
     "chai": "3.5.0",
@@ -35,20 +34,16 @@
     "koa-route": "^3.1.0",
     "mocha": "2.4.5",
     "semantic-release": "6.2.1",
-    "socket.io-client": "^1.4.5",
     "supertest": "^1.2.0",
     "supertest-as-promised": "^3.0.0"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Torsten Link",
+    "email": "torstenlink@gmx.de"
+  }, {
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=5"
