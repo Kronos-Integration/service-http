@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
-    "kronos-koa": "1.0.1",
+    "kronos-koa": "^1.1.0",
     "kronos-service": "^2.17.0",
     "network-address": "1.1.0",
     "ws": "^1.1.0"
@@ -37,13 +37,16 @@
     "supertest": "^1.2.0",
     "supertest-as-promised": "^3.0.0"
   },
-  "contributors": [{
-    "name": "Torsten Link",
-    "email": "torstenlink@gmx.de"
-  }, {
-    "name": "Markus Felten",
-    "email": "markus.felten@gmx.de"
-  }],
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=5"
