@@ -4,9 +4,11 @@
 const http = require('http'),
   https = require('https'),
   address = require('network-address'),
+  url = require('url'),
   Koa = require('kronos-koa'),
   WebSocketServer = require('ws').Server,
   Service = require('kronos-service').Service,
+  endpoint = require('kronos-endpoint'),
   ReceiveEndpoint = require('kronos-endpoint').ReceiveEndpoint;
 
 const configAttributes = {
@@ -98,6 +100,22 @@ class ServiceKOA extends Service {
     return `${this.scheme}://${this.hostname}:${this.port}`;
   }
 
+  _configure(config) {
+    super._configure(config);
+
+    if (this.socketEndpoints === undefined) {
+      this.socketEndpoints = {};
+    }
+
+    if (config.sockets) {
+      Object.keys(config.sockets).forEach(name => {
+        const s = config.sockets[name];
+        this.createSocketEndpoint(name, s.path);
+        this.info(`socket: ${name} ${s.path}`);
+      });
+    }
+  }
+
   /**
    * apply new configuration.
    * if required restarts the server
@@ -120,6 +138,20 @@ class ServiceKOA extends Service {
     return needsRestart ? sp.then(p => this.restartIfRunning()) : sp;
   }
 
+  createSocketEndpoint(name, path) {
+    const ep = this.addEndpoint(new SocketEndpoint(name, this));
+    this.socketEndpoints[path || name] = ep;
+    return ep;
+  }
+
+  endpointForSocketConnection(ws) {
+    const location = url.parse(ws.upgradeReq.url, true);
+    this.info(`connection: ${location.path} -> ${this.socketEndpoints[location.path]}`);
+    return this.socketEndpoints[location.path];
+    // you might use location.query.access_token to authenticate or share sessions
+    // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
+  }
+
   _start() {
     if (!this.server) {
       if (this.isSecure) {
@@ -133,17 +165,19 @@ class ServiceKOA extends Service {
       });
 
       this.wss.on('connection', ws => {
-        console.log('connection');
+        const ep = this.endpointForSocketConnection(ws);
 
-        ws.on('message', message => {
-          console.log('received: %s', message);
-        });
+        if (ep) {
+          ws.on('message', message => ep.receive(message));
+        }
 
         const id = setInterval(() => {
-          ws.send(JSON.stringify(process.memoryUsage()), () => { /* ignore errors */ });
+          ws.send(JSON.stringify({
+            memory: process.memoryUsage()
+          }), () => { /* ignore errors */ });
         }, 1000);
         ws.on('close', () => {
-          console.log('stopping client interval');
+          //console.log('stopping client interval');
           clearInterval(id);
         });
       });
@@ -188,6 +222,10 @@ class ServiceKOA extends Service {
       });
     });
   }
+}
+
+class SocketEndpoint extends endpoint.SendEndpoint {
+
 }
 
 module.exports.Service = ServiceKOA;
