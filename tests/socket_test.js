@@ -30,11 +30,23 @@ describe('service-koa socket', function () {
 
   const se = ks1.createSocketEndpoint('test', '/test');
 
-  it('endpooint is socket', () => assert.isTrue(se.socket));
- 
+  describe('socket endpoint', () => {
+    it('is socket', () => assert.isTrue(se.socket));
+    it('has opposite', () => assert.isDefined(se.opposite));
+  });
+
   se.receive = message => {
     console.log(`se: ${message}`);
   };
+
+  setInterval(() => {
+    console.log(`opposite: ${se.opposite}, ${se.opposite.receive}`);
+
+    se.opposite.receive({
+      memory: process.memoryUsage()
+    });
+
+  }, 1000);
 
   const socketUrl = 'ws://localhost:1235/test';
 

@@ -126,6 +126,7 @@ class ServiceKOA extends Service {
 
   addSocketEndpoint(ep) {
     //this.addEndpoint(new SocketEndpoint(name, this));
+    console.log(`addSocketEndpoint: ${ep.path} ${ep.name}`);
     this.socketEndpoints[ep.path] = ep;
     return ep;
   }
@@ -138,7 +139,7 @@ class ServiceKOA extends Service {
     const thePath = path || name;
     let ep = this.socketEndpoints[thePath];
     if (ep === undefined) {
-      ep = this.addSocketEndpoint(new SocketEndpoint(name, this));
+      ep = this.addSocketEndpoint(new SocketEndpoint(name, this, path));
     }
     return ep;
   }
@@ -166,21 +167,13 @@ class ServiceKOA extends Service {
       this.wss.on('connection', ws => {
         const ep = this.endpointForSocketConnection(ws);
 
-        if (ep && ep.connected) {
+        if (ep) {
+          //if (ep.connected) {
           ep.open(ws);
           ws.on('message', message => ep.receive(message));
+          ws.on('close', () => ep.close(ws));
+          //}
         }
-
-        const id = setInterval(() => {
-          ep.opposite.receive({memory: process.memoryUsage()});
-          ws.send(JSON.stringify({
-            memory: process.memoryUsage()
-          }), () => { /* ignore errors */ });
-        }, 1000);
-        ws.on('close', () => {
-          ep.close(ws);
-          clearInterval(id);
-        });
       });
 
       if (this.timeout) {
@@ -334,14 +327,16 @@ module.exports.RouteSendEndpoint = RouteSendEndpoint;
 class SocketEndpoint extends endpoint.SendEndpoint {
   constructor(name, owner, path) {
     super(name, owner);
- 
-  	const opposite = new endpoint.ReceiveEndpoint(this.name,this.owner);
- 
+
+    const opposite = new endpoint.ReceiveEndpoint(this.name, this.owner);
+    opposite.receive = message => Promise.reject(new Error(`${this.name}: socket closed`));
+
     Object.defineProperty(this, 'opposite', {
       value: opposite
     });
-    
-    // The path in the URL
+
+    console.log(`opposite: ${this.opposite} ${opposite}`);
+
     Object.defineProperty(this, 'path', {
       value: path
     });
@@ -350,21 +345,43 @@ class SocketEndpoint extends endpoint.SendEndpoint {
   get socket() {
     return true;
   }
-  
+
   matches(ws, url) {
-  	return url.path === this.path;
+    return url.path === this.path;
   }
-  
+
   open(ws) {
-  	this.opposite.receive = message => {
-  	  return new Promise((f,r) =>
-  	  ws.send(JSON.stringify(message)), error => { if(error) r(error);}));
-  
-  	};
+    this.opposite.receive = message => {
+      return new Promise((fullfill, reject) =>
+        ws.send(JSON.stringify(message),
+          error => {
+            if (error) {
+              reject(error);
+            } else {
+              fullfill();
+            }
+          }));
+    };
   }
-  
+
   close(ws) {
+    this.opposite.receive = message => Promise.reject(new Error(`${this.name}: socket already closed`));
   }
+
+  toJSON() {
+    const json = super.toJSON();
+
+    json.socket = true;
+
+    for (const attr of['path']) {
+      if (this[attr] !== undefined) {
+        json[attr] = this[attr];
+      }
+    }
+
+    return json;
+  }
+
 }
 
 module.exports.SocketEndpoint = SocketEndpoint;
