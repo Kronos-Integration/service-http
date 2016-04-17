@@ -33,6 +33,8 @@ describe('service-koa socket', function () {
   describe('socket endpoint', () => {
     it('is socket', () => assert.isTrue(se.socket));
     it('has opposite', () => assert.isDefined(se.opposite));
+    it('isOut', () => assert.isTrue(se.isOut));
+    it('opposite isIn', () => assert.isTrue(se.opposite.isIn));
   });
 
   se.receive = message => {
@@ -40,12 +42,11 @@ describe('service-koa socket', function () {
   };
 
   setInterval(() => {
-    console.log(`opposite: ${se.opposite}, ${se.opposite.receive}`);
+    //console.log(`opposite: ${se.opposite}, ${se.opposite.receive}`);
 
     se.opposite.receive({
       memory: process.memoryUsage()
     });
-
   }, 1000);
 
   const socketUrl = 'ws://localhost:1235/test';
@@ -61,7 +62,6 @@ describe('service-koa socket', function () {
       let ws = new WebSocket(socketUrl, {});
 
       ws.on('open', function open() {
-        console.log('connected');
         ws.send(Date.now().toString(), {
           mask: true
         });

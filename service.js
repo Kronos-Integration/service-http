@@ -126,7 +126,6 @@ class ServiceKOA extends Service {
 
   addSocketEndpoint(ep) {
     //this.addEndpoint(new SocketEndpoint(name, this));
-    console.log(`addSocketEndpoint: ${ep.path} ${ep.name}`);
     this.socketEndpoints[ep.path] = ep;
     return ep;
   }
@@ -146,7 +145,7 @@ class ServiceKOA extends Service {
 
   endpointForSocketConnection(ws) {
     const location = url.parse(ws.upgradeReq.url, true);
-    this.info(`connection: ${location.path} -> ${this.socketEndpoints[location.path]}`);
+    //this.info(`connection: ${location.path} -> ${this.socketEndpoints[location.path]}`);
     return this.socketEndpoints[location.path];
     // you might use location.query.access_token to authenticate or share sessions
     // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
@@ -168,11 +167,12 @@ class ServiceKOA extends Service {
         const ep = this.endpointForSocketConnection(ws);
 
         if (ep) {
-          //if (ep.connected) {
           ep.open(ws);
-          ws.on('message', message => ep.receive(message));
+          ws.on('message', message => {
+            console.log(message);
+            ep.receive(message);
+          });
           ws.on('close', () => ep.close(ws));
-          //}
         }
       });
 
@@ -335,8 +335,6 @@ class SocketEndpoint extends endpoint.SendEndpoint {
       value: opposite
     });
 
-    console.log(`opposite: ${this.opposite} ${opposite}`);
-
     Object.defineProperty(this, 'path', {
       value: path
     });
@@ -351,6 +349,7 @@ class SocketEndpoint extends endpoint.SendEndpoint {
   }
 
   open(ws) {
+    this.owner.info(`open ${this.name}`);
     this.opposite.receive = message => {
       return new Promise((fullfill, reject) =>
         ws.send(JSON.stringify(message),
@@ -365,6 +364,7 @@ class SocketEndpoint extends endpoint.SendEndpoint {
   }
 
   close(ws) {
+    this.owner.info(`close ${this.name}`);
     this.opposite.receive = message => Promise.reject(new Error(`${this.name}: socket already closed`));
   }
 
@@ -381,7 +381,6 @@ class SocketEndpoint extends endpoint.SendEndpoint {
 
     return json;
   }
-
 }
 
 module.exports.SocketEndpoint = SocketEndpoint;
