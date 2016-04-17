@@ -167,16 +167,18 @@ class ServiceKOA extends Service {
         const ep = this.endpointForSocketConnection(ws);
 
         if (ep && ep.connected) {
+          ep.open(ws);
           ws.on('message', message => ep.receive(message));
         }
 
         const id = setInterval(() => {
+          ep.opposite.receive({memory: process.memoryUsage()});
           ws.send(JSON.stringify({
             memory: process.memoryUsage()
           }), () => { /* ignore errors */ });
         }, 1000);
         ws.on('close', () => {
-          //console.log('stopping client interval');
+          ep.close(ws);
           clearInterval(id);
         });
       });
@@ -332,7 +334,13 @@ module.exports.RouteSendEndpoint = RouteSendEndpoint;
 class SocketEndpoint extends endpoint.SendEndpoint {
   constructor(name, owner, path) {
     super(name, owner);
-
+ 
+  	const opposite = new endpoint.ReceiveEndpoint(this.name,this.owner);
+ 
+    Object.defineProperty(this, 'opposite', {
+      value: opposite
+    });
+    
     // The path in the URL
     Object.defineProperty(this, 'path', {
       value: path
@@ -341,6 +349,21 @@ class SocketEndpoint extends endpoint.SendEndpoint {
 
   get socket() {
     return true;
+  }
+  
+  matches(ws, url) {
+  	return url.path === this.path;
+  }
+  
+  open(ws) {
+  	this.opposite.receive = message => {
+  	  return new Promise((f,r) =>
+  	  ws.send(JSON.stringify(message)), error => { if(error) r(error);}));
+  
+  	};
+  }
+  
+  close(ws) {
   }
 }
 
