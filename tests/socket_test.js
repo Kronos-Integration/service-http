@@ -32,18 +32,17 @@ describe('service-koa socket', function () {
 
   describe('socket endpoint', () => {
     it('is socket', () => assert.isTrue(se.socket));
-    it('has opposite', () => assert.isDefined(se.opposite));
     it('isOut', () => assert.isTrue(se.isOut));
+    it('has opposite', () => assert.isDefined(se.opposite));
     it('opposite isIn', () => assert.isTrue(se.opposite.isIn));
   });
 
   se.receive = message => {
     console.log(`se: ${message}`);
+    return se.opposite.receive(message);
   };
 
   setInterval(() => {
-    //console.log(`opposite: ${se.opposite}, ${se.opposite.receive}`);
-
     se.opposite.receive({
       memory: process.memoryUsage()
     });
@@ -59,17 +58,10 @@ describe('service-koa socket', function () {
         ctx.body = fs.createReadStream(path.join(__dirname, 'fixtures', 'index.html'));
       });
 
-      let ws = new WebSocket(socketUrl, {});
+      const ws = new WebSocket(socketUrl, {});
 
-      ws.on('open', function open() {
-        ws.send(Date.now().toString(), {
-          mask: true
-        });
-      });
-
-      ws.on('close', () => {
-        console.log('disconnected');
-      });
+      ws.on('open', () => ws.send(Date.now().toString(), { mask: true }));
+      ws.on('close', () => { console.log('disconnected');});
 
       ws.on('message', (data, flags) => {
         console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
