@@ -42,12 +42,13 @@ describe('service-koa socket', function () {
     return se.opposite.receive(message);
   };
 
+/*
   setInterval(() => {
     se.opposite.receive({
       memory: process.memoryUsage()
     });
   }, 1000);
-
+*/
   const socketUrl = 'ws://localhost:1235/test';
 
   it('socket', done => {
@@ -66,12 +67,13 @@ describe('service-koa socket', function () {
       ws.on('message', (data, flags) => {
         console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
 
+/*
         setTimeout(() => {
           ws.send(Date.now().toString(), {
             mask: true
           });
         }, 500);
-
+*/
         done();
       });
 
