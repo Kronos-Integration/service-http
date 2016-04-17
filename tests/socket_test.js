@@ -23,12 +23,23 @@ describe('service-koa socket', function () {
   //this.timeout(200000);
 
   const ks1 = new ServiceKOA({
-    name: "my-name1",
+    name: 'my-name1',
     hostname: 'localhost',
-    port: 1235
+    port: 1235,
+    sockets: {
+      'test': {
+        path: '/test'
+      }
+    }
   }, sp);
 
-  const socketUrl = 'ws://localhost:1235';
+  const se = ks1.createSocketEndpoint('test', '/test');
+
+  se.receive = message => {
+    console.log(`se: ${message}`);
+  };
+
+  const socketUrl = 'ws://localhost:1235/test';
 
   it('socket', done => {
     ks1.configure({}).then(() => ks1.start().then(() => {
