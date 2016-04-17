@@ -33,7 +33,7 @@ describe('service-koa socket', function () {
     }
   }, sp);
 
-  const se = ks1.endpoints.test; /// ks1.createSocketEndpoint('test', '/test');
+  const se = ks1.createSocketEndpoint('test', '/test');
 
   se.receive = message => {
     console.log(`se: ${message}`);

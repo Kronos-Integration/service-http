@@ -5,6 +5,7 @@ const http = require('http'),
   https = require('https'),
   address = require('network-address'),
   url = require('url'),
+  pathToRegexp = require('path-to-regexp'),
   Koa = require('kronos-koa'),
   WebSocketServer = require('ws').Server,
   Service = require('kronos-service').Service,
@@ -50,6 +51,7 @@ class ServiceKOA extends Service {
   constructor(config, owner) {
     super(config, owner);
 
+    this.socketEndpoints = {};
     this.koa = new Koa();
 
     const props = {};
@@ -100,22 +102,6 @@ class ServiceKOA extends Service {
     return `${this.scheme}://${this.hostname}:${this.port}`;
   }
 
-  _configure(config) {
-    super._configure(config);
-
-    if (this.socketEndpoints === undefined) {
-      this.socketEndpoints = {};
-    }
-
-    if (config.sockets) {
-      Object.keys(config.sockets).forEach(name => {
-        const s = config.sockets[name];
-        this.createSocketEndpoint(name, s.path);
-        this.info(`socket: ${name} ${s.path}`);
-      });
-    }
-  }
-
   /**
    * apply new configuration.
    * if required restarts the server
@@ -138,9 +124,22 @@ class ServiceKOA extends Service {
     return needsRestart ? sp.then(p => this.restartIfRunning()) : sp;
   }
 
+  addSocketEndpoint(ep) {
+    //this.addEndpoint(new SocketEndpoint(name, this));
+    this.socketEndpoints[ep.path] = ep;
+    return ep;
+  }
+
+  removeSocketEndpoint(ep) {
+    delete this.socketEndpoints[ep.path];
+  }
+
   createSocketEndpoint(name, path) {
-    const ep = this.addEndpoint(new SocketEndpoint(name, this));
-    this.socketEndpoints[path || name] = ep;
+    const thePath = path || name;
+    let ep = this.socketEndpoints[thePath];
+    if (ep === undefined) {
+      ep = this.addSocketEndpoint(new SocketEndpoint(name, this));
+    }
     return ep;
   }
 
@@ -167,7 +166,7 @@ class ServiceKOA extends Service {
       this.wss.on('connection', ws => {
         const ep = this.endpointForSocketConnection(ws);
 
-        if (ep) {
+        if (ep && ep.connected) {
           ws.on('message', message => ep.receive(message));
         }
 
@@ -224,9 +223,125 @@ class ServiceKOA extends Service {
   }
 }
 
-class SocketEndpoint extends endpoint.SendEndpoint {
-
-}
 
 module.exports.Service = ServiceKOA;
 module.exports.registerWithManager = manager => manager.registerServiceFactory(ServiceKOA);
+
+
+
+function decode(val) {
+  if (val) return decodeURIComponent(val);
+}
+
+/**
+ * Endpoint to link against a koa route
+ */
+class RouteSendEndpoint extends endpoint.SendEndpoint {
+
+  /**
+   * @param name {String} endpoint name
+   * @param owner {Step} the owner of the endpoint
+   * @param method {String} http method defaults to get
+   * @param serviceName {String} if present registers the route as a service
+   */
+  constructor(name, owner, path, method, serviceName) {
+    super(name, owner);
+
+    // The path in the URL
+    Object.defineProperty(this, 'path', {
+      value: path
+    });
+
+    const keys = [];
+    const re = pathToRegexp(path, keys, {});
+
+    Object.defineProperty(this, 'regex', {
+      value: re
+    });
+
+    Object.defineProperty(this, 'keys', {
+      value: keys
+    });
+
+    method = method ? method.toUpperCase() : 'GET';
+
+    // The HTTP method to use (GET, POST, ...)
+    Object.defineProperty(this, 'method', {
+      value: method
+    });
+
+    Object.defineProperty(this, 'serviceName', {
+      value: serviceName
+    });
+  }
+
+  get socket() {
+    return false;
+  }
+
+  get route() {
+    return (ctx, next) => {
+      if (!this.matches(ctx, this.method)) return next();
+
+      // path
+      const m = this.regex.exec(ctx.path);
+      if (m) {
+        const args = m.slice(1).map(decode);
+        const values = {};
+        const keys = this.keys;
+        for (const i in args) {
+          values[keys[i].name] = args[i];
+        }
+
+        return this.receive(ctx, values).catch(e => {
+          this.owner.error(`${this.method} ${this.path}: ${e}`);
+          ctx.body = e;
+        });
+      }
+
+      // miss
+      return next();
+    };
+  }
+
+  matches(ctx) {
+    if (ctx.method === this.method) return true;
+    if (this.method === 'GET' && ctx.method === 'HEAD') return true;
+    return false;
+  }
+
+  toString() {
+    return `${this.method} ${this.name}`;
+  }
+
+  toJSON() {
+    const json = super.toJSON();
+
+    for (const attr of['serviceName', 'method', 'path']) {
+      if (this[attr] !== undefined) {
+        json[attr] = this[attr];
+      }
+    }
+
+    return json;
+  }
+}
+
+module.exports.RouteSendEndpoint = RouteSendEndpoint;
+
+class SocketEndpoint extends endpoint.SendEndpoint {
+  constructor(name, owner, path) {
+    super(name, owner);
+
+    // The path in the URL
+    Object.defineProperty(this, 'path', {
+      value: path
+    });
+  }
+
+  get socket() {
+    return true;
+  }
+}
+
+module.exports.SocketEndpoint = SocketEndpoint;
