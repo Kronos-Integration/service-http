@@ -25,16 +25,13 @@ describe('service-koa socket', function () {
   const ks1 = new ServiceKOA({
     name: 'my-name1',
     hostname: 'localhost',
-    port: 1235,
-    sockets: {
-      'test': {
-        path: '/test'
-      }
-    }
+    port: 1235
   }, sp);
 
   const se = ks1.createSocketEndpoint('test', '/test');
 
+  it('endpooint is socket' () => assert.isTrue(se.socket));
+ 
   se.receive = message => {
     console.log(`se: ${message}`);
   };
