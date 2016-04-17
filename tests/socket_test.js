@@ -30,7 +30,7 @@ describe('service-koa socket', function () {
 
   const se = ks1.createSocketEndpoint('test', '/test');
 
-  it('endpooint is socket' () => assert.isTrue(se.socket));
+  it('endpooint is socket', () => assert.isTrue(se.socket));
  
   se.receive = message => {
     console.log(`se: ${message}`);
