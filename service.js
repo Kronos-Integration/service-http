@@ -29,9 +29,6 @@ const configAttributes = {
   },
   timeout: {
     default: 120000
-  },
-  io: {
-    needsRestart: true
   }
 };
 
@@ -64,19 +61,6 @@ class ServiceKOA extends Service {
       });
 
     Object.defineProperties(this, props);
-
-    const ws = new ReceiveEndpoint('ws');
-    ws.receive = request => {
-      this.trace(level => `broadcast ${JSON.stringify(request.data)} to ws`);
-
-      this.wss.clients.forEach(client => {
-        client.send(request.data);
-      });
-
-      return Promise.resolve();
-    };
-
-    this.addEndpoint(ws);
   }
 
   get isSecure() {
@@ -218,10 +202,8 @@ class ServiceKOA extends Service {
   }
 }
 
-
 module.exports.Service = ServiceKOA;
 module.exports.registerWithManager = manager => manager.registerServiceFactory(ServiceKOA);
-
 
 
 function decode(val) {
