@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
     "kronos-koa": "^1.1.0",
-    "kronos-service": "^2.17.1",
+    "kronos-service": "^2.17.2",
     "network-address": "1.1.0",
     "path-to-regexp": "^1.2.1",
     "ws": "^1.1.0"
