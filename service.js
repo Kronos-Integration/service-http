@@ -26,7 +26,7 @@ class ServiceKOA extends Service {
   }
 
   get configurationAttributes() {
-    return {
+    return Object.assign({
       port: {
         needsRestart: true,
         default: 9898
@@ -42,9 +42,16 @@ class ServiceKOA extends Service {
         needsRestart: true
       },
       timeout: {
-        default: 120000
+        default: 120000,
+        setter(value) {
+          if (value && this.server) {
+            this.server.setTimeout(value);
+            return true;
+          }
+          return false;
+        }
       }
-    };
+    }, super.configurationAttributes);
   }
 
   constructor(config, owner) {
@@ -52,18 +59,6 @@ class ServiceKOA extends Service {
 
     this.socketEndpoints = {};
     this.koa = new Koa();
-
-    const props = {};
-
-    const ca = this.configurationAttributes;
-    Object.keys(ca).forEach(name =>
-      props[name] = {
-        get() {
-          return config[name] || ca[name].default;
-        }
-      });
-
-    Object.defineProperties(this, props);
   }
 
   get isSecure() {
@@ -87,29 +82,6 @@ class ServiceKOA extends Service {
 
   get url() {
     return `${this.scheme}://${this.hostname}:${this.port}`;
-  }
-
-  /**
-   * apply new configuration.
-   * if required restarts the server
-   */
-  configure(config) {
-    const sp = super.configure(config);
-    let needsRestart = false;
-
-    if (config.timeout && this.server) {
-      this.server.setTimeout(config.timeout);
-    }
-
-    const ca = this.configurationAttributes;
-    Object.keys(ca).forEach(name => {
-      if (config[name] !== undefined && this[name] !== config[name]) {
-        needsRestart |= ca[name].needsRestart;
-        this.config[name] = config[name];
-      }
-    });
-
-    return needsRestart ? sp.then(p => this.restartIfRunning()) : sp;
   }
 
   addSocketEndpoint(ep) {

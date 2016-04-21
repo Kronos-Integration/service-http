@@ -67,7 +67,7 @@ describe('service-koa', () => {
       port: 1234
     }, sp);
 
-    it('is secure', () => assert.equal(ks.isSecure, true));
+    it('is secure', () => assert.isTrue(ks.isSecure));
     it('has port', () => assert.equal(ks.port, 1234));
     it('has url', () => assert.equal(ks.url, `https://${address()}:1234`));
 
@@ -78,9 +78,16 @@ describe('service-koa', () => {
           hostname: 'www.example.com'
         }).then(
           () => {
-            assert.equal(ks.port, 1235);
-            assert.equal(ks.hostname, 'www.example.com');
-            assert.equal(ks.url, 'https://www.example.com:1235');
+            try {
+              assert.equal(ks.port, 1235);
+              assert.equal(ks.hostname, 'www.example.com');
+              assert.isTrue(ks.isSecure);
+              assert.equal(ks.url, 'https://www.example.com:1235');
+            } catch (e) {
+              console.log(e);
+              done(e);
+              return;
+            }
             done();
           }
         );
