@@ -12,26 +12,6 @@ const http = require('http'),
   endpoint = require('kronos-endpoint'),
   ReceiveEndpoint = require('kronos-endpoint').ReceiveEndpoint;
 
-const configAttributes = {
-  port: {
-    needsRestart: true,
-    default: 9898
-  },
-  hostname: {
-    needsRestart: true,
-    default: address()
-  },
-  key: {
-    needsRestart: true
-  },
-  cert: {
-    needsRestart: true
-  },
-  timeout: {
-    default: 120000
-  }
-};
-
 /**
  * HTTP server with koa
  */
@@ -45,6 +25,28 @@ class ServiceKOA extends Service {
     return ServiceKOA.name;
   }
 
+  get configurationAttributes() {
+    return {
+      port: {
+        needsRestart: true,
+        default: 9898
+      },
+      hostname: {
+        needsRestart: true,
+        default: address()
+      },
+      key: {
+        needsRestart: true
+      },
+      cert: {
+        needsRestart: true
+      },
+      timeout: {
+        default: 120000
+      }
+    };
+  }
+
   constructor(config, owner) {
     super(config, owner);
 
@@ -53,10 +55,11 @@ class ServiceKOA extends Service {
 
     const props = {};
 
-    Object.keys(configAttributes).forEach(name =>
+    const ca = this.configurationAttributes;
+    Object.keys(ca).forEach(name =>
       props[name] = {
         get() {
-          return config[name] || configAttributes[name].default;
+          return config[name] || ca[name].default;
         }
       });
 
@@ -98,9 +101,10 @@ class ServiceKOA extends Service {
       this.server.setTimeout(config.timeout);
     }
 
-    Object.keys(configAttributes).forEach(name => {
+    const ca = this.configurationAttributes;
+    Object.keys(ca).forEach(name => {
       if (config[name] !== undefined && this[name] !== config[name]) {
-        needsRestart |= configAttributes[name].needsRestart;
+        needsRestart |= ca[name].needsRestart;
         this.config[name] = config[name];
       }
     });
