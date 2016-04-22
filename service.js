@@ -128,9 +128,17 @@ class ServiceKOA extends Service {
 
         if (ep) {
           ep.open(ws);
-          ws.on('message', message => {
-            console.log(message);
-            ep.receive(message);
+          ws.on('message', (message, flags) => {
+            try {
+              message = JSON.parse(message);
+              this.trace({
+                'endpoint': ep.toString(),
+                received: message
+              });
+              ep.receive(message);
+            } catch (e) {
+              this.error(e);
+            }
           });
           ws.on('close', () => ep.close(ws));
         }
@@ -306,7 +314,11 @@ class SocketEndpoint extends endpoint.SendEndpoint {
   open(ws) {
     this.owner.info(`open ${this.name}`);
     this.opposite.receive = message => {
-      return new Promise((fullfill, reject) =>
+      return new Promise((fullfill, reject) => {
+        this.owner.trace({
+          message: 'send',
+          content: message
+        });
         ws.send(JSON.stringify(message),
           error => {
             if (error) {
@@ -314,7 +326,8 @@ class SocketEndpoint extends endpoint.SendEndpoint {
             } else {
               fullfill();
             }
-          }));
+          });
+      });
     };
   }
 
