@@ -284,14 +284,11 @@ module.exports.RouteSendEndpoint = RouteSendEndpoint;
 
 class SocketEndpoint extends endpoint.SendEndpoint {
   constructor(name, owner, path) {
-    super(name, owner);
-
-    const opposite = new endpoint.ReceiveEndpoint(this.name, this.owner);
-    opposite.receive = message => Promise.reject(new Error(`${this.name}: socket closed`));
-
-    Object.defineProperty(this, 'opposite', {
-      value: opposite
+    super(name, owner, {
+      createOpposite: true
     });
+
+    this.opposite.receive = message => Promise.reject(new Error(`${this.name}: socket closed`));
 
     Object.defineProperty(this, 'path', {
       value: path
