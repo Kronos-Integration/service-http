@@ -296,8 +296,6 @@ class SocketEndpoint extends endpoint.SendEndpoint {
       createOpposite: true
     });
 
-    this.opposite.receive = message => Promise.reject(new Error(`${this.name}: socket closed`));
-
     Object.defineProperty(this, 'path', {
       value: path
     });
@@ -333,7 +331,7 @@ class SocketEndpoint extends endpoint.SendEndpoint {
 
   close(ws) {
     this.owner.info(`close ${this.name}`);
-    this.opposite.receive = message => Promise.reject(new Error(`${this.name}: socket already closed`));
+    this.opposite.receive = undefined;
   }
 
   toJSON() {
