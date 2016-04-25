@@ -27,6 +27,9 @@ class ServiceKOA extends Service {
 
   get configurationAttributes() {
     return Object.assign({
+      docRoot: {
+        description: 'file system root'
+      },
       port: {
         needsRestart: true,
         default: 9898
@@ -42,10 +45,10 @@ class ServiceKOA extends Service {
         needsRestart: true
       },
       timeout: {
-        default: 120000,
+        default: 120,
         setter(value) {
           if (value && this.server) {
-            this.server.setTimeout(value);
+            this.server.setTimeout(value * 1000);
             return true;
           }
           return false;
@@ -59,6 +62,10 @@ class ServiceKOA extends Service {
 
     this.socketEndpoints = {};
     this.koa = new Koa();
+
+    if (this.docRoot) {
+      this.koa.use(require('koa-static')(this.docRoot), {});
+    }
   }
 
   get isSecure() {
@@ -132,7 +139,7 @@ class ServiceKOA extends Service {
             try {
               message = JSON.parse(message);
               this.trace({
-                'endpoint': ep.toString(),
+                endpoint: ep.toString(),
                 received: message
               });
               ep.receive(message);
@@ -145,7 +152,7 @@ class ServiceKOA extends Service {
       });
 
       if (this.timeout) {
-        this.server.setTimeout(this.timeout);
+        this.server.setTimeout(this.timeout * 1000);
       }
 
       return new Promise((fullfill, reject) => {
