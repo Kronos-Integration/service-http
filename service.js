@@ -28,23 +28,28 @@ class ServiceKOA extends Service {
   get configurationAttributes() {
     return Object.assign({
       docRoot: {
-        description: 'file system root'
+        description: 'file system root for static content'
       },
       port: {
+        description: 'port of the http(s) server',
         needsRestart: true,
         default: 9898
       },
       hostname: {
+        description: 'hostname of the http(s) server',
         needsRestart: true,
         default: address()
       },
       key: {
+        description: 'ssl key',
         needsRestart: true
       },
       cert: {
+        description: 'ssl cert',
         needsRestart: true
       },
       timeout: {
+        description: 'server timeout',
         default: 120,
         setter(value) {
           if (value && this.server) {
