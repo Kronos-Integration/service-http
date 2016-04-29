@@ -33,12 +33,14 @@ class ServiceKOA extends Service {
       port: {
         description: 'port of the http(s) server',
         needsRestart: true,
-        default: 9898
+        default: 9898,
+        type: 'integer'
       },
       hostname: {
         description: 'hostname of the http(s) server',
         needsRestart: true,
-        default: address()
+        default: address(),
+        type: 'string'
       },
       key: {
         description: 'ssl key',
@@ -50,6 +52,7 @@ class ServiceKOA extends Service {
       },
       timeout: {
         description: 'server timeout',
+        type: 'duration',
         default: 120,
         setter(value) {
           if (value && this.server) {
