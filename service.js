@@ -270,7 +270,11 @@ class RouteSendEndpoint extends endpoint.SendEndpoint {
         }
 
         return this.receive(ctx, values).catch(e => {
-          this.owner.error(`${this.method} ${this.path}: ${e}`);
+          this.owner.error({
+            method: this.method,
+            path: this.path,
+            error: e
+          });
           ctx.body = e;
         });
       }
