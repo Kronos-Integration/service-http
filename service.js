@@ -166,19 +166,29 @@ class ServiceKOA extends Service {
       return new Promise((fullfill, reject) => {
         this.trace(level => `starting ${this.url}`);
 
-        try {
-          this.server.listen(this.port, this.hostname, err => {
-            if (err) {
-              this.server = undefined;
-              reject(err);
-            } else {
-              fullfill();
-            }
-          });
-        } catch (e) {
+        const server = this.server;
+
+        server.on('listening', () => fullfill());
+
+        server.on('error', e => {
           this.error(e);
-          reject(e);
-        }
+          // TODO this does not get called !
+          if (e.code === 'EADDRINUSE') {
+            this.trace(level => `Address in use ${this.url} retrying...`);
+            setTimeout(() => {
+              server.close();
+              server.listen(this.port, this.hostname);
+            }, 1000);
+          }
+        });
+
+        server.listen(this.port, this.hostname, err => {
+          if (err) {
+            this.server = undefined;
+            this.error(err);
+            reject(err);
+          }
+        });
       });
     }
 
