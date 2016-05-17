@@ -28,7 +28,8 @@ class ServiceKOA extends Service {
   get configurationAttributes() {
     return Object.assign({
       docRoot: {
-        description: 'file system root for static content'
+        description: 'file system root for static content',
+        type: 'fs-path'
       },
       port: {
         description: 'port of the http(s) server',
