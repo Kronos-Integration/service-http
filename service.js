@@ -169,8 +169,6 @@ class ServiceKOA extends Service {
 
         const server = this.server;
 
-        server.once('listening', () => fullfill());
-
         server.on('error', e => {
           this.error(e);
           // TODO this does not get called !
@@ -188,6 +186,8 @@ class ServiceKOA extends Service {
             this.server = undefined;
             this.error(err);
             reject(err);
+          } else {
+            fullfill();
           }
         });
       });
