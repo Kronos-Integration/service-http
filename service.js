@@ -169,7 +169,7 @@ class ServiceKOA extends Service {
 
         const server = this.server;
 
-        server.on('listening', () => fullfill());
+        server.once('listening', () => fullfill());
 
         server.on('error', e => {
           this.error(e);
