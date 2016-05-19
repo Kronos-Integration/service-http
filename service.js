@@ -164,32 +164,46 @@ class ServiceKOA extends Service {
         this.server.setTimeout(this.timeout * 1000);
       }
 
+
       return new Promise((fullfill, reject) => {
         this.trace(level => `starting ${this.url}`);
 
+        const service = this;
         const server = this.server;
 
-        server.on('error', e => {
-          this.error(e);
-          // TODO this does not get called !
+        function listen() {
+          server.listen(service.port, service.hostname, err => {
+            process.removeListener('uncaughtException', addressInUseHandler);
+            if (err) {
+              service.server = undefined;
+              service.error(err);
+              reject(err);
+            } else {
+              service.trace(level => `listening on ${service.url}`);
+              fullfill();
+            }
+          });
+        }
+
+        function addressInUseHandler(e) {
           if (e.code === 'EADDRINUSE') {
-            this.trace(level => `Address in use ${this.url} retrying...`);
+            service.trace(level => `Address in use ${service.url} retrying...`);
+
+            // try different strategies
+            // 1. retry later
+            // 2. use other port / interface
+
             setTimeout(() => {
               server.close();
-              server.listen(this.port, this.hostname);
+              service.port++;
+              listen();
             }, 1000);
           }
-        });
+        }
 
-        server.listen(this.port, this.hostname, err => {
-          if (err) {
-            this.server = undefined;
-            this.error(err);
-            reject(err);
-          } else {
-            fullfill();
-          }
-        });
+        process.on('uncaughtException', addressInUseHandler);
+        //server.on('error', addressInUseHandler);
+        listen();
       });
     }
 
