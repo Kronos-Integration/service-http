@@ -23,7 +23,7 @@
   "dependencies": {
     "koa-static": "^3.0.0",
     "kronos-koa": "^1.1.0",
-    "kronos-service": "^3.2.3",
+    "kronos-service": "^3.2.4",
     "network-address": "1.1.0",
     "path-to-regexp": "^1.4.0",
     "ws": "^1.1.0"
@@ -39,16 +39,13 @@
     "supertest": "^1.2.0",
     "supertest-as-promised": "3.1.0"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Torsten Link",
+    "email": "torstenlink@gmx.de"
+  }, {
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=6.1"

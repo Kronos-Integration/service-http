@@ -23,8 +23,10 @@ describe('service-koa socket', function () {
 
   const ks1 = new ServiceKOA({
     name: 'my-name1',
-    hostname: 'localhost',
-    port: 1235
+    listen: {
+      address: 'localhost',
+      port: 1235
+    }
   }, sp);
 
   const se = ks1.createSocketEndpoint('test', '/test');
@@ -52,8 +54,10 @@ describe('service-koa socket', function () {
 
   it('socket', done => {
     ks1.configure({
-      hostname: 'localhost',
-      port: 1235
+      listen: {
+        address: 'localhost',
+        port: 1235
+      }
     }).then(() => ks1.start().then(() => {
       ks1.koa.use(ctx => {
         ctx.type = 'text/html';

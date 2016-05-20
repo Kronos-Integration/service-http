@@ -31,20 +31,16 @@ class ServiceKOA extends Service {
         description: 'file system root for static content',
         type: 'fs-path'
       },
-      port: {
-        description: 'port of the http(s) server',
-        needsRestart: true,
-        default: 9898,
-        type: 'integer'
-      },
-      hostname: {
-        description: 'hostname of the http(s) server',
-        needsRestart: true,
-        default: address(),
-        type: 'string'
-      },
       listen: {
         description: 'server listen definition',
+
+        /*
+                default: {
+                  address: address(),
+                  port: 9898,
+                  retryTimeout: 10
+                },
+        */
 
         attributes: {
           retryTimeout: {
@@ -53,7 +49,7 @@ class ServiceKOA extends Service {
             type: 'duration'
           },
           address: {
-            description: 'hostname of the http(s) server',
+            description: 'hostname/ip-address of the http(s) server',
             needsRestart: true,
             default: address(),
             type: 'string'
@@ -128,7 +124,7 @@ class ServiceKOA extends Service {
   }
 
   get url() {
-    return `${this.scheme}://${this.hostname}:${this.port}`;
+    return `${this.scheme}://${this.listen.address}:${this.listen.port}`;
   }
 
   addSocketEndpoint(ep) {
@@ -210,14 +206,12 @@ class ServiceKOA extends Service {
         const service = this;
         const server = this.server;
 
-        if (service.listen) {
-          if (service.listen.fromPort) {
-            service.port = service.listen.fromPort;
-          }
+        if (service.listen.fromPort) {
+          service.listen.port = service.listen.fromPort;
         }
 
         function listen() {
-          server.listen(service.port, service.hostname, err => {
+          server.listen(service.listen.port, service.listen.address, err => {
             process.removeListener('uncaughtException', addressInUseHandler);
             if (err) {
               service.server = undefined;
@@ -238,12 +232,10 @@ class ServiceKOA extends Service {
             // 1. retry later
             // 2. use other port / interface
 
-            if (service.listen) {
-              if (service.listen.fromPort && service.port < service.listen.toPort) {
-                service.port++;
-                listen();
-                return;
-              }
+            if (service.listen.fromPort && service.listen.port < service.listen.toPort) {
+              service.listen.port++;
+              listen();
+              return;
             }
 
             setTimeout(() => {
