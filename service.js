@@ -47,7 +47,7 @@ class ServiceKOA extends Service {
         description: 'server listen definition',
 
         attributes: {
-          timeout: {
+          retryTimeout: {
             description: 'how long should we retry binding to the address (EADDRINUSE)',
             default: 10,
             type: 'duration'
@@ -160,8 +160,8 @@ class ServiceKOA extends Service {
 
   timeoutForTransition(transition) {
     if (transition.name === 'start') {
-      if (this.listen && this.listen.timeout)
-        return this.listen.timeout * 1000;
+      if (this.listen && this.listen.retryTimeout)
+        return this.listen.retryTimeout * 1000;
     }
 
     return super.timeoutForTransition(transition);
