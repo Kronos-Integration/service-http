@@ -43,6 +43,37 @@ class ServiceKOA extends Service {
         default: address(),
         type: 'string'
       },
+      listen: {
+        description: 'server listen definition',
+
+        attributes: {
+          timeout: {
+            description: 'how long should we retry binding to the address (EADDRINUSE)',
+            default: 10,
+            type: 'duration'
+          },
+          address: {
+            description: 'hostname of the http(s) server',
+            needsRestart: true,
+            default: address(),
+            type: 'string'
+          },
+          fromPort: {
+            description: 'start port range of the http(s) server',
+            type: 'integer'
+          },
+          toPort: {
+            description: 'end port range of the http(s) server',
+            type: 'integer'
+          },
+          port: {
+            description: 'port of the http(s) server',
+            needsRestart: true,
+            default: 9898,
+            type: 'integer'
+          }
+        }
+      },
       key: {
         description: 'ssl key',
         needsRestart: true
@@ -127,6 +158,15 @@ class ServiceKOA extends Service {
     // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
   }
 
+  timeoutForTransition(transition) {
+    if (transition.name === 'start') {
+      if (this.listen && this.listen.timeout)
+        return this.listen.timeout * 1000;
+    }
+
+    return super.timeoutForTransition(transition);
+  }
+
   _start() {
     if (!this.server) {
       if (this.isSecure) {
@@ -164,12 +204,17 @@ class ServiceKOA extends Service {
         this.server.setTimeout(this.timeout * 1000);
       }
 
-
       return new Promise((fullfill, reject) => {
         this.trace(level => `starting ${this.url}`);
 
         const service = this;
         const server = this.server;
+
+        if (service.listen) {
+          if (service.listen.fromPort) {
+            service.port = service.listen.fromPort;
+          }
+        }
 
         function listen() {
           server.listen(service.port, service.hostname, err => {
@@ -193,11 +238,18 @@ class ServiceKOA extends Service {
             // 1. retry later
             // 2. use other port / interface
 
+            if (service.listen) {
+              if (service.listen.fromPort && service.port < service.listen.toPort) {
+                service.port++;
+                listen();
+                return;
+              }
+            }
+
             setTimeout(() => {
               server.close();
-              service.port++;
               listen();
-            }, 1000);
+            }, 10000);
           }
         }
 
