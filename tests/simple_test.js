@@ -33,9 +33,9 @@ describe('service-koa', () => {
     it('has name', () => assert.equal(ks.name, 'my-name'));
     it('is not secure', () => assert.equal(ks.isSecure, false));
 
-    it('has port', () => assert.equal(ks.listen.port, 1234));
+    it('has port', () => assert.equal(ks.port, 1234));
 
-    it('has address', () => assert.equal(ks.listen.address, address()));
+    it('has address', () => assert.equal(ks.address, address()));
     it('has url', () => assert.equal(ks.url, `http://${address()}:1234`));
 
     describe('configure', () => {
@@ -88,8 +88,8 @@ describe('service-koa', () => {
         }).then(
           () => {
             try {
-              assert.equal(ks.listen.port, 1235);
-              assert.equal(ks.listen.address, 'www.example.com');
+              assert.equal(ks.port, 1235);
+              assert.equal(ks.address, 'www.example.com');
               assert.isTrue(ks.isSecure);
               assert.equal(ks.url, 'https://www.example.com:1235');
             } catch (e) {

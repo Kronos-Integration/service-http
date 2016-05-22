@@ -116,7 +116,7 @@ class ServiceKOA extends Service {
   }
 
   get url() {
-    return `${this.scheme}://${this.listen.address}:${this.listen.port}`;
+    return `${this.scheme}://${this.address}:${this.port}`;
   }
 
   get port() {
@@ -124,7 +124,7 @@ class ServiceKOA extends Service {
   }
 
   get address() {
-    return this.address.port;
+    return this.listen.address;
   }
 
   addSocketEndpoint(ep) {
