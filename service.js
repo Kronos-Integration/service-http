@@ -34,14 +34,6 @@ class ServiceKOA extends Service {
       listen: {
         description: 'server listen definition',
 
-        /*
-                default: {
-                  address: address(),
-                  port: 9898,
-                  retryTimeout: 10
-                },
-        */
-
         attributes: {
           retryTimeout: {
             description: 'how long should we retry binding to the address (EADDRINUSE)',
@@ -125,6 +117,14 @@ class ServiceKOA extends Service {
 
   get url() {
     return `${this.scheme}://${this.listen.address}:${this.listen.port}`;
+  }
+
+  get port() {
+    return this.listen.port;
+  }
+
+  get address() {
+    return this.address.port;
   }
 
   addSocketEndpoint(ep) {
