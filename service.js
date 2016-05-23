@@ -398,11 +398,15 @@ class SocketEndpoint extends endpoint.SendEndpoint {
   }
 
   open(ws) {
-    this.owner.info(`open ${this.name}`);
+    this.owner.trace({
+      state: 'open',
+      endpoint: this.identifier
+    });
     this.opposite.receive = message => {
       return new Promise((fullfill, reject) => {
         this.owner.trace({
           message: 'send',
+          endpoint: this.identifier,
           content: message
         });
         ws.send(JSON.stringify(message),
@@ -418,7 +422,10 @@ class SocketEndpoint extends endpoint.SendEndpoint {
   }
 
   close(ws) {
-    this.owner.info(`close ${this.name}`);
+    this.owner.trace({
+      state: 'close',
+      endpoint: this.identifier
+    });
     this.opposite.receive = undefined;
   }
 
