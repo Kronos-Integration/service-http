@@ -34,7 +34,7 @@
     "istanbul": "0.4.3",
     "jsdoc": "3.4.0",
     "koa-route": "^3.1.0",
-    "mocha": "2.4.5",
+    "mocha": "2.5.1",
     "semantic-release": "6.2.2",
     "supertest": "^1.2.0",
     "supertest-as-promised": "3.1.0"
