@@ -36,7 +36,7 @@
     "koa-route": "^3.1.0",
     "mocha": "2.5.3",
     "semantic-release": "6.3.0",
-    "supertest": "^1.2.0",
+    "supertest": "^2.0.0",
     "supertest-as-promised": "3.2.0"
   },
   "contributors": [
