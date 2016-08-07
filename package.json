@@ -23,7 +23,7 @@
   "dependencies": {
     "koa-static": "^3.0.0",
     "kronos-koa": "^1.1.1",
-    "kronos-service": "^3.4.3",
+    "kronos-service": "^3.4.4",
     "network-address": "1.1.0",
     "path-to-regexp": "^1.5.3",
     "ws": "^1.1.1"
