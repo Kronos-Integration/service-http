@@ -25,7 +25,7 @@ describe('service-koa socket', function () {
     name: 'my-name1',
     listen: {
       address: 'localhost',
-      port: 1235
+      port: 1236
     }
   }, sp);
 
@@ -50,13 +50,13 @@ describe('service-koa socket', function () {
       });
     }, 1000);
   */
-  const socketUrl = 'ws://localhost:1235/test';
+  const socketUrl = 'ws://localhost:1236/test';
 
   it('socket', done => {
     ks1.configure({
       listen: {
         address: 'localhost',
-        port: 1235
+        port: 1236
       }
     }).then(() => ks1.start().then(() => {
       ks1.koa.use(ctx => {
