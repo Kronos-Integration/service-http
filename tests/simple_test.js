@@ -26,7 +26,8 @@ describe('service-koa', () => {
       type: 'xxx',
       name: 'my-name',
       listen: {
-        port: 1234
+        port: 1234,
+        address: address()
       }
     }, sp);
 
@@ -70,7 +71,8 @@ describe('service-koa', () => {
       key: fs.readFileSync(path.join(__dirname, 'fixtures', 'www.example.com.key')),
       cert: fs.readFileSync(path.join(__dirname, 'fixtures', 'www.example.com.cert')),
       listen: {
-        port: 1234
+        port: 1234,
+        address: address()
       }
     }, sp);
 

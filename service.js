@@ -3,7 +3,6 @@
 
 const http = require('http'),
   https = require('https'),
-  address = require('network-address'),
   url = require('url'),
   pathToRegexp = require('path-to-regexp'),
   Koa = require('kronos-koa'),
@@ -43,7 +42,6 @@ class ServiceKOA extends Service {
           address: {
             description: 'hostname/ip-address of the http(s) server',
             needsRestart: true,
-            default: address(),
             type: 'string'
           },
           fromPort: {
@@ -211,7 +209,7 @@ class ServiceKOA extends Service {
         }
 
         function listen() {
-          server.listen(service.listen.port, service.listen.address, err => {
+          const handler = err => {
             process.removeListener('uncaughtException', addressInUseHandler);
             if (err) {
               service.server = undefined;
@@ -221,7 +219,13 @@ class ServiceKOA extends Service {
               service.trace(level => `listening on ${service.url}`);
               fullfill();
             }
-          });
+          };
+
+          if (service.listen.address) {
+            server.listen(service.listen.port, service.listen.address, handler);
+          } else {
+            server.listen(service.listen.port, handler);
+          }
         }
 
         function addressInUseHandler(e) {
