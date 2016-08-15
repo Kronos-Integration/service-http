@@ -349,6 +349,7 @@ class RouteSendEndpoint extends endpoint.SendEndpoint {
             error: e
           });
           ctx.body = e;
+          ctx.status = 500;
         });
       }
 
