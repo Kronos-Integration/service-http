@@ -5,6 +5,7 @@ const http = require('http'),
   https = require('https'),
   url = require('url'),
   pathToRegexp = require('path-to-regexp'),
+  mat = require('model-attributes'),
   Koa = require('kronos-koa'),
   WebSocketServer = require('ws').Server,
   Service = require('kronos-service').Service,
@@ -20,12 +21,8 @@ class ServiceKOA extends Service {
     return 'koa';
   }
 
-  get type() {
-    return ServiceKOA.name;
-  }
-
-  get configurationAttributes() {
-    return Object.assign({
+  static get configurationAttributes() {
+    return Object.assign(mat.createAttributes({
       docRoot: {
         description: 'file system root for static content',
         type: 'fs-path'
@@ -80,7 +77,7 @@ class ServiceKOA extends Service {
           return false;
         }
       }
-    }, super.configurationAttributes);
+    }), Service.configurationAttributes);
   }
 
   constructor(config, owner) {

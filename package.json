@@ -25,14 +25,15 @@
     "kronos-koa": "^1.1.1",
     "kronos-service": "^4.0.0",
     "path-to-regexp": "^1.5.3",
-    "ws": "^1.1.1"
+    "ws": "^1.1.1",
+    "model-attributes": "^1.2.0"
   },
   "devDependencies": {
     "chai": "3.5.0",
     "cz-conventional-changelog": "1.2.0",
     "istanbul": "0.4.5",
     "jsdoc": "3.4.0",
-    "koa-route": "^3.1.0",
+    "koa-route": "^3.2.0",
     "mocha": "3.0.2",
     "network-address": "^1.1.0",
     "semantic-release": "6.3.0",
