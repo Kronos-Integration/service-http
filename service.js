@@ -39,31 +39,33 @@ class ServiceKOA extends Service {
           address: {
             description: 'hostname/ip-address of the http(s) server',
             needsRestart: true,
-            type: 'string'
+            type: 'hostname'
           },
           fromPort: {
             description: 'start port range of the http(s) server',
-            type: 'integer'
+            type: 'ip-port'
           },
           toPort: {
             description: 'end port range of the http(s) server',
-            type: 'integer'
+            type: 'ip-port'
           },
           port: {
             description: 'port of the http(s) server',
             needsRestart: true,
             default: 9898,
-            type: 'integer'
+            type: 'ip-port'
           }
         }
       },
       key: {
         description: 'ssl key',
-        needsRestart: true
+        needsRestart: true,
+        type: 'blob'
       },
       cert: {
         description: 'ssl cert',
-        needsRestart: true
+        needsRestart: true,
+        type: 'blob'
       },
       timeout: {
         description: 'server timeout',
