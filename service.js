@@ -152,7 +152,7 @@ class ServiceKOA extends Service {
   }
 
   timeoutForTransition(transition) {
-    if (transition.name === 'start') {
+    if (transition.name.startsWith('start')) {
       if (this.listen && this.listen.retryTimeout)
         return this.listen.retryTimeout * 1000;
     }
