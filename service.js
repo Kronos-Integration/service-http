@@ -22,10 +22,10 @@ class ServiceKOA extends Service {
   }
 
   static get configurationAttributes() {
-    return Object.assign(mat.createAttributes({
+    return mat.mergeAttributes(Service.configurationAttributes, mat.createAttributes({
       docRoot: {
         description: 'file system root for static content',
-        type: 'fs-path'
+        type: 'posix-path'
       },
       listen: {
         description: 'server listen definition',
@@ -68,18 +68,34 @@ class ServiceKOA extends Service {
         type: 'blob'
       },
       timeout: {
-        description: 'server timeout',
-        type: 'duration',
-        default: 120,
-        setter(value) {
-          if (value && this.server) {
-            this.server.setTimeout(value * 1000);
-            return true;
+        attributes: {
+          server: {
+            description: 'server timeout',
+            type: 'duration',
+            default: 120,
+            setter(value, attribute) {
+
+              console.log(`set ${value} ${this.name}`);
+              if (value === undefined) {
+                value = attribute.default;
+              }
+
+              if (this.timeout === undefined) {
+                this.timeout = {};
+              }
+
+              this.timeout.server = value;
+
+              if (this.server) {
+                this.server.setTimeout(value * 1000);
+                return true;
+              }
+              return false;
+            }
           }
-          return false;
         }
       }
-    }), Service.configurationAttributes);
+    }));
   }
 
   constructor(config, owner) {
@@ -149,15 +165,6 @@ class ServiceKOA extends Service {
     return this.socketEndpoints[location.path];
     // you might use location.query.access_token to authenticate or share sessions
     // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
-  }
-
-  timeoutForTransition(transition) {
-    if (transition.name.startsWith('start')) {
-      if (this.listen && this.listen.retryTimeout)
-        return this.listen.retryTimeout * 1000;
-    }
-
-    return super.timeoutForTransition(transition);
   }
 
   _start() {

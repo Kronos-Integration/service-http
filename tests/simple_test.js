@@ -39,19 +39,22 @@ describe('service-koa', () => {
     it('has address', () => assert.equal(ks.address, address()));
     it('has url', () => assert.equal(ks.url, `http://${address()}:1234`));
 
+    it('has server timeout', () => assert.equal(ks.timeout.server, 120));
+
     describe('configure', () => {
-      it('can change port', done => {
+      it('can change port', () =>
         ks.configure({
           listen: {
             port: 1235
           }
-        }).then(
-          () => {
-            assert.equal(ks.listen.port, 1235);
-            done();
+        }).then(() => assert.equal(ks.listen.port, 1235)));
+
+      it('can change timeout', () =>
+        ks.configure({
+          timeout: {
+            server: 123.45
           }
-        );
-      });
+        }).then(() => assert.equal(ks.timeout.server, 123.45)));
     });
 
     it('GET /', () =>
