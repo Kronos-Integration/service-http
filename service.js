@@ -74,8 +74,6 @@ class ServiceKOA extends Service {
             type: 'duration',
             default: 120,
             setter(value, attribute) {
-
-              console.log(`set ${value} ${this.name}`);
               if (value === undefined) {
                 value = attribute.default;
               }
