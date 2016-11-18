@@ -7,6 +7,7 @@ const http = require('http'),
   pathToRegexp = require('path-to-regexp'),
   mat = require('model-attributes'),
   Koa = require('kronos-koa'),
+  jwt = require('koa-jwt'),
   WebSocketServer = require('ws').Server,
   Service = require('kronos-service').Service,
   endpoint = require('kronos-endpoint'),
@@ -27,6 +28,17 @@ class ServiceKOA extends Service {
         description: 'file system root for static content',
         type: 'posix-path'
       },
+      auth: {
+        description: 'authentification',
+        attributes: {
+          jwt: {
+            attributes: {
+              privateKey: {}
+            }
+          }
+        }
+      },
+
       listen: {
         description: 'server listen definition',
 
@@ -104,6 +116,17 @@ class ServiceKOA extends Service {
 
     if (this.docRoot) {
       this.koa.use(require('koa-static')(this.docRoot), {});
+    }
+
+    if (this.auth) {
+      if (this.auth.jwt) {
+        this.koa.use(jwt({
+          secret: '',
+          algorithm: 'RS256'
+        }));
+
+        this.koa.use(require('koa-static')(this.docRoot), {});
+      }
     }
   }
 
