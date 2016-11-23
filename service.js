@@ -124,8 +124,6 @@ class ServiceKOA extends Service {
           secret: '',
           algorithm: 'RS256'
         }));
-
-        this.koa.use(require('koa-static')(this.docRoot), {});
       }
     }
   }
