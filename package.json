@@ -43,7 +43,7 @@
     "supertest-as-promised": "^4.0.2",
     "jsdoc-to-markdown": "^2.0.1",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.39.0"
+    "rollup": "^0.39.1"
   },
   "contributors": [
     {
