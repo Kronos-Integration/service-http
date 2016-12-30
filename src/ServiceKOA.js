@@ -41,8 +41,11 @@ class ServiceKOA extends Service {
         description: 'authentification',
         attributes: {
           jwt: {
+            description: 'json web tokens'
             attributes: {
-              privateKey: {}
+              privateKey: {
+              	description: 'private key content'
+              }
             }
           }
         }
@@ -127,6 +130,7 @@ class ServiceKOA extends Service {
       this.koa.use(require('koa-static')(this.docRoot), {});
     }
 
+	/*
     if (this.auth) {
       if (this.auth.jwt) {
         this.koa.use(jwt({
@@ -135,6 +139,7 @@ class ServiceKOA extends Service {
         }));
       }
     }
+    */
   }
 
   get isSecure() {
