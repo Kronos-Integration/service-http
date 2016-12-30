@@ -11,12 +11,15 @@ const chai = require('chai'),
   path = require('path'),
   address = require('network-address'),
   request = require('supertest-as-promised')(Promise),
-  service = require('kronos-service'),
-  ServiceKOA = require('../service').Service,
   route = require('koa-route'),
-  ServiceProviderMixin = service.ServiceProviderMixin;
+  {
+    ServiceProviderMixin, Service
+  } = require('kronos-service'),
+  {
+    ServiceKOA
+  } = require('../dist/module');
 
-class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
+class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 const sp = new ServiceProvider();
 
