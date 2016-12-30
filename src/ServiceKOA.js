@@ -5,13 +5,22 @@ const http = require('http'),
   https = require('https'),
   url = require('url'),
   pathToRegexp = require('path-to-regexp'),
-  mat = require('model-attributes'),
   Koa = require('kronos-koa'),
   jwt = require('koa-jwt'),
-  WebSocketServer = require('ws').Server,
-  Service = require('kronos-service').Service,
-  endpoint = require('kronos-endpoint'),
-  ReceiveEndpoint = require('kronos-endpoint').ReceiveEndpoint;
+  WebSocketServer = require('ws').Server;
+
+import {
+  Service
+}
+from 'kronos-service';
+import {
+  SendEndpoint
+}
+from 'kronos-endpoint';
+import {
+  mergeAttributes, createAttributes
+}
+from 'model-attributes';
 
 /**
  * HTTP server with koa
@@ -23,7 +32,7 @@ class ServiceKOA extends Service {
   }
 
   static get configurationAttributes() {
-    return mat.mergeAttributes(Service.configurationAttributes, mat.createAttributes({
+    return mergeAttributes(Service.configurationAttributes, createAttributes({
       docRoot: {
         description: 'file system root for static content',
         type: 'posix-path'
@@ -299,8 +308,6 @@ class ServiceKOA extends Service {
   }
 }
 
-module.exports.Service = ServiceKOA;
-module.exports.registerWithManager = manager => manager.registerServiceFactory(ServiceKOA);
 
 
 function decode(val) {
@@ -310,7 +317,7 @@ function decode(val) {
 /**
  * Endpoint to link against a koa route
  */
-class RouteSendEndpoint extends endpoint.SendEndpoint {
+class RouteSendEndpoint extends SendEndpoint {
 
   /**
    * @param name {String} endpoint name
@@ -406,9 +413,8 @@ class RouteSendEndpoint extends endpoint.SendEndpoint {
   }
 }
 
-module.exports.RouteSendEndpoint = RouteSendEndpoint;
 
-class SocketEndpoint extends endpoint.SendEndpoint {
+class SocketEndpoint extends SendEndpoint {
   constructor(name, owner, path) {
     super(name, owner, {
       createOpposite: true
@@ -474,4 +480,13 @@ class SocketEndpoint extends endpoint.SendEndpoint {
   }
 }
 
-module.exports.SocketEndpoint = SocketEndpoint;
+function registerWithManager(manager) {
+  return manager.registerServiceFactory(ServiceKOA);
+}
+
+export {
+  registerWithManager,
+  ServiceKOA,
+  RouteSendEndpoint,
+  SocketEndpoint
+};

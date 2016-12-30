@@ -7,11 +7,14 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  service = require('kronos-service'),
-  ServiceKOA = require('../service').Service,
-  ServiceProviderMixin = service.ServiceProviderMixin;
+  {
+    ServiceProviderMixin, Service
+  } = require('kronos-service'),
+  {
+    ServiceKOA
+  } = require('../dist/module');
 
-class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
+class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 const sp = new ServiceProvider();
 
