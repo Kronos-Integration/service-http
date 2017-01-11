@@ -28,7 +28,7 @@
     "koa-jwt": "^2.1.0",
     "koa-static": "^3.0.0",
     "kronos-koa": "^1.1.1",
-    "kronos-service": "^4.5.1",
+    "kronos-service": "^4.5.2",
     "model-attributes": "^3.0.4",
     "path-to-regexp": "^1.7.0",
     "ws": "^1.1.1"
