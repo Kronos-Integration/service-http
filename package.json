@@ -43,7 +43,7 @@
     "semantic-release": "^6.3.6",
     "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2",
-    "jsdoc-to-markdown": "^2.0.1",
+    "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.41.4",
     "nyc": "^10.1.2"
