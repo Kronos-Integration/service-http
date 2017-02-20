@@ -32,7 +32,7 @@
     "kronos-service": "^4.5.4",
     "model-attributes": "^3.0.6",
     "path-to-regexp": "^1.7.0",
-    "ws": "^2.0.3"
+    "ws": "^2.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
