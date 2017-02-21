@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "cz-conventional-changelog": "^1.2.0",
+    "cz-conventional-changelog": "^2.0.0",
     "koa-route": "^3.2.0",
     "mocha": "^3.2.0",
     "network-address": "^1.1.2",
