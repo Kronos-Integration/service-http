@@ -30,7 +30,7 @@
     "koa-static": "^3.0.0",
     "kronos-koa": "^1.1.1",
     "kronos-service": "^4.5.4",
-    "model-attributes": "^3.0.6",
+    "model-attributes": "^3.0.7",
     "path-to-regexp": "^1.7.0",
     "ws": "^2.1.0"
   },
