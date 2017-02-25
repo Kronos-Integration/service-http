@@ -28,7 +28,7 @@
   "dependencies": {
     "koa-jwt": "^2.2.2",
     "koa-static": "^3.0.0",
-    "kronos-koa": "^1.1.2",
+    "kronos-koa": "^1.2.0",
     "kronos-service": "^4.5.4",
     "model-attributes": "^3.0.7",
     "path-to-regexp": "^1.7.0",
