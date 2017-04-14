@@ -60,7 +60,7 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=7.8.0"
+    "node": ">=7.9.0"
   },
   "config": {
     "commitizen": {
@@ -75,5 +75,10 @@
       "lcov"
     ],
     "report-dir": "./coverage"
+  },
+  "template": {
+    "repository": {
+      "url": "https://github.com/Kronos-Tools/npm-package-template.git"
+    }
   }
 }
