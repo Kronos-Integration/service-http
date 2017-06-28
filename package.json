@@ -45,7 +45,7 @@
     "supertest-as-promised": "^4.0.2",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.42.0",
+    "rollup": "^0.43.0",
     "nyc": "^11.0.3"
   },
   "contributors": [
@@ -60,12 +60,7 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=7.10.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+    "node": ">=8.1.2"
   },
   "nyc": {
     "include": [
