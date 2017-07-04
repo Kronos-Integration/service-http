@@ -3,6 +3,5 @@
 
 export default {
   format: 'cjs',
-  plugins: [],
-  external: ['model-attributes', 'kronos-service', 'kronos-endpoint']
+  plugins: []
 };
