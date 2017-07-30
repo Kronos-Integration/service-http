@@ -9,115 +9,109 @@ const http = require('http'),
   jwt = require('koa-jwt'),
   WebSocketServer = require('ws').Server;
 
-import {
-  Service
-}
-from 'kronos-service';
-import {
-  SendEndpoint
-}
-from 'kronos-endpoint';
-import {
-  mergeAttributes, createAttributes
-}
-from 'model-attributes';
+import { Service } from 'kronos-service';
+import { SendEndpoint } from 'kronos-endpoint';
+import { mergeAttributes, createAttributes } from 'model-attributes';
 
 /**
  * HTTP server with koa
  */
 class ServiceKOA extends Service {
-
   static get name() {
     return 'koa';
   }
 
   static get configurationAttributes() {
-    return mergeAttributes(Service.configurationAttributes, createAttributes({
-      docRoot: {
-        description: 'file system root for static content',
-        type: 'posix-path'
-      },
-      auth: {
-        description: 'authentification',
-        attributes: {
-          jwt: {
-            description: 'json web tokens',
-            attributes: {
-              privateKey: {
-                description: 'private key content'
+    return mergeAttributes(
+      Service.configurationAttributes,
+      createAttributes({
+        docRoot: {
+          description: 'file system root for static content',
+          type: 'posix-path'
+        },
+        auth: {
+          description: 'authentification',
+          attributes: {
+            jwt: {
+              description: 'json web tokens',
+              attributes: {
+                privateKey: {
+                  description: 'private key content'
+                }
+              }
+            }
+          }
+        },
+
+        listen: {
+          description: 'server listen definition',
+
+          attributes: {
+            retryTimeout: {
+              description:
+                'how long should we retry binding to the address (EADDRINUSE)',
+              default: 10,
+              type: 'duration'
+            },
+            address: {
+              description: 'hostname/ip-address of the http(s) server',
+              needsRestart: true,
+              type: 'hostname'
+            },
+            fromPort: {
+              description: 'start port range of the http(s) server',
+              type: 'ip-port'
+            },
+            toPort: {
+              description: 'end port range of the http(s) server',
+              type: 'ip-port'
+            },
+            port: {
+              description: 'port of the http(s) server',
+              needsRestart: true,
+              default: 9898,
+              type: 'ip-port'
+            }
+          }
+        },
+        key: {
+          description: 'ssl key',
+          needsRestart: true,
+          type: 'blob'
+        },
+        cert: {
+          description: 'ssl cert',
+          needsRestart: true,
+          type: 'blob'
+        },
+        timeout: {
+          attributes: {
+            server: {
+              description: 'server timeout',
+              type: 'duration',
+              default: 120,
+              setter(value, attribute) {
+                if (value === undefined) {
+                  value = attribute.default;
+                }
+
+                if (this.timeout === undefined) {
+                  this.timeout = {};
+                }
+
+                this.timeout.server = value;
+
+                if (this.server) {
+                  this.server.setTimeout(value * 1000);
+                  return true;
+                }
+                return false;
               }
             }
           }
         }
-      },
-
-      listen: {
-        description: 'server listen definition',
-
-        attributes: {
-          retryTimeout: {
-            description: 'how long should we retry binding to the address (EADDRINUSE)',
-            default: 10,
-            type: 'duration'
-          },
-          address: {
-            description: 'hostname/ip-address of the http(s) server',
-            needsRestart: true,
-            type: 'hostname'
-          },
-          fromPort: {
-            description: 'start port range of the http(s) server',
-            type: 'ip-port'
-          },
-          toPort: {
-            description: 'end port range of the http(s) server',
-            type: 'ip-port'
-          },
-          port: {
-            description: 'port of the http(s) server',
-            needsRestart: true,
-            default: 9898,
-            type: 'ip-port'
-          }
-        }
-      },
-      key: {
-        description: 'ssl key',
-        needsRestart: true,
-        type: 'blob'
-      },
-      cert: {
-        description: 'ssl cert',
-        needsRestart: true,
-        type: 'blob'
-      },
-      timeout: {
-        attributes: {
-          server: {
-            description: 'server timeout',
-            type: 'duration',
-            default: 120,
-            setter(value, attribute) {
-              if (value === undefined) {
-                value = attribute.default;
-              }
-
-              if (this.timeout === undefined) {
-                this.timeout = {};
-              }
-
-              this.timeout.server = value;
-
-              if (this.server) {
-                this.server.setTimeout(value * 1000);
-                return true;
-              }
-              return false;
-            }
-          }
-        }
-      }
-    }));
+      })
+    );
   }
 
   constructor(config, owner) {
@@ -185,6 +179,7 @@ class ServiceKOA extends Service {
 
   createSocketEndpoint(name, path) {
     const thePath = path || name;
+
     let ep = this.socketEndpoints[thePath];
     if (ep === undefined) {
       ep = this.addSocketEndpoint(new SocketEndpoint(name, this, path));
@@ -192,9 +187,8 @@ class ServiceKOA extends Service {
     return ep;
   }
 
-  endpointForSocketConnection(ws) {
-    const location = url.parse(ws.upgradeReq.url, true);
-    //this.info(`connection: ${location.path} -> ${this.socketEndpoints[location.path]}`);
+  endpointForSocketConnection(ws, req) {
+    const location = url.parse(req.url, true);
     return this.socketEndpoints[location.path];
     // you might use location.query.access_token to authenticate or share sessions
     // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
@@ -202,18 +196,16 @@ class ServiceKOA extends Service {
 
   _start() {
     if (!this.server) {
-      if (this.isSecure) {
-        this.server = https.createServer(this.serverOptions, this.koa.callback());
-      } else {
-        this.server = http.createServer(this.koa.callback());
-      }
+      this.server = this.isSecure
+        ? https.createServer(this.serverOptions, this.koa.callback())
+        : http.createServer(this.koa.callback());
 
       this.wss = new WebSocketServer({
         server: this.server
       });
 
-      this.wss.on('connection', ws => {
-        const ep = this.endpointForSocketConnection(ws);
+      this.wss.on('connection', (ws, req) => {
+        const ep = this.endpointForSocketConnection(ws, req);
 
         if (ep) {
           ep.open(ws);
@@ -233,7 +225,7 @@ class ServiceKOA extends Service {
         }
       });
 
-      if (this.timeout) {
+      if (this.timeout !== undefined) {
         this.server.setTimeout(this.timeout * 1000);
       }
 
@@ -243,7 +235,7 @@ class ServiceKOA extends Service {
         const service = this;
         const server = this.server;
 
-        if (service.listen.fromPort) {
+        if (service.listen.fromPort !== undefined) {
           service.listen.port = service.listen.fromPort;
         }
 
@@ -260,7 +252,7 @@ class ServiceKOA extends Service {
             }
           };
 
-          if (service.listen.address) {
+          if (service.listen.address !== undefined) {
             server.listen(service.listen.port, service.listen.address, handler);
           } else {
             server.listen(service.listen.port, handler);
@@ -275,7 +267,10 @@ class ServiceKOA extends Service {
             // 1. retry later
             // 2. use other port / interface
 
-            if (service.listen.fromPort && service.listen.port < service.listen.toPort) {
+            if (
+              service.listen.fromPort &&
+              service.listen.port < service.listen.toPort
+            ) {
               service.listen.port++;
               listen();
               return;
@@ -313,17 +308,14 @@ class ServiceKOA extends Service {
   }
 }
 
-
-
 function decode(val) {
-  if (val) return decodeURIComponent(val);
+  if (val !== undefined) return decodeURIComponent(val);
 }
 
 /**
  * Endpoint to link against a koa route
  */
 class RouteSendEndpoint extends SendEndpoint {
-
   /**
    * @param name {String} endpoint name
    * @param owner {Step} the owner of the endpoint
@@ -408,7 +400,7 @@ class RouteSendEndpoint extends SendEndpoint {
   toJSON() {
     const json = super.toJSON();
 
-    for (const attr of['serviceName', 'method', 'path']) {
+    for (const attr of ['serviceName', 'method', 'path']) {
       if (this[attr] !== undefined) {
         json[attr] = this[attr];
       }
@@ -417,7 +409,6 @@ class RouteSendEndpoint extends SendEndpoint {
     return json;
   }
 }
-
 
 class SocketEndpoint extends SendEndpoint {
   constructor(name, owner, path) {
@@ -450,14 +441,13 @@ class SocketEndpoint extends SendEndpoint {
           endpoint: this.identifier,
           content: message
         });
-        ws.send(JSON.stringify(message),
-          error => {
-            if (error) {
-              reject(error);
-            } else {
-              fullfill();
-            }
-          });
+        ws.send(JSON.stringify(message), error => {
+          if (error) {
+            reject(error);
+          } else {
+            fullfill();
+          }
+        });
       });
     };
   }
@@ -475,7 +465,7 @@ class SocketEndpoint extends SendEndpoint {
 
     json.socket = true;
 
-    for (const attr of['path']) {
+    for (const attr of ['path']) {
       if (this[attr] !== undefined) {
         json[attr] = this[attr];
       }
@@ -489,9 +479,4 @@ function registerWithManager(manager) {
   return manager.registerServiceFactory(ServiceKOA);
 }
 
-export {
-  registerWithManager,
-  ServiceKOA,
-  RouteSendEndpoint,
-  SocketEndpoint
-};
+export { registerWithManager, ServiceKOA, RouteSendEndpoint, SocketEndpoint };
