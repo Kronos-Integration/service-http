@@ -1,8 +1,12 @@
-/* jslint node: true, esnext: true */
-'use strict';
+import pkg from './package.json';
 
 export default {
-  format: 'cjs',
   plugins: [],
-  external: ['model-attributes', 'kronos-service', 'kronos-endpoint']
+  external: ['model-attributes', 'kronos-service', 'kronos-endpoint'],
+  input: pkg.module,
+
+  output: {
+    format: 'cjs',
+    file: pkg.main
+  }
 };
