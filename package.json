@@ -35,7 +35,7 @@
     "ws": "^3.1.0"
   },
   "devDependencies": {
-    "chai": "^4.1.1",
+    "chai": "^4.1.2",
     "koa-route": "^3.2.0",
     "mocha": "^3.5.0",
     "network-address": "^1.1.2",
@@ -45,7 +45,7 @@
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.49.2",
-    "nyc": "^11.1.0"
+    "nyc": "^11.2.1"
   },
   "contributors": [
     {
