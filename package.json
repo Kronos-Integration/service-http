@@ -2,7 +2,9 @@
   "name": "kronos-service-koa",
   "version": "0.0.0-semantic-release",
   "description": "koa backed http server",
-  "keywords": ["kronos-service"],
+  "keywords": [
+    "kronos-service"
+  ],
   "main": "dist/module.js",
   "module": "src/ServiceKOA.js",
   "scripts": {
@@ -35,7 +37,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "koa-route": "^3.2.0",
-    "mocha": "^3.5.2",
+    "mocha": "^3.5.3",
     "network-address": "^1.1.2",
     "semantic-release": "^8.0.0",
     "supertest": "^3.0.0",
@@ -57,11 +59,15 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=8.4.0"
+    "node": ">=8.5.0"
   },
   "nyc": {
-    "include": ["dist/**/*.js"],
-    "reporter": ["lcov"],
+    "include": [
+      "dist/**/*.js"
+    ],
+    "reporter": [
+      "lcov"
+    ],
     "report-dir": "./coverage"
   },
   "template": {
