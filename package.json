@@ -37,15 +37,15 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "koa-route": "^3.2.0",
-    "mocha": "^3.5.3",
+    "mocha": "^4.0.1",
     "network-address": "^1.1.2",
-    "semantic-release": "^8.0.4",
+    "semantic-release": "^8.2.2",
     "supertest": "^3.0.0",
-    "supertest-as-promised": "^4.0.2",
+    "supertest-as-promised": "^3.5.3",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.50.0",
-    "nyc": "^11.2.1"
+    "nyc": "^11.3.0"
   },
   "contributors": [
     {
@@ -59,7 +59,7 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=8.6.0"
+    "node": ">=8.7.0"
   },
   "nyc": {
     "include": [
