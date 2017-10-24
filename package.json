@@ -41,7 +41,7 @@
     "network-address": "^1.1.2",
     "semantic-release": "^8.2.2",
     "supertest": "^3.0.0",
-    "supertest-as-promised": "^4.0.2",
+    "supertest-as-promised": "^3.5.3",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.50.0",
