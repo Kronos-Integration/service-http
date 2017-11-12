@@ -37,7 +37,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "koa-route": "^3.2.0",
-    "mocha": "^4.0.1",
+    "mocha": "^3.5.3",
     "network-address": "^1.1.2",
     "semantic-release": "^9.1.1",
     "supertest": "^3.0.0",
