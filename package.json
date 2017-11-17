@@ -8,13 +8,13 @@
   "main": "dist/module.js",
   "module": "src/ServiceKOA.js",
   "scripts": {
-    "cover": "nyc --temp-directory build/nyc npm test",
-    "test": "mocha tests/*-test.js",
+    "cover": "nyc --temp-directory build/nyc ava",
+    "test": "ava",
     "semantic-release": "semantic-release",
-    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
-    "pretest": "rollup -c",
-    "posttest": "markdown-doctest",
-    "precover": "rollup -c",
+    "docs": "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md",
+    "pretest": "rollup -c tests/rollup.config.js",
+    "posttest": "npm run prepare && markdown-doctest",
+    "precover": "rollup -c tests/rollup.config.js",
     "prepare": "rollup -c"
   },
   "repository": {
@@ -35,17 +35,21 @@
     "ws": "^3.1.0"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
     "koa-route": "^3.2.0",
-    "mocha": "^3.5.3",
     "network-address": "^1.1.2",
     "semantic-release": "^9.1.1",
     "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2",
-    "jsdoc-to-markdown": "^3.0.1",
+    "jsdoc-to-markdown": "^3.0.2",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.51.5",
-    "nyc": "^11.3.0"
+    "rollup": "^0.51.7",
+    "nyc": "^11.3.0",
+    "jsdoc-babel": "^0.3.0",
+    "ava": "^0.23.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-multi-entry": "^2.0.2",
+    "babel-preset-env": "^1.6.1",
+    "xo": "^0.19.0"
   },
   "contributors": [
     {
@@ -72,10 +76,21 @@
   },
   "template": {
     "repository": {
-      "url": "https://github.com/Kronos-Tools/npm-package-template.git"
+      "url": "https://github.com/arlac77/npm-package-template.git"
     }
   },
   "xo": {
     "space": true
+  },
+  "ava": {
+    "files": [
+      "build/*-test.js"
+    ],
+    "presets": [
+      "env"
+    ],
+    "require": [
+      "babel-register"
+    ]
   }
 }
