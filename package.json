@@ -3,8 +3,8 @@
   "version": "0.0.0-semantic-release",
   "description": "koa backed http server",
   "keywords": ["kronos-service"],
-  "main": "dist/module.js",
-  "module": "src/ServiceKOA.js",
+  "main": "dist/service-koa.js",
+  "module": "src/service-koa.js",
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
     "test": "ava",
