@@ -35,26 +35,38 @@ test('service-koa plain http', t => {
   t.is(ks.timeout.server, 120);
 });
 
+test('service-koa plain http change port', async t => {
+  const sp = new ServiceProvider();
+  const ks = new ServiceKOA(
+    {
+      type: 'xxx',
+      name: 'my-name',
+      listen: {
+        port: 1234,
+        address: address()
+      }
+    },
+    sp
+  );
+
+  await ks.configure({
+    listen: {
+      port: 1235
+    }
+  });
+
+  t.is(ks.listen.port, 1235);
+
+  await ks.configure({
+    timeout: {
+      server: 123.45
+    }
+  });
+
+  t.is(ks.timeout.server, 123.45);
+});
+
 /*
-describe('service-koa', () => {
-  describe('plain http', () => {
-
-    describe('configure', () => {
-      it('can change port', () =>
-        ks.configure({
-          listen: {
-            port: 1235
-          }
-        }).then(() => assert.equal(ks.listen.port, 1235)));
-
-      it('can change timeout', () =>
-        ks.configure({
-          timeout: {
-            server: 123.45
-          }
-        }).then(() => assert.equal(ks.timeout.server, 123.45)));
-    });
-
     it('GET /', () =>
       ks.start().then(() => {
         ks.koa.use(route.get('/', ctx => ctx.body = 'OK'));
