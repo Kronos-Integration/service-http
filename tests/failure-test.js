@@ -1,44 +1,35 @@
-/* global describe, it, xit, before, beforeEach, after, afterEach */
-/* jslint node: true, esnext: true */
-
-'use strict';
-
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  {
-    ServiceProviderMixin, Service
-  } = require('kronos-service'),
-  {
-    ServiceKOA
-  } = require('../dist/module');
+import { ServiceProviderMixin, Service } from 'kronos-service';
+import { ServiceKOA } from '../src/service-koa';
+import test from 'ava';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 const sp = new ServiceProvider();
 
-describe('service-koa failures', () => {
-  describe('with already in use port', () => {
-    const ks1 = new ServiceKOA({
+test('service-koa failures with already in use port', async t => {
+  const ks1 = new ServiceKOA(
+    {
       name: 'my-name1',
-      listen: { 
+      listen: {
         port: 1235
       }
-    }, sp);
+    },
+    sp
+  );
 
-    const ks2 = new ServiceKOA({
+  const ks2 = new ServiceKOA(
+    {
       name: 'my-name2',
-      listen: { 
+      listen: {
         port: 1235
       }
-    }, sp);
+    },
+    sp
+  );
 
-    it('can start', () => {
-      ks1.start().then(() => ks2.start().then(() => {
-        assert.equal(ks1.state, 'running');
-        assert.equal(ks2.state, 'running');
-      }));
-    });
-  });
+  await ks1.start();
+  await ks2.start();
+
+  t.is(ks1.state, 'running');
+  t.is(ks2.state, 'running');
 });

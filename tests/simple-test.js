@@ -1,48 +1,43 @@
-/* global describe, it, xit, before, beforeEach, after, afterEach */
-/* jslint node: true, esnext: true */
+const fs = require('fs');
+const path = require('path');
+const address = require('network-address');
+const request = require('supertest-as-promised')(Promise);
+const route = require('koa-route');
 
-'use strict';
-
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  fs = require('fs'),
-  path = require('path'),
-  address = require('network-address'),
-  request = require('supertest-as-promised')(Promise),
-  route = require('koa-route'),
-  {
-    ServiceProviderMixin, Service
-  } = require('kronos-service'),
-  {
-    ServiceKOA
-  } = require('../dist/module');
+import { ServiceProviderMixin, Service } from 'kronos-service';
+import { ServiceKOA } from '../src/service-koa';
+import test from 'ava';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
-const sp = new ServiceProvider();
-
-describe('service-koa', () => {
-  describe('plain http', () => {
-    const ks = new ServiceKOA({
+test('service-koa plain http', t => {
+  const sp = new ServiceProvider();
+  const ks = new ServiceKOA(
+    {
       type: 'xxx',
       name: 'my-name',
       listen: {
         port: 1234,
         address: address()
       }
-    }, sp);
+    },
+    sp
+  );
 
-    it('has name', () => assert.equal(ks.name, 'my-name'));
-    it('is not secure', () => assert.equal(ks.isSecure, false));
+  t.is(ks.name, 'my-name');
+  t.is(ks.isSecure, false);
 
-    it('has port', () => assert.equal(ks.port, 1234));
+  t.is(ks.port, 1234);
 
-    it('has address', () => assert.equal(ks.address, address()));
-    it('has url', () => assert.equal(ks.url, `http://${address()}:1234`));
+  t.is(ks.address, address());
+  t.is(ks.url, `http://${address()}:1234`);
 
-    it('has server timeout', () => assert.equal(ks.timeout.server, 120));
+  t.is(ks.timeout.server, 120);
+});
+
+/*
+describe('service-koa', () => {
+  describe('plain http', () => {
 
     describe('configure', () => {
       it('can change port', () =>
@@ -121,3 +116,5 @@ describe('service-koa', () => {
       }));
   });
 });
+
+*/
