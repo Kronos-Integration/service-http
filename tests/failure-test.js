@@ -29,6 +29,7 @@ test('service-koa failures with already in use port', async t => {
 
   await ks1.start();
   t.is(ks1.state, 'running');
+  await ks1.stop();
 
   try {
     await ks2.start();

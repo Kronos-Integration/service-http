@@ -9,6 +9,7 @@ export default {
   },
   external: [
     'ava',
+    'got',
     'kronos-koa',
     'model-attributes',
     'kronos-service',
