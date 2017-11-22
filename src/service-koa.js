@@ -2,10 +2,10 @@ const http = require('http'),
   https = require('https'),
   url = require('url'),
   pathToRegexp = require('path-to-regexp'),
-  Koa = require('kronos-koa'),
   jwt = require('koa-jwt'),
   WebSocketServer = require('ws').Server;
 
+import { KronosKoa } from 'kronos-koa';
 import { Service } from 'kronos-service';
 import { SendEndpoint } from 'kronos-endpoint';
 import { mergeAttributes, createAttributes } from 'model-attributes';
@@ -115,7 +115,7 @@ export class ServiceKOA extends Service {
     super(config, owner);
 
     this.socketEndpoints = {};
-    this.koa = new Koa();
+    this.koa = new KronosKoa();
 
     if (this.docRoot) {
       this.koa.use(require('koa-static')(this.docRoot), {});
