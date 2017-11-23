@@ -36,6 +36,6 @@ test('service-koa failures with already in use port', async t => {
 
   t.is(ks2.state, 'failed');
 
-  ks1.stop();
-  ks2.stop();
+  await ks1.stop();
+  await ks2.stop();
 });

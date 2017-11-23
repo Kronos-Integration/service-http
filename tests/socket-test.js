@@ -62,19 +62,20 @@ test('service-koa socket', async t => {
     console.log('disconnected');
   });
 
-  ws.on('message', (data, flags) => {
-    console.log(
-      'Roundtrip time: ' + (Date.now() - parseInt(data, 10)) + 'ms',
-      flags
-    );
-
-    /*
-        setTimeout(() => {
-          ws.send(Date.now().toString(), {
-            mask: true
-          });
-        }, 500);
-*/
-    done();
+  await new Promise((resolve, reject) => {
+    ws.on('message', (data, flags) => {
+      console.log(
+        'Roundtrip time: ' + (Date.now() - parseInt(data, 10)) + 'ms',
+        flags
+      );
+      resolve();
+      /*
+          setTimeout(() => {
+            ws.send(Date.now().toString(), {
+              mask: true
+            });
+          }, 500);
+  */
+    });
   });
 });

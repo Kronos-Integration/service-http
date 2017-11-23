@@ -249,15 +249,17 @@ export class ServiceKOA extends Service {
             }
           };
 
-          if (service.listen.address !== undefined) {
-            server.listen(service.listen.port, service.listen.address, handler);
-          } else {
+          if (service.listen.address === undefined) {
             server.listen(service.listen.port, handler);
+          } else {
+            server.listen(service.listen.port, service.listen.address, handler);
           }
         }
 
         function addressInUseHandler(e) {
           if (e.code === 'EADDRINUSE') {
+            //console.log(`addressInUseHandler: ${e.code}`);
+
             service.trace(level => `Address in use ${service.url} retrying...`);
 
             // try different strategies

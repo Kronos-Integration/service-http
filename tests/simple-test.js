@@ -7,6 +7,7 @@ const route = require('koa-route');
 import { ServiceProviderMixin, Service } from 'kronos-service';
 import { ServiceKOA } from '../src/service-koa';
 import test from 'ava';
+import got from 'got';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
@@ -66,18 +67,32 @@ test('service-koa plain http change port', async t => {
   t.is(ks.timeout.server, 123.45);
 });
 
-/*
-    it('GET /', () =>
-      ks.start().then(() => {
-        ks.koa.use(route.get('/', ctx => ctx.body = 'OK'));
-        request(ks.server.listen())
-          .get('/')
-          .expect(200)
-          .expect(res => assert.equal(res.text, 'OK'))
-          .end(() => ks.stop());
-      }));
-  });
+test('service-koa plain http get', async t => {
+  const sp = new ServiceProvider();
+  const ks = new ServiceKOA(
+    {
+      type: 'xxx',
+      name: 'my-name',
+      listen: {
+        port: 1234,
+        address: address()
+      }
+    },
+    sp
+  );
 
+  await ks.start();
+  ks.koa.use(route.get('/', ctx => (ctx.body = 'OK')));
+
+  const response = await got(`http://localhost:${ks.listen.port}/`);
+
+  t.is(response.body, 'OK');
+  t.is(response.statusCode, 200);
+
+  await ks.stop();
+});
+
+/*
   describe('https', () => {
     const ks = new ServiceKOA({
       name: 'my-name',

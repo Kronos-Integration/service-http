@@ -7,6 +7,12 @@ export default {
     format: 'cjs',
     sourcemap: true
   },
-  external: ['ava', 'model-attributes', 'kronos-service', 'kronos-endpoint'],
+  external: [
+    'ava',
+    'got',
+    'model-attributes',
+    'kronos-service',
+    'kronos-endpoint'
+  ],
   plugins: [multiEntry()]
 };
