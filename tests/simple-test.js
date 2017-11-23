@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const address = require('network-address');
-const request = require('supertest-as-promised')(Promise);
 const route = require('koa-route');
 
 import { ServiceProviderMixin, Service } from 'kronos-service';
@@ -11,7 +10,7 @@ import got from 'got';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
-test('service-koa plain http', t => {
+test('service-koa plain http', async t => {
   const sp = new ServiceProvider();
   const ks = new ServiceKOA(
     {
@@ -34,6 +33,7 @@ test('service-koa plain http', t => {
   t.is(ks.url, `http://${address()}:1234`);
 
   t.is(ks.timeout.server, 120);
+  await ks.stop();
 });
 
 test('service-koa plain http change port', async t => {
@@ -65,6 +65,28 @@ test('service-koa plain http change port', async t => {
   });
 
   t.is(ks.timeout.server, 123.45);
+  await ks.stop();
+});
+
+test('service-koa plain http get /', async t => {
+  const sp = new ServiceProvider();
+  const ks = new ServiceKOA(
+    {
+      type: 'xxx',
+      name: 'my-name',
+      listen: {
+        port: 1236,
+        address: address()
+      }
+    },
+    sp
+  );
+
+  ks.koa.use(route.get('/', ctx => (ctx.body = 'OK')));
+
+  const response = await got(`http://localhost:${ks.listen.port}/`);
+  t.is(response.body, 'OK');
+  await ks.stop();
 });
 
 test('service-koa plain http get', async t => {
