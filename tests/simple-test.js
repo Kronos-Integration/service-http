@@ -114,7 +114,7 @@ test('service-koa plain http get', async t => {
   await ks.stop();
 });
 
-test('service-koa plain https get', async t => {
+test.skip('service-koa plain https get', async t => {
   const sp = new ServiceProvider();
 
   const addr = 'localhost'; // address();
