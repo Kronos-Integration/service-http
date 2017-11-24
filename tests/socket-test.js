@@ -1,25 +1,15 @@
-/* global describe, it, xit, before, beforeEach, after, afterEach */
-/* jslint node: true, esnext: true */
-
-'use strict';
-
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  fs = require('fs'),
-  path = require('path'),
-  WebSocket = require('ws'),
-  { ServiceProviderMixin, Service } = require('kronos-service'),
-  { ServiceKOA } = require('../dist/module');
+const fs = require('fs');
+const path = require('path');
+const WebSocket = require('ws');
+import { ServiceProviderMixin, Service } from 'kronos-service';
+import { ServiceKOA } from '../src/service-koa';
+import test from 'ava';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 const sp = new ServiceProvider();
 
-describe('service-koa socket', function() {
-  //this.timeout(200000);
-
+test('service-koa socket', async t => {
   const ks1 = new ServiceKOA(
     {
       name: 'my-name1',
@@ -33,73 +23,59 @@ describe('service-koa socket', function() {
 
   const se = ks1.createSocketEndpoint('test', '/test');
 
-  describe('socket endpoint', () => {
-    it('is socket', () => assert.isTrue(se.socket));
-    it('isOut', () => assert.isTrue(se.isOut));
-    it('has opposite', () => assert.isDefined(se.opposite));
-    it('opposite isIn', () => assert.isTrue(se.opposite.isIn));
-  });
+  t.is(se.socket, true);
+  t.is(se.isOut, true);
+  t.truthy(se.opposite);
+  t.truthy(se.opposite.isIn);
 
   se.receive = message => {
     console.log(`se: ${message}`);
     return se.opposite.receive(message);
   };
 
-  /*
-    setInterval(() => {
-      se.opposite.receive({
-        memory: process.memoryUsage()
-      });
-    }, 1000);
-  */
   const socketUrl = 'ws://localhost:1236/test';
 
-  it('socket', done => {
-    ks1
-      .configure({
-        listen: {
-          address: 'localhost',
-          port: 1236
-        }
-      })
-      .then(() =>
-        ks1.start().then(() => {
-          ks1.koa.use(ctx => {
-            ctx.type = 'text/html';
-            ctx.body = fs.createReadStream(
-              path.join(__dirname, 'fixtures', 'index.html')
-            );
-          });
+  await ks1.configure({
+    listen: {
+      address: 'localhost',
+      port: 1236
+    }
+  });
 
-          const ws = new WebSocket(socketUrl, {});
+  await ks1.start();
 
-          ws.on('open', () =>
+  ks1.koa.use(ctx => {
+    ctx.type = 'text/html';
+    ctx.body = fs.createReadStream(
+      path.join(__dirname, 'fixtures', 'index.html')
+    );
+  });
+
+  const ws = new WebSocket(socketUrl, {});
+
+  ws.on('open', () =>
+    ws.send(Date.now().toString(), {
+      mask: true
+    })
+  );
+  ws.on('close', () => {
+    console.log('disconnected');
+  });
+
+  await new Promise((resolve, reject) => {
+    ws.on('message', (data, flags) => {
+      console.log(
+        'Roundtrip time: ' + (Date.now() - parseInt(data, 10)) + 'ms',
+        flags
+      );
+      resolve();
+      /*
+          setTimeout(() => {
             ws.send(Date.now().toString(), {
               mask: true
-            })
-          );
-          ws.on('close', () => {
-            console.log('disconnected');
-          });
-
-          ws.on('message', (data, flags) => {
-            console.log(
-              'Roundtrip time: ' + (Date.now() - parseInt(data, 10)) + 'ms',
-              flags
-            );
-
-            /*
-                setTimeout(() => {
-                  ws.send(Date.now().toString(), {
-                    mask: true
-                  });
-                }, 500);
-        */
-            done();
-          });
-
-          //assert.equal(ks1.state, 'running');
-        })
-      );
+            });
+          }, 500);
+  */
+    });
   });
 });

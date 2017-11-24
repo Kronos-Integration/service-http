@@ -5,16 +5,16 @@
   "keywords": [
     "kronos-service"
   ],
-  "main": "dist/module.js",
-  "module": "src/ServiceKOA.js",
+  "main": "dist/service-koa.js",
+  "module": "src/service-koa.js",
   "scripts": {
-    "cover": "nyc --temp-directory build/nyc npm test",
-    "test": "mocha tests/*-test.js",
+    "cover": "nyc --temp-directory build/nyc ava",
+    "test": "ava",
     "semantic-release": "semantic-release",
-    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
-    "pretest": "rollup -c",
-    "posttest": "markdown-doctest",
-    "precover": "rollup -c",
+    "docs": "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md",
+    "pretest": "rollup -c tests/rollup.config.js",
+    "posttest": "npm run prepare && markdown-doctest",
+    "precover": "rollup -c tests/rollup.config.js",
     "prepare": "rollup -c"
   },
   "repository": {
@@ -28,24 +28,27 @@
   "dependencies": {
     "koa-jwt": "3.2.2",
     "koa-static": "4.0.2",
-    "kronos-koa": "^1.2.2",
-    "kronos-service": "^4.8.2",
+    "kronos-koa": "^1.2.4",
+    "kronos-service": "^4.10.0",
     "model-attributes": "^3.0.10",
     "path-to-regexp": "^2.0.0",
-    "ws": "^3.1.0"
+    "ws": "^3.3.2"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
+    "ava": "^0.23.0",
+    "babel-preset-env": "^1.6.1",
+    "got": "^8.0.0",
+    "jsdoc-babel": "^0.3.0",
+    "jsdoc-to-markdown": "^3.0.2",
     "koa-route": "^3.2.0",
-    "mocha": "^3.5.3",
-    "network-address": "^1.1.2",
-    "semantic-release": "^9.1.1",
-    "supertest": "^3.0.0",
-    "supertest-as-promised": "^4.0.2",
-    "jsdoc-to-markdown": "^3.0.1",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.51.5",
-    "nyc": "^11.3.0"
+    "network-address": "^1.1.2",
+    "nyc": "^11.3.0",
+    "rollup": "^0.51.8",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-multi-entry": "^2.0.2",
+    "semantic-release": "^9.1.1",
+    "xo": "^0.19.0"
   },
   "contributors": [
     {
@@ -63,19 +66,31 @@
   },
   "nyc": {
     "include": [
-      "dist/**/*.js"
+      "build/*-test.js",
+      "src/**/*.js"
     ],
     "reporter": [
       "lcov"
     ],
-    "report-dir": "./coverage"
+    "report-dir": "./build/coverage"
   },
   "template": {
     "repository": {
-      "url": "https://github.com/Kronos-Tools/npm-package-template.git"
+      "url": "https://github.com/arlac77/npm-package-template.git"
     }
   },
   "xo": {
     "space": true
+  },
+  "ava": {
+    "files": [
+      "build/*-test.js"
+    ],
+    "presets": [
+      "env"
+    ],
+    "require": [
+      "babel-register"
+    ]
   }
 }

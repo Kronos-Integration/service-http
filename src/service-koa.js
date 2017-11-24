@@ -1,14 +1,11 @@
-/* jslint node: true, esnext: true */
-'use strict';
-
 const http = require('http'),
   https = require('https'),
   url = require('url'),
   pathToRegexp = require('path-to-regexp'),
-  Koa = require('kronos-koa'),
   jwt = require('koa-jwt'),
   WebSocketServer = require('ws').Server;
 
+import { KronosKoa } from 'kronos-koa';
 import { Service } from 'kronos-service';
 import { SendEndpoint } from 'kronos-endpoint';
 import { mergeAttributes, createAttributes } from 'model-attributes';
@@ -16,7 +13,7 @@ import { mergeAttributes, createAttributes } from 'model-attributes';
 /**
  * HTTP server with koa
  */
-class ServiceKOA extends Service {
+export class ServiceKOA extends Service {
   static get name() {
     return 'koa';
   }
@@ -118,7 +115,7 @@ class ServiceKOA extends Service {
     super(config, owner);
 
     this.socketEndpoints = {};
-    this.koa = new Koa();
+    this.koa = new KronosKoa();
 
     if (this.docRoot) {
       this.koa.use(require('koa-static')(this.docRoot), {});
@@ -252,15 +249,17 @@ class ServiceKOA extends Service {
             }
           };
 
-          if (service.listen.address !== undefined) {
-            server.listen(service.listen.port, service.listen.address, handler);
-          } else {
+          if (service.listen.address === undefined) {
             server.listen(service.listen.port, handler);
+          } else {
+            server.listen(service.listen.port, service.listen.address, handler);
           }
         }
 
         function addressInUseHandler(e) {
           if (e.code === 'EADDRINUSE') {
+            //console.log(`addressInUseHandler: ${e.code}`);
+
             service.trace(level => `Address in use ${service.url} retrying...`);
 
             // try different strategies
@@ -315,7 +314,7 @@ function decode(val) {
 /**
  * Endpoint to link against a koa route
  */
-class RouteSendEndpoint extends SendEndpoint {
+export class RouteSendEndpoint extends SendEndpoint {
   /**
    * @param name {String} endpoint name
    * @param owner {Step} the owner of the endpoint
@@ -410,7 +409,7 @@ class RouteSendEndpoint extends SendEndpoint {
   }
 }
 
-class SocketEndpoint extends SendEndpoint {
+export class SocketEndpoint extends SendEndpoint {
   constructor(name, owner, path) {
     super(name, owner, {
       createOpposite: true
@@ -475,8 +474,6 @@ class SocketEndpoint extends SendEndpoint {
   }
 }
 
-function registerWithManager(manager) {
+export function registerWithManager(manager) {
   return manager.registerServiceFactory(ServiceKOA);
 }
-
-export { registerWithManager, ServiceKOA, RouteSendEndpoint, SocketEndpoint };
