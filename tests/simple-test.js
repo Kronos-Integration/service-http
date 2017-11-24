@@ -75,15 +75,15 @@ test('service-koa plain http get /', async t => {
       type: 'xxx',
       name: 'my-name',
       listen: {
-        port: 1236,
-        address: address()
+        port: 1239,
+        address: 'localhost'
       }
     },
     sp
   );
 
   ks.koa.use(route.get('/', ctx => (ctx.body = 'OK')));
-
+  await ks.start();
   const response = await got(`http://localhost:${ks.listen.port}/`);
   t.is(response.body, 'OK');
   await ks.stop();
@@ -97,7 +97,7 @@ test('service-koa plain http get', async t => {
       name: 'my-name',
       listen: {
         port: 1234,
-        address: address()
+        address: 'localhost'
       }
     },
     sp
@@ -114,22 +114,45 @@ test('service-koa plain http get', async t => {
   await ks.stop();
 });
 
+test('service-koa plain https get', async t => {
+  const sp = new ServiceProvider();
+
+  const addr = 'localhost'; // address();
+  const PORT = 1239;
+  const ks = new ServiceKOA(
+    {
+      name: 'my-name',
+      key: fs.readFileSync(
+        path.join(__dirname, '..', 'tests', 'fixtures', 'www.example.com.key')
+      ),
+      cert: fs.readFileSync(
+        path.join(__dirname, '..', 'tests', 'fixtures', 'www.example.com.cert')
+      ),
+      listen: {
+        port: PORT,
+        address: addr
+      }
+    },
+    sp
+  );
+
+  t.is(ks.isSecure, true);
+  t.is(ks.listen.port, PORT);
+  t.is(ks.url, `https://${addr}:${PORT}`);
+
+  await ks.start();
+  ks.koa.use(route.get('/', ctx => (ctx.body = 'OK')));
+
+  const response = await got(`http://${addr}:${ks.listen.port}/`);
+
+  t.is(response.body, 'OK');
+  t.is(response.statusCode, 200);
+
+  await ks.stop();
+});
+
 /*
   describe('https', () => {
-    const ks = new ServiceKOA({
-      name: 'my-name',
-      key: fs.readFileSync(path.join(__dirname, 'fixtures', 'www.example.com.key')),
-      cert: fs.readFileSync(path.join(__dirname, 'fixtures', 'www.example.com.cert')),
-      listen: {
-        port: 1234,
-        address: address()
-      }
-    }, sp);
-
-    it('is secure', () => assert.isTrue(ks.isSecure));
-    it('has port', () => assert.equal(ks.listen.port, 1234));
-    it('has url', () => assert.equal(ks.url, `https://${address()}:1234`));
-
     describe('configure', () => {
       it('can change port', done => {
         ks.configure({
@@ -154,16 +177,6 @@ test('service-koa plain http get', async t => {
         );
       });
     });
-    it('GET /', () =>
-      ks.start().then(() => {
-        ks.koa.use(route.get('/', ctx => ctx.body = 'OK'));
-        request(ks.server.listen())
-          .get('/')
-          .expect(200)
-          .expect(res => assert.equal(res.text, 'OK'))
-          .end(() => ks.stop());
-      }));
   });
 });
-
 */

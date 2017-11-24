@@ -6,7 +6,7 @@ class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 const sp = new ServiceProvider();
 
-test('service-koa failures with already in use port', async t => {
+test.skip('service-koa failures with already in use port', async t => {
   const ks1 = new ServiceKOA(
     {
       name: 'my-name1',
