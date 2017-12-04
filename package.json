@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
-    "koa-jwt": "3.2.2",
+    "koa-jwt": "3.3.0",
     "koa-static": "4.0.2",
     "kronos-koa": "^1.2.4",
     "kronos-service": "^4.10.0",
