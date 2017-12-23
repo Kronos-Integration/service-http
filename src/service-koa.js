@@ -14,6 +14,9 @@ import { mergeAttributes, createAttributes } from 'model-attributes';
  * HTTP server with koa
  */
 export class ServiceKOA extends Service {
+  /**
+   * @return {string} 'koa'
+   */
   static get name() {
     return 'koa';
   }
@@ -316,10 +319,10 @@ function decode(val) {
  */
 export class RouteSendEndpoint extends SendEndpoint {
   /**
-   * @param name {String} endpoint name
+   * @param name {string} endpoint name
    * @param owner {Step} the owner of the endpoint
-   * @param method {String} http method defaults to get
-   * @param serviceName {String} if present registers the route as a service
+   * @param method {string} http method defaults to get
+   * @param serviceName {string} if present registers the route as a service
    */
   constructor(name, owner, path, method, serviceName) {
     super(name, owner);
