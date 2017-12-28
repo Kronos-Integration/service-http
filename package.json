@@ -1,12 +1,23 @@
 {
   "name": "kronos-service-koa",
   "version": "0.0.0-semantic-release",
+  "main": "dist/service-koa.js",
+  "module": "src/service-koa.js",
   "description": "koa backed http server",
   "keywords": [
     "kronos-service"
   ],
-  "main": "dist/service-koa.js",
-  "module": "src/service-koa.js",
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
+  "license": "BSD-2-Clause",
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
     "test": "ava",
@@ -18,14 +29,6 @@
     "prepare": "rollup -c",
     "lint": "documentation lint src/service-koa.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kronos-Integration/kronos-service-koa.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Kronos-Integration/kronos-service-koa/issues"
-  },
-  "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
   "dependencies": {
     "koa-jwt": "3.3.0",
     "koa-static": "4.0.2",
@@ -48,19 +51,27 @@
     "xo": "^0.19.0",
     "documentation": "^5.3.5"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
-  "license": "BSD-2-Clause",
   "engines": {
     "node": ">=8.9.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kronos-Integration/kronos-service-koa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kronos-Integration/kronos-service-koa/issues"
+  },
+  "homepage": "https://github.com/Kronos-Integration/kronos-service-koa#readme",
+  "ava": {
+    "files": [
+      "build/*-test.js"
+    ],
+    "presets": [
+      "env"
+    ],
+    "require": [
+      "babel-register"
+    ]
   },
   "nyc": {
     "include": [
@@ -72,23 +83,12 @@
     ],
     "report-dir": "./build/coverage"
   },
+  "xo": {
+    "space": true
+  },
   "template": {
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template.git"
     }
-  },
-  "xo": {
-    "space": true
-  },
-  "ava": {
-    "files": [
-      "build/*-test.js"
-    ],
-    "presets": [
-      "env"
-    ],
-    "require": [
-      "babel-register"
-    ]
   }
 }
