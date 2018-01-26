@@ -40,7 +40,7 @@
     "ws": "^4.0.0"
   },
   "devDependencies": {
-    "ava": "^0.24.0",
+    "ava": "^0.25.0",
     "got": "^8.0.1",
     "koa-route": "^3.2.0",
     "markdown-doctest": "^0.9.1",
