@@ -33,7 +33,7 @@
   "dependencies": {
     "koa-jwt": "3.3.1",
     "koa-static": "4.0.2",
-    "kronos-koa": "^1.2.6",
+    "kronos-koa": "^2.0.0",
     "kronos-service": "^4.10.0",
     "model-attributes": "^3.0.10",
     "path-to-regexp": "^2.2.1",
