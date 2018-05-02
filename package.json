@@ -41,7 +41,8 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
-    "got": "^8.0.1",
+    "documentation": "^6.3.2",
+    "got": "^8.3.1",
     "koa-route": "^3.2.0",
     "markdown-doctest": "^0.9.1",
     "network-address": "^1.1.2",
@@ -49,7 +50,6 @@
     "rollup": "^0.58.2",
     "rollup-plugin-multi-entry": "^2.0.2",
     "semantic-release": "^15.1.7",
-    "documentation": "^6.3.2",
     "travis-deploy-once": "^5.0.0"
   },
   "engines": {
