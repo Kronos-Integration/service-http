@@ -31,7 +31,7 @@
     "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
-    "koa-jwt": "3.3.1",
+    "koa-jwt": "3.3.2",
     "koa-static": "4.0.2",
     "kronos-koa": "^2.0.0",
     "kronos-service": "^4.10.0",
@@ -41,12 +41,12 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
-    "documentation": "^6.3.2",
+    "documentation": "^6.3.3",
     "got": "^8.3.1",
     "koa-route": "^3.2.0",
     "markdown-doctest": "^0.9.1",
     "network-address": "^1.1.2",
-    "nyc": "^11.7.3",
+    "nyc": "^11.8.0",
     "rollup": "^0.59.0",
     "rollup-plugin-multi-entry": "^2.0.2",
     "semantic-release": "^15.4.1",
