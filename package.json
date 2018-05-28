@@ -47,7 +47,7 @@
     "markdown-doctest": "^0.9.1",
     "network-address": "^1.1.2",
     "nyc": "^11.8.0",
-    "rollup": "^0.59.3",
+    "rollup": "^0.59.4",
     "rollup-plugin-multi-entry": "^2.0.2",
     "semantic-release": "^15.5.0",
     "travis-deploy-once": "^5.0.0"
