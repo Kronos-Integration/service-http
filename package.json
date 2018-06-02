@@ -1,6 +1,9 @@
 {
   "name": "kronos-service-koa",
   "version": "0.0.0-semantic-release",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/service-koa.js",
   "module": "src/service-koa.js",
   "description": "koa backed http server",
