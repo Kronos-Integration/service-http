@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "koa-jwt": "3.3.2",
-    "koa-static": "4.0.3",
+    "koa-static": "5.0.0",
     "kronos-koa": "^2.0.0",
     "kronos-service": "^4.10.0",
     "model-attributes": "^3.0.10",
