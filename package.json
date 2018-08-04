@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
-    "documentation": "^8.0.2",
+    "documentation": "^8.1.0",
     "got": "^9.0.0",
     "koa-route": "^3.2.0",
     "markdown-doctest": "^0.9.1",
