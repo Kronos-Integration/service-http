@@ -34,7 +34,7 @@
     "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
-    "koa-jwt": "3.5.0",
+    "koa-jwt": "3.5.1",
     "koa-static": "5.0.0",
     "kronos-koa": "^2.0.0",
     "kronos-service": "^4.10.0",
