@@ -41,7 +41,7 @@
     "ws": "^6.0.0"
   },
   "devDependencies": {
-    "ava": "^1.0.0-rc.2",
+    "ava": "^1.0.1",
     "got": "^9.4.0",
     "documentation": "^9.0.0",
     "koa-route": "^3.2.0",
