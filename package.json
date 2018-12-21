@@ -43,7 +43,7 @@
   "devDependencies": {
     "ava": "^1.0.1",
     "got": "^9.4.0",
-    "documentation": "^9.1.0",
+    "documentation": "^9.1.1",
     "koa-route": "^3.2.0",
     "markdown-doctest": "^0.9.1",
     "network-address": "^1.1.2",
