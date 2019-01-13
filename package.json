@@ -33,7 +33,7 @@
     "koa-jwt": "3.5.1",
     "koa-static": "5.0.0",
     "kronos-koa": "^2.0.0",
-    "kronos-service": "^4.10.0",
+    "kronos-service": "^4.17.1",
     "model-attributes": "^3.0.10",
     "path-to-regexp": "^2.2.1",
     "ws": "^6.0.0"
