@@ -35,7 +35,7 @@
     "kronos-koa": "^2.0.0",
     "kronos-service": "^4.17.2",
     "model-attributes": "^4.0.0",
-    "path-to-regexp": "3.0.0",
+    "path-to-regexp": "^3.1.0",
     "ws": "^7.1.2"
   },
   "devDependencies": {
