@@ -2,6 +2,7 @@ import http from "http";
 import https from "https";
 import url from "url";
 import Koa from "koa";
+import WebSocketServer from "ws";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { RouteSendEndpoint } from "./route-send-endpoint.mjs";
@@ -195,6 +196,7 @@ export class ServiceKOA extends Service {
         ? https.createServer(this.serverOptions, this.koa.callback())
         : http.createServer(this.koa.callback());
 
+        /*
       this.wss = new WebSocketServer({
         server: this.server
       });
@@ -219,6 +221,7 @@ export class ServiceKOA extends Service {
           ws.on("close", () => ep.close(ws));
         }
       });
+*/
 
       if (this.timeout !== undefined) {
         this.server.setTimeout(this.timeout * 1000);

@@ -1,7 +1,8 @@
 import test from "ava";
 import got from "got";
 import fs from "fs";
-import path from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 import address from "network-address";
 import route from "koa-route";
 
@@ -114,6 +115,8 @@ test("service-koa plain http get", async t => {
   await ks.stop();
 });
 
+const here = dirname(fileURLToPath(import.meta.url));
+
 test.skip("service-koa plain https get", async t => {
   const sp = new ServiceProvider();
 
@@ -123,10 +126,10 @@ test.skip("service-koa plain https get", async t => {
     {
       name: "my-name",
       key: fs.readFileSync(
-        path.join(__dirname, "..", "tests", "fixtures", "www.example.com.key")
+        join(here, "..", "tests", "fixtures", "www.example.com.key")
       ),
       cert: fs.readFileSync(
-        path.join(__dirname, "..", "tests", "fixtures", "www.example.com.cert")
+        join(here, "..", "tests", "fixtures", "www.example.com.cert")
       ),
       listen: {
         port: PORT,
