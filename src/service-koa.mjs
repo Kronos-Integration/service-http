@@ -1,8 +1,8 @@
 import http from "http";
 import https from "https";
 import url from "url";
+import Koa from "koa";
 import { mergeAttributes, createAttributes } from "model-attributes";
-import { KronosKoa } from "kronos-koa";
 import { Service } from "@kronos-integration/service";
 import { RouteSendEndpoint } from "./route-send-endpoint.mjs";
 import { SocketEndpoint } from "./socket-endpoint.mjs";
@@ -117,7 +117,7 @@ export class ServiceKOA extends Service {
     super(config, owner);
 
     this.socketEndpoints = {};
-    this.koa = new KronosKoa();
+    this.koa = new Koa();
 
     /*
     if (this.auth) {
