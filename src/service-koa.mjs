@@ -1,14 +1,12 @@
 const http = require('http'),
   https = require('https'),
   url = require('url'),
-  pathToRegexp = require('path-to-regexp'),
-  jwt = require('koa-jwt'),
   WebSocketServer = require('ws').Server;
 
 import { KronosKoa } from 'kronos-koa';
 import { Service } from 'kronos-service';
 import { mergeAttributes, createAttributes } from 'model-attributes';
-import { RouteSendEndpoint } from './route-send-endpoint';
+import { RouteSendEndpoint } from './route-send-endpoint.mjs';
 import { SocketEndpoint } from './socket-endpoint';
 
 export { RouteSendEndpoint, SocketEndpoint };

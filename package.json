@@ -1,11 +1,11 @@
 {
-  "name": "kronos-service-koa",
+  "name": "@kronos-integration/service-koa",
   "version": "0.0.0-semantic-release",
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/service-koa.js",
-  "module": "src/service-koa.js",
+  "main": "src/service-koa.mjs",
+  "module": "src/service-koa.mjs",
   "description": "koa backed http server",
   "keywords": [
     "kronos-service"
@@ -23,17 +23,16 @@
   "license": "BSD-2-Clause",
   "scripts": {
     "cover": "c8 -x 'tests/**/*.mjs' --temp-directory build/tmp ava && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme src/service-koa.js --section=API",
-    "lint": "documentation lint src/service-koa.js",
-    "posttest": "npm run prepare && markdown-doctest",
-    "prepare": "rollup -c",
+    "docs": "documentation readme src/service-koa.mjs --section=API",
+    "lint": "documentation lint src/service-koa.mjs",
+    "posttest": "markdown-doctest",
     "test": "ava"
   },
   "dependencies": {
     "koa-jwt": "3.5.1",
     "koa-static": "5.0.0",
     "kronos-koa": "^2.0.0",
-    "kronos-service": "^4.17.2",
+    "@kronos-integration/service": "^5.0.0",
     "model-attributes": "^4.0.0",
     "path-to-regexp": "^3.1.0",
     "ws": "^7.2.0"
@@ -48,12 +47,6 @@
     "koa-route": "^3.2.0",
     "markdown-doctest": "^1.0.0",
     "network-address": "^1.1.2",
-    "rollup": "^1.25.1",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-executable": "^1.5.1",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "semantic-release": "^15.13.27"
   },
   "engines": {
