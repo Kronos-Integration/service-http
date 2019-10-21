@@ -1,21 +1,21 @@
-import test from 'ava';
-import got from 'got';
-import fs from 'fs';
-import path from 'path';
-import address from 'network-address';
-import route from 'koa-route';
+import test from "ava";
+import got from "got";
+import fs from "fs";
+import path from "path";
+import address from "network-address";
+import route from "koa-route";
 
-import { ServiceProviderMixin, Service } from 'kronos-service';
-import { ServiceKOA } from '../src/service-koa.mjs';
+import { ServiceProviderMixin, Service } from "@kronos-integration/service";
+import { ServiceKOA } from "../src/service-koa.mjs";
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
-test('service-koa plain http', async t => {
+test("service-koa plain http", async t => {
   const sp = new ServiceProvider();
   const ks = new ServiceKOA(
     {
-      type: 'xxx',
-      name: 'my-name',
+      type: "xxx",
+      name: "my-name",
       listen: {
         port: 1234,
         address: address()
@@ -24,7 +24,7 @@ test('service-koa plain http', async t => {
     sp
   );
 
-  t.is(ks.name, 'my-name');
+  t.is(ks.name, "my-name");
   t.is(ks.isSecure, false);
 
   t.is(ks.port, 1234);
@@ -36,12 +36,12 @@ test('service-koa plain http', async t => {
   await ks.stop();
 });
 
-test('service-koa plain http change port', async t => {
+test("service-koa plain http change port", async t => {
   const sp = new ServiceProvider();
   const ks = new ServiceKOA(
     {
-      type: 'xxx',
-      name: 'my-name',
+      type: "xxx",
+      name: "my-name",
       listen: {
         port: 1234,
         address: address()
@@ -68,65 +68,65 @@ test('service-koa plain http change port', async t => {
   await ks.stop();
 });
 
-test('service-koa plain http get /', async t => {
+test("service-koa plain http get /", async t => {
   const sp = new ServiceProvider();
   const ks = new ServiceKOA(
     {
-      type: 'xxx',
-      name: 'my-name',
+      type: "xxx",
+      name: "my-name",
       listen: {
         port: 1239,
-        address: 'localhost'
+        address: "localhost"
       }
     },
     sp
   );
 
-  ks.koa.use(route.get('/', ctx => (ctx.body = 'OK')));
+  ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
   await ks.start();
   const response = await got(`http://localhost:${ks.listen.port}/`);
-  t.is(response.body, 'OK');
+  t.is(response.body, "OK");
   await ks.stop();
 });
 
-test('service-koa plain http get', async t => {
+test("service-koa plain http get", async t => {
   const sp = new ServiceProvider();
   const ks = new ServiceKOA(
     {
-      type: 'xxx',
-      name: 'my-name',
+      type: "xxx",
+      name: "my-name",
       listen: {
         port: 1234,
-        address: 'localhost'
+        address: "localhost"
       }
     },
     sp
   );
 
   await ks.start();
-  ks.koa.use(route.get('/', ctx => (ctx.body = 'OK')));
+  ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
 
   const response = await got(`http://localhost:${ks.listen.port}/`);
 
-  t.is(response.body, 'OK');
+  t.is(response.body, "OK");
   t.is(response.statusCode, 200);
 
   await ks.stop();
 });
 
-test.skip('service-koa plain https get', async t => {
+test.skip("service-koa plain https get", async t => {
   const sp = new ServiceProvider();
 
-  const addr = 'localhost'; // address();
+  const addr = "localhost"; // address();
   const PORT = 1239;
   const ks = new ServiceKOA(
     {
-      name: 'my-name',
+      name: "my-name",
       key: fs.readFileSync(
-        path.join(__dirname, '..', 'tests', 'fixtures', 'www.example.com.key')
+        path.join(__dirname, "..", "tests", "fixtures", "www.example.com.key")
       ),
       cert: fs.readFileSync(
-        path.join(__dirname, '..', 'tests', 'fixtures', 'www.example.com.cert')
+        path.join(__dirname, "..", "tests", "fixtures", "www.example.com.cert")
       ),
       listen: {
         port: PORT,
@@ -141,11 +141,11 @@ test.skip('service-koa plain https get', async t => {
   t.is(ks.url, `https://${addr}:${PORT}`);
 
   await ks.start();
-  ks.koa.use(route.get('/', ctx => (ctx.body = 'OK')));
+  ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
 
   const response = await got(`http://${addr}:${ks.listen.port}/`);
 
-  t.is(response.body, 'OK');
+  t.is(response.body, "OK");
   t.is(response.statusCode, 200);
 
   await ks.stop();

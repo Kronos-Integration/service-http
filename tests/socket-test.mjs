@@ -2,7 +2,7 @@ import test from "ava";
 import fs from "fs";
 import path from "path";
 import WebSocket from "ws";
-import { ServiceProviderMixin, Service } from "kronos-service";
+import { ServiceProviderMixin, Service } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}

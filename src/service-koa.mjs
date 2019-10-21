@@ -1,10 +1,9 @@
-import WebSocket from "ws";
 import http from "http";
 import https from "https";
 import url from "url";
-import { KronosKoa } from "kronos-koa";
-import { Service } from "kronos-service";
 import { mergeAttributes, createAttributes } from "model-attributes";
+import { KronosKoa } from "kronos-koa";
+import { Service } from "@kronos-integration/service";
 import { RouteSendEndpoint } from "./route-send-endpoint.mjs";
 import { SocketEndpoint } from "./socket-endpoint.mjs";
 
