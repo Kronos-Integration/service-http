@@ -1,13 +1,12 @@
-const http = require('http'),
-  https = require('https'),
-  url = require('url'),
-  WebSocketServer = require('ws').Server;
-
-import { KronosKoa } from 'kronos-koa';
-import { Service } from 'kronos-service';
-import { mergeAttributes, createAttributes } from 'model-attributes';
-import { RouteSendEndpoint } from './route-send-endpoint.mjs';
-import { SocketEndpoint } from './socket-endpoint';
+import WebSocket from "ws";
+import http from "http";
+import https from "https";
+import url from "url";
+import { KronosKoa } from "kronos-koa";
+import { Service } from "kronos-service";
+import { mergeAttributes, createAttributes } from "model-attributes";
+import { RouteSendEndpoint } from "./route-send-endpoint.mjs";
+import { SocketEndpoint } from "./socket-endpoint.mjs";
 
 export { RouteSendEndpoint, SocketEndpoint };
 
@@ -19,7 +18,7 @@ export class ServiceKOA extends Service {
    * @return {string} 'koa'
    */
   static get name() {
-    return 'koa';
+    return "koa";
   }
 
   static get configurationAttributes() {
@@ -27,17 +26,17 @@ export class ServiceKOA extends Service {
       Service.configurationAttributes,
       createAttributes({
         docRoot: {
-          description: 'file system root for static content',
-          type: 'posix-path'
+          description: "file system root for static content",
+          type: "posix-path"
         },
         auth: {
-          description: 'authentification',
+          description: "authentification",
           attributes: {
             jwt: {
-              description: 'json web tokens',
+              description: "json web tokens",
               attributes: {
                 privateKey: {
-                  description: 'private key content'
+                  description: "private key content"
                 }
               }
             }
@@ -45,51 +44,51 @@ export class ServiceKOA extends Service {
         },
 
         listen: {
-          description: 'server listen definition',
+          description: "server listen definition",
 
           attributes: {
             retryTimeout: {
               description:
-                'how long should we retry binding to the address (EADDRINUSE)',
+                "how long should we retry binding to the address (EADDRINUSE)",
               default: 10,
-              type: 'duration'
+              type: "duration"
             },
             address: {
-              description: 'hostname/ip-address of the http(s) server',
+              description: "hostname/ip-address of the http(s) server",
               needsRestart: true,
-              type: 'hostname'
+              type: "hostname"
             },
             fromPort: {
-              description: 'start port range of the http(s) server',
-              type: 'ip-port'
+              description: "start port range of the http(s) server",
+              type: "ip-port"
             },
             toPort: {
-              description: 'end port range of the http(s) server',
-              type: 'ip-port'
+              description: "end port range of the http(s) server",
+              type: "ip-port"
             },
             port: {
-              description: 'port of the http(s) server',
+              description: "port of the http(s) server",
               needsRestart: true,
               default: 9898,
-              type: 'ip-port'
+              type: "ip-port"
             }
           }
         },
         key: {
-          description: 'ssl key',
+          description: "ssl key",
           needsRestart: true,
-          type: 'blob'
+          type: "blob"
         },
         cert: {
-          description: 'ssl cert',
+          description: "ssl cert",
           needsRestart: true,
-          type: 'blob'
+          type: "blob"
         },
         timeout: {
           attributes: {
             server: {
-              description: 'server timeout',
-              type: 'duration',
+              description: "server timeout",
+              type: "duration",
               default: 120,
               setter(value, attribute) {
                 if (value === undefined) {
@@ -121,10 +120,6 @@ export class ServiceKOA extends Service {
     this.socketEndpoints = {};
     this.koa = new KronosKoa();
 
-    if (this.docRoot) {
-      this.koa.use(require('koa-static')(this.docRoot), {});
-    }
-
     /*
     if (this.auth) {
       if (this.auth.jwt) {
@@ -153,7 +148,7 @@ export class ServiceKOA extends Service {
   }
 
   get scheme() {
-    return this.isSecure ? 'https' : 'http';
+    return this.isSecure ? "https" : "http";
   }
 
   get url() {
@@ -205,12 +200,12 @@ export class ServiceKOA extends Service {
         server: this.server
       });
 
-      this.wss.on('connection', (ws, req) => {
+      this.wss.on("connection", (ws, req) => {
         const ep = this.endpointForSocketConnection(ws, req);
 
         if (ep) {
           ep.open(ws);
-          ws.on('message', (message, flags) => {
+          ws.on("message", (message, flags) => {
             try {
               message = JSON.parse(message);
               this.trace({
@@ -222,7 +217,7 @@ export class ServiceKOA extends Service {
               this.error(e);
             }
           });
-          ws.on('close', () => ep.close(ws));
+          ws.on("close", () => ep.close(ws));
         }
       });
 
@@ -242,7 +237,7 @@ export class ServiceKOA extends Service {
 
         function listen() {
           const handler = err => {
-            process.removeListener('uncaughtException', addressInUseHandler);
+            process.removeListener("uncaughtException", addressInUseHandler);
             if (err) {
               service.server = undefined;
               service.error(err);
@@ -261,7 +256,7 @@ export class ServiceKOA extends Service {
         }
 
         function addressInUseHandler(e) {
-          if (e.code === 'EADDRINUSE') {
+          if (e.code === "EADDRINUSE") {
             //console.log(`addressInUseHandler: ${e.code}`);
 
             service.trace(level => `Address in use ${service.url} retrying...`);
@@ -286,7 +281,7 @@ export class ServiceKOA extends Service {
           }
         }
 
-        process.on('uncaughtException', addressInUseHandler);
+        process.on("uncaughtException", addressInUseHandler);
         //server.on('error', addressInUseHandler);
         listen();
       });

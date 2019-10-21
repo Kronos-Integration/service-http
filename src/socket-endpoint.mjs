@@ -1,4 +1,4 @@
-import { SendEndpoint } from 'kronos-endpoint';
+import { SendEndpoint } from "@kronos-integration/endpoint";
 
 export class SocketEndpoint extends SendEndpoint {
   constructor(name, owner, path) {

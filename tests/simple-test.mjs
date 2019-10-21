@@ -1,12 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const address = require('network-address');
-const route = require('koa-route');
-
-import { ServiceProviderMixin, Service } from 'kronos-service';
-import { ServiceKOA } from '../src/service-koa';
 import test from 'ava';
 import got from 'got';
+import fs from 'fs';
+import path from 'path';
+import address from 'network-address';
+import route from 'koa-route';
+
+import { ServiceProviderMixin, Service } from 'kronos-service';
+import { ServiceKOA } from '../src/service-koa.mjs';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 

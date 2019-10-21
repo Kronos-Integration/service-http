@@ -1,4 +1,4 @@
-import { SendEndpoint } from 'kronos-endpoint';
+import { SendEndpoint } from "@kronos-integration/endpoint";
 
 /**
  * Endpoint to link against a koa route
@@ -13,31 +13,25 @@ export class RouteSendEndpoint extends SendEndpoint {
   constructor(name, owner, path, method, serviceName) {
     super(name, owner);
 
-    // The path in the URL
-    Object.defineProperty(this, 'path', {
-      value: path
-    });
-
     const keys = [];
     const re = pathToRegexp(path, keys, {});
 
-    Object.defineProperty(this, 'regex', {
-      value: re
-    });
-
-    Object.defineProperty(this, 'keys', {
-      value: keys
-    });
-
-    method = method ? method.toUpperCase() : 'GET';
-
-    // The HTTP method to use (GET, POST, ...)
-    Object.defineProperty(this, 'method', {
-      value: method
-    });
-
-    Object.defineProperty(this, 'serviceName', {
-      value: serviceName
+    Object.defineProperties(this, {
+      path: {
+        value: path
+      },
+      regex: {
+        value: re
+      },
+      keys: {
+        value: keys
+      },
+      method: {
+        value: method ? method.toUpperCase() : "GET"
+      },
+      serviceName: {
+        value: serviceName
+      }
     });
   }
 
@@ -77,7 +71,7 @@ export class RouteSendEndpoint extends SendEndpoint {
 
   matches(ctx) {
     if (ctx.method === this.method) return true;
-    if (this.method === 'GET' && ctx.method === 'HEAD') return true;
+    if (this.method === "GET" && ctx.method === "HEAD") return true;
     return false;
   }
 
@@ -88,7 +82,7 @@ export class RouteSendEndpoint extends SendEndpoint {
   toJSON() {
     const json = super.toJSON();
 
-    for (const attr of ['serviceName', 'method', 'path']) {
+    for (const attr of ["serviceName", "method", "path"]) {
       if (this[attr] !== undefined) {
         json[attr] = this[attr];
       }

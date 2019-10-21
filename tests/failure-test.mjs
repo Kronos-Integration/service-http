@@ -1,6 +1,6 @@
-import { ServiceProviderMixin, Service } from 'kronos-service';
-import { ServiceKOA } from '../src/service-koa';
 import test from 'ava';
+import { ServiceProviderMixin, Service } from 'kronos-service';
+import { ServiceKOA } from '../src/service-koa.mjs';
 
 class ServiceProvider extends ServiceProviderMixin(Service) {}
 
