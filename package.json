@@ -1,6 +1,7 @@
 {
   "name": "@kronos-integration/service-koa",
   "version": "0.0.0-semantic-release",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
@@ -29,10 +30,10 @@
     "test": "ava"
   },
   "dependencies": {
+    "@kronos-integration/service": "^5.0.0",
     "koa-jwt": "3.5.1",
     "koa-static": "5.0.0",
     "kronos-koa": "^2.0.0",
-    "@kronos-integration/service": "^5.0.0",
     "model-attributes": "^4.0.0",
     "path-to-regexp": "^3.1.0",
     "ws": "^7.2.0"
@@ -75,7 +76,7 @@
   },
   "template": {
     "repository": {
-      "url": "https://github.com/arlac77/npm-package-template.git"
+      "url": "https://github.com/arlac77/npm-package-template-esm-only.git"
     }
   }
 }
