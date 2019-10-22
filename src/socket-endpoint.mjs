@@ -25,7 +25,7 @@ export class SocketEndpoint extends SendEndpoint {
       endpoint: this.identifier
     });
     this.opposite.receive = message => {
-      return new Promise((fullfill, reject) => {
+      return new Promise((resolve, reject) => {
         this.owner.trace({
           message: 'send',
           endpoint: this.identifier,
@@ -35,7 +35,7 @@ export class SocketEndpoint extends SendEndpoint {
           if (error) {
             reject(error);
           } else {
-            fullfill();
+            resolve();
           }
         });
       });

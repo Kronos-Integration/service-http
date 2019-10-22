@@ -293,7 +293,7 @@ export class ServiceKOA extends Service {
   }
 
   _stop() {
-    return new Promise((fulfill, reject) => {
+    return new Promise((resolve, reject) => {
       this.trace(level => `stopping ${this.url}`);
 
       this.server.close(err => {
@@ -301,7 +301,7 @@ export class ServiceKOA extends Service {
           reject(err);
         } else {
           this.server = undefined;
-          fulfill();
+          resolve();
         }
       });
     });
