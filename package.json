@@ -30,8 +30,8 @@
     "test": "ava"
   },
   "dependencies": {
-    "@kronos-integration/service": "^5.0.1",
-    "koa": "^2.10.0",
+    "@kronos-integration/service": "^5.2.1",
+    "koa": "^2.11.0",
     "koa-jwt": "^3.6.0",
     "model-attributes": "^4.0.0",
     "path-to-regexp": "^3.1.0",
