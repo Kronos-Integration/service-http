@@ -112,8 +112,10 @@ export class ServiceKOA extends Service {
   constructor(config, owner) {
     super(config, owner);
 
-    this.socketEndpoints = {};
-    this.koa = new Koa();
+    Object.defineProperties(this, {
+      socketEndpoints: { value: {} },
+      koa: { value: new Koa() }
+    });
 
     /*
     if (this.auth) {
@@ -191,7 +193,7 @@ export class ServiceKOA extends Service {
         ? https.createServer(this.serverOptions, this.koa.callback())
         : http.createServer(this.koa.callback());
 
-        /*
+      /*
       this.wss = new WebSocketServer({
         server: this.server
       });
@@ -222,7 +224,7 @@ export class ServiceKOA extends Service {
         this.server.setTimeout(this.timeout * 1000);
       }
 
-      return new Promise((fullfill, reject) => {
+      return new Promise((resolve, reject) => {
         this.trace(severity => `starting ${this.url}`);
 
         const service = this;
@@ -233,6 +235,7 @@ export class ServiceKOA extends Service {
         }
 
         function listen() {
+
           const handler = err => {
             process.removeListener("uncaughtException", addressInUseHandler);
             if (err) {
@@ -240,8 +243,8 @@ export class ServiceKOA extends Service {
               service.error(err);
               reject(err);
             } else {
-              service.trace(level => `listening on ${service.url}`);
-              fullfill();
+              service.trace(severity => `listening on ${service.url}`);
+              resolve();
             }
           };
 
@@ -256,7 +259,7 @@ export class ServiceKOA extends Service {
           if (e.code === "EADDRINUSE") {
             //console.log(`addressInUseHandler: ${e.code}`);
 
-            service.trace(level => `Address in use ${service.url} retrying...`);
+            service.trace(severity => `Address in use ${service.url} retrying...`);
 
             // try different strategies
             // 1. retry later
@@ -304,6 +307,5 @@ export class ServiceKOA extends Service {
 function decode(val) {
   if (val !== undefined) return decodeURIComponent(val);
 }
-
 
 export default ServiceKOA;

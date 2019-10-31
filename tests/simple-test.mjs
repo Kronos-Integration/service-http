@@ -1,6 +1,6 @@
 import test from "ava";
 import got from "got";
-import fs from "fs";
+import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import address from "network-address";
@@ -107,6 +107,8 @@ test("service-koa plain http get", async t => {
   await ks.start();
   ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
 
+  t.is(ks.url, `http://localhost:1234`);
+
   const response = await got(`http://localhost:${ks.listen.port}/`);
 
   t.is(response.body, "OK");
@@ -124,11 +126,12 @@ test.skip("service-koa plain https get", async t => {
   const PORT = 1239;
   const ks = new ServiceKOA(
     {
+      loglLevel: "trace",
       name: "my-name",
-      key: fs.readFileSync(
+      key: readFileSync(
         join(here, "..", "tests", "fixtures", "www.example.com.key")
       ),
-      cert: fs.readFileSync(
+      cert: readFileSync(
         join(here, "..", "tests", "fixtures", "www.example.com.cert")
       ),
       listen: {
@@ -144,9 +147,10 @@ test.skip("service-koa plain https get", async t => {
   t.is(ks.url, `https://${addr}:${PORT}`);
 
   await ks.start();
+
   ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
 
-  const response = await got(`http://${addr}:${ks.listen.port}/`);
+  const response = await got(`${ks.url}/`);
 
   t.is(response.body, "OK");
   t.is(response.statusCode, 200);
