@@ -2,7 +2,6 @@ import http from "http";
 import https from "https";
 import url from "url";
 import Koa from "koa";
-import WebSocketServer from "ws";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { RouteSendEndpoint } from "./route-send-endpoint.mjs";
@@ -25,10 +24,6 @@ export class ServiceKOA extends Service {
     return mergeAttributes(
       Service.configurationAttributes,
       createAttributes({
-        docRoot: {
-          description: "file system root for static content",
-          type: "posix-path"
-        },
         auth: {
           description: "authentification",
           attributes: {
@@ -190,7 +185,7 @@ export class ServiceKOA extends Service {
     // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
   }
 
-  _start() {
+  async _start() {
     if (!this.server) {
       this.server = this.isSecure
         ? https.createServer(this.serverOptions, this.koa.callback())
@@ -228,7 +223,7 @@ export class ServiceKOA extends Service {
       }
 
       return new Promise((fullfill, reject) => {
-        this.trace(level => `starting ${this.url}`);
+        this.trace(severity => `starting ${this.url}`);
 
         const service = this;
         const server = this.server;
@@ -288,13 +283,11 @@ export class ServiceKOA extends Service {
         listen();
       });
     }
-
-    return Promise.resolve();
   }
 
   _stop() {
     return new Promise((resolve, reject) => {
-      this.trace(level => `stopping ${this.url}`);
+      this.trace(severity => `stopping ${this.url}`);
 
       this.server.close(err => {
         if (err) {
@@ -312,6 +305,5 @@ function decode(val) {
   if (val !== undefined) return decodeURIComponent(val);
 }
 
-export function registerWithManager(manager) {
-  return manager.registerServiceFactory(ServiceKOA);
-}
+
+export default ServiceKOA;
