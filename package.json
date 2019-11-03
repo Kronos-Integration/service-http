@@ -30,7 +30,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "@kronos-integration/service": "^5.2.6",
+    "@kronos-integration/service": "^5.3.0",
     "koa": "^2.11.0",
     "koa-jwt": "^3.6.0",
     "model-attributes": "^4.0.0",
@@ -47,7 +47,7 @@
     "koa-route": "^3.2.0",
     "markdown-doctest": "^1.0.0",
     "network-address": "^1.1.2",
-    "semantic-release": "^15.13.29"
+    "semantic-release": "^15.13.30"
   },
   "engines": {
     "node": ">=12.12.0"
