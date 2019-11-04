@@ -18,7 +18,7 @@ test.skip("service-koa socket", async t => {
       name: "my-name1",
       listen: {
         address: "localhost",
-        port: 1236
+        socket: 1236
       }
     },
     sp
@@ -41,7 +41,7 @@ test.skip("service-koa socket", async t => {
   await ks1.configure({
     listen: {
       address: "localhost",
-      port: 1236
+      socket: 1236
     }
   });
 

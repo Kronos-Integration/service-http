@@ -18,7 +18,7 @@ test("service-koa plain http", async t => {
       type: "xxx",
       name: "my-name",
       listen: {
-        port: 1234,
+        socket: 1234,
         address: address()
       }
     },
@@ -28,7 +28,7 @@ test("service-koa plain http", async t => {
   t.is(ks.name, "my-name");
   t.is(ks.isSecure, false);
 
-  t.is(ks.port, 1234);
+  t.is(ks.socket, 1234);
 
   t.is(ks.address, address());
   t.is(ks.url, `http://${address()}:1234`);
@@ -44,7 +44,7 @@ test("service-koa plain http change port", async t => {
       type: "xxx",
       name: "my-name",
       listen: {
-        port: 1234,
+        socket: 1234,
         address: address()
       }
     },
@@ -53,11 +53,11 @@ test("service-koa plain http change port", async t => {
 
   await ks.configure({
     listen: {
-      port: 1235
+      socket: 1235
     }
   });
 
-  t.is(ks.listen.port, 1235);
+  t.is(ks.listen.socket, 1235);
 
   await ks.configure({
     timeout: {
@@ -76,7 +76,7 @@ test("service-koa plain http get /", async t => {
       type: "xxx",
       name: "my-name",
       listen: {
-        port: 1239,
+        socket: 1239,
         address: "localhost"
       }
     },
@@ -85,7 +85,7 @@ test("service-koa plain http get /", async t => {
 
   ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
   await ks.start();
-  const response = await got(`http://localhost:${ks.listen.port}/`);
+  const response = await got(`http://localhost:${ks.listen.socket}/`);
   t.is(response.body, "OK");
   await ks.stop();
 });
@@ -97,7 +97,7 @@ test("service-koa plain http get", async t => {
       type: "xxx",
       name: "my-name",
       listen: {
-        port: 1234,
+        socket: 1234,
         address: "localhost"
       }
     },
@@ -109,7 +109,7 @@ test("service-koa plain http get", async t => {
 
   t.is(ks.url, `http://localhost:1234`);
 
-  const response = await got(`http://localhost:${ks.listen.port}/`);
+  const response = await got(`http://localhost:${ks.listen.socket}/`);
 
   t.is(response.body, "OK");
   t.is(response.statusCode, 200);
@@ -135,7 +135,7 @@ test.skip("service-koa plain https get", async t => {
         join(here, "..", "tests", "fixtures", "www.example.com.cert")
       ),
       listen: {
-        port: PORT,
+        socket: PORT,
         address: addr
       }
     },
@@ -143,7 +143,7 @@ test.skip("service-koa plain https get", async t => {
   );
 
   t.is(ks.isSecure, true);
-  t.is(ks.listen.port, PORT);
+  t.is(ks.listen.socket, PORT);
   t.is(ks.url, `https://${addr}:${PORT}`);
 
   await ks.start();
@@ -164,13 +164,13 @@ test.skip("service-koa plain https get", async t => {
       it('can change port', done => {
         ks.configure({
           listen: {
-            port: 1235,
+            socket: 1235,
             address: 'www.example.com'
           }
         }).then(
           () => {
             try {
-              assert.equal(ks.port, 1235);
+              assert.equal(ks.socket, 1235);
               assert.equal(ks.address, 'www.example.com');
               assert.isTrue(ks.isSecure);
               assert.equal(ks.url, 'https://www.example.com:1235');

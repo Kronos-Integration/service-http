@@ -11,7 +11,7 @@ test.skip("service-koa failures with already in use port", async t => {
     {
       name: "my-name1",
       listen: {
-        port: 1235
+        socket: 1235
       }
     },
     sp
@@ -21,7 +21,7 @@ test.skip("service-koa failures with already in use port", async t => {
     {
       name: "my-name2",
       listen: {
-        port: 1235
+        socket: 1235
       }
     },
     sp

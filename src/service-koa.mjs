@@ -61,11 +61,11 @@ export class ServiceKOA extends Service {
               description: "end port range of the http(s) server",
               type: "ip-port"
             },
-            port: {
-              description: "port of the http(s) server",
+            socket: {
+              description: "listening port|socket of the http(s) server",
               needsRestart: true,
               default: 9898,
-              type: "ip-port"
+              type: "listen-socket"
             }
           }
         },
@@ -149,11 +149,11 @@ export class ServiceKOA extends Service {
   }
 
   get url() {
-    return `${this.scheme}://${this.address}:${this.port}`;
+    return `${this.scheme}://${this.address}:${this.socket}`;
   }
 
-  get port() {
-    return this.listen.port;
+  get socket() {
+    return this.listen.socket;
   }
 
   get address() {
@@ -231,7 +231,7 @@ export class ServiceKOA extends Service {
         const server = this.server;
 
         if (service.listen.fromPort !== undefined) {
-          service.listen.port = service.listen.fromPort;
+          service.listen.socket = service.listen.fromPort;
         }
 
         function listen() {
@@ -249,9 +249,9 @@ export class ServiceKOA extends Service {
           };
 
           if (service.listen.address === undefined) {
-            server.listen(service.listen.port, handler);
+            server.listen(service.listen.socket, handler);
           } else {
-            server.listen(service.listen.port, service.listen.address, handler);
+            server.listen(service.listen.socket, service.listen.address, handler);
           }
         }
 
@@ -267,9 +267,9 @@ export class ServiceKOA extends Service {
 
             if (
               service.listen.fromPort &&
-              service.listen.port < service.listen.toPort
+              service.listen.socket < service.listen.toPort
             ) {
-              service.listen.port++;
+              service.listen.socket++;
               listen();
               return;
             }
