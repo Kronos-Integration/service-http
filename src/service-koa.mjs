@@ -66,7 +66,6 @@ export class ServiceKOA extends Service {
             socket: {
               description: "listening port|socket of the http(s) server",
               needsRestart: true,
-              default: 9898,
               type: "listen-socket"
             }
           }
