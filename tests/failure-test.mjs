@@ -7,11 +7,13 @@ class ServiceProvider extends ServiceProviderMixin(Service) {}
 const sp = new ServiceProvider();
 
 test.skip("service-koa failures with already in use port", async t => {
+  const port = 1235;
+
   const ks1 = new ServiceKOA(
     {
       name: "my-name1",
       listen: {
-        socket: 1235
+        socket: port
       }
     },
     sp
@@ -21,7 +23,7 @@ test.skip("service-koa failures with already in use port", async t => {
     {
       name: "my-name2",
       listen: {
-        socket: 1235
+        socket: port
       }
     },
     sp
@@ -29,11 +31,8 @@ test.skip("service-koa failures with already in use port", async t => {
 
   await ks1.start();
   t.is(ks1.state, "running");
-  await ks1.stop();
 
-  try {
-    await ks2.start();
-  } catch (e) {}
+  await ks2.start();
 
   t.is(ks2.state, "failed");
 

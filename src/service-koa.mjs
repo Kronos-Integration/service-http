@@ -11,6 +11,8 @@ export { RouteSendEndpoint, SocketEndpoint };
 
 /**
  * HTTP server with koa
+ * @property {http.Server} server only present if state is running
+ * @property {koa} koa
  */
 export class ServiceKOA extends Service {
   /**
@@ -188,7 +190,7 @@ export class ServiceKOA extends Service {
   }
 
   async _start() {
-    if (!this.server) {
+    try {
       this.server = this.isSecure
         ? https.createServer(this.serverOptions, this.koa.callback())
         : http.createServer(this.koa.callback());
@@ -235,11 +237,10 @@ export class ServiceKOA extends Service {
         }
 
         function listen() {
-
           const handler = err => {
             process.removeListener("uncaughtException", addressInUseHandler);
             if (err) {
-              service.server = undefined;
+              delete service.server;
               service.error(err);
               reject(err);
             } else {
@@ -248,10 +249,20 @@ export class ServiceKOA extends Service {
             }
           };
 
-          if (service.listen.address === undefined) {
-            server.listen(service.listen.socket, handler);
-          } else {
-            server.listen(service.listen.socket, service.listen.address, handler);
+          try {
+            if (service.listen.address === undefined) {
+              server.listen(service.listen.socket, handler);
+            } else {
+              server.listen(
+                service.listen.socket,
+                service.listen.address,
+                handler
+              );
+            }
+          } catch (err) {
+            delete service.server;
+            service.error(err);
+            reject(err);
           }
         }
 
@@ -259,7 +270,9 @@ export class ServiceKOA extends Service {
           if (e.code === "EADDRINUSE") {
             //console.log(`addressInUseHandler: ${e.code}`);
 
-            service.trace(severity => `Address in use ${service.url} retrying...`);
+            service.trace(
+              severity => `Address in use ${service.url} retrying...`
+            );
 
             // try different strategies
             // 1. retry later
@@ -285,6 +298,9 @@ export class ServiceKOA extends Service {
         //server.on('error', addressInUseHandler);
         listen();
       });
+    } catch (e) {
+      delete this.server;
+      throw e;
     }
   }
 
