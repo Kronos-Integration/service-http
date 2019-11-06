@@ -34,9 +34,7 @@ test("service-koa failures with already in use port", async t => {
 
   await t.throwsAsync(() => ks2.start(), Error, 'listen EADDRINUSE: address already in use :::1235');
 
- // await ks2.start();
-
-  //t.is(ks2.state, "failed");
+  t.is(ks2.state, "failed");
 
   await ks1.stop();
   //await ks2.stop();

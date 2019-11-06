@@ -1,6 +1,5 @@
 import http from "http";
 import https from "https";
-import url from "url";
 import Koa from "koa";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
@@ -100,7 +99,6 @@ export class ServiceKOA extends Service {
     super(config, owner);
 
     Object.defineProperties(this, {
-      socketEndpoints: { value: {} },
       koa: { value: new Koa() }
     });
 
@@ -147,33 +145,6 @@ export class ServiceKOA extends Service {
     return this.listen.address;
   }
 
-  addSocketEndpoint(ep) {
-    //this.addEndpoint(new SocketEndpoint(name, this));
-    this.socketEndpoints[ep.path] = ep;
-    return ep;
-  }
-
-  removeSocketEndpoint(ep) {
-    delete this.socketEndpoints[ep.path];
-  }
-
-  createSocketEndpoint(name, path) {
-    const thePath = path || name;
-
-    let ep = this.socketEndpoints[thePath];
-    if (ep === undefined) {
-      ep = this.addSocketEndpoint(new SocketEndpoint(name, this, path));
-    }
-    return ep;
-  }
-
-  endpointForSocketConnection(ws, req) {
-    const location = url.parse(req.url, true);
-    return this.socketEndpoints[location.path];
-    // you might use location.query.access_token to authenticate or share sessions
-    // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
-  }
-
   async _start() {
     try {
       this.server = this.isSecure
@@ -182,38 +153,9 @@ export class ServiceKOA extends Service {
 
       const server = this.server;
 
-
-      /*
-      this.wss = new WebSocketServer({
-        server: this.server
-      });
-
-      this.wss.on("connection", (ws, req) => {
-        const ep = this.endpointForSocketConnection(ws, req);
-
-        if (ep) {
-          ep.open(ws);
-          ws.on("message", (message, flags) => {
-            try {
-              message = JSON.parse(message);
-              this.trace({
-                endpoint: ep.toString(),
-                received: message
-              });
-              ep.receive(message);
-            } catch (e) {
-              this.error(e);
-            }
-          });
-          ws.on("close", () => ep.close(ws));
-        }
-      });
-*/
-
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
       }
-
 
       return new Promise((resolve, reject) => {
         this.trace(severity => `starting ${this.url}`);
@@ -269,10 +211,6 @@ export class ServiceKOA extends Service {
       });
     }
   }
-}
-
-function decode(val) {
-  if (val !== undefined) return decodeURIComponent(val);
 }
 
 export default ServiceKOA;
