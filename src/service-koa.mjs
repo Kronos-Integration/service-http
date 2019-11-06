@@ -44,24 +44,10 @@ export class ServiceKOA extends Service {
           description: "server listen definition",
 
           attributes: {
-            retryTimeout: {
-              description:
-                "how long should we retry binding to the address (EADDRINUSE)",
-              default: 10,
-              type: "duration"
-            },
             address: {
               description: "hostname/ip-address of the http(s) server",
               needsRestart: true,
               type: "hostname"
-            },
-            fromPort: {
-              description: "start port range of the http(s) server",
-              type: "ip-port"
-            },
-            toPort: {
-              description: "end port range of the http(s) server",
-              type: "ip-port"
             },
             socket: {
               description: "listening port|socket of the http(s) server",
@@ -194,6 +180,9 @@ export class ServiceKOA extends Service {
         ? https.createServer(this.serverOptions, this.koa.callback())
         : http.createServer(this.koa.callback());
 
+      const server = this.server;
+
+
       /*
       this.wss = new WebSocketServer({
         server: this.server
@@ -222,80 +211,42 @@ export class ServiceKOA extends Service {
 */
 
       if (this.timeout !== undefined) {
-        this.server.setTimeout(this.timeout * 1000);
+        server.setTimeout(this.timeout * 1000);
       }
+
 
       return new Promise((resolve, reject) => {
         this.trace(severity => `starting ${this.url}`);
 
-        const service = this;
-        const server = this.server;
-
-        if (service.listen.fromPort !== undefined) {
-          service.listen.socket = service.listen.fromPort;
-        }
-
-        function listen() {
-          const handler = err => {
-            process.removeListener("uncaughtException", addressInUseHandler);
-            if (err) {
-              delete service.server;
-              service.error(err);
-              reject(err);
-            } else {
-              service.trace(severity => `listening on ${service.url}`);
-              resolve();
-            }
-          };
-
-          try {
-            if (service.listen.address === undefined) {
-              server.listen(service.listen.socket, handler);
-            } else {
-              server.listen(
-                service.listen.socket,
-                service.listen.address,
-                handler
-              );
-            }
-          } catch (err) {
-            delete service.server;
-            service.error(err);
+        const handler = err => {
+          if (err) {
+            delete this.server;
+            this.error(err);
             reject(err);
+          } else {
+            this.trace(severity => `listening on ${this.url}`);
+            resolve();
           }
-        }
+        };
 
-        function addressInUseHandler(e) {
-          if (e.code === "EADDRINUSE") {
-            //console.log(`addressInUseHandler: ${e.code}`);
+        server.on('error', handler);
 
-            service.trace(
-              severity => `Address in use ${service.url} retrying...`
+        try {
+          if (this.listen.address === undefined) {
+            server.listen(this.listen.socket, handler);
+          } else {
+            server.listen(
+              this.listen.socket,
+              this.listen.address,
+              handler
             );
-
-            // try different strategies
-            // 1. retry later
-            // 2. use other port / interface
-
-            if (
-              service.listen.fromPort &&
-              service.listen.socket < service.listen.toPort
-            ) {
-              service.listen.socket++;
-              listen();
-              return;
-            }
-
-            setTimeout(() => {
-              server.close();
-              listen();
-            }, 10000);
           }
+        } catch (err) {
+          delete this.server;
+          this.error(err);
+          reject(err);
         }
 
-        process.on("uncaughtException", addressInUseHandler);
-        //server.on('error', addressInUseHandler);
-        listen();
       });
     } catch (e) {
       delete this.server;
@@ -304,18 +255,19 @@ export class ServiceKOA extends Service {
   }
 
   _stop() {
-    return new Promise((resolve, reject) => {
-      this.trace(severity => `stopping ${this.url}`);
-
-      this.server.close(err => {
-        if (err) {
-          reject(err);
-        } else {
-          this.server = undefined;
-          resolve();
-        }
+    if (this.server) {
+      return new Promise((resolve, reject) => {
+        this.trace(severity => `stopping ${this.url}`);
+        this.server.close(err => {
+          if (err) {
+            reject(err);
+          } else {
+            this.server = undefined;
+            resolve();
+          }
+        });
       });
-    });
+    }
   }
 }
 
