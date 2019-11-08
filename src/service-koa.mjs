@@ -21,6 +21,16 @@ export class ServiceKOA extends Service {
     return "koa";
   }
 
+  static get endpoints() {
+    return {
+      ...super.endpoints,
+      authentification: {
+        out: true,
+        default: true
+      }
+    };
+  }
+
   static get configurationAttributes() {
     return mergeAttributes(
       Service.configurationAttributes,
