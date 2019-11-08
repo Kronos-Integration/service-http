@@ -37,6 +37,30 @@ test("service-koa plain http", async t => {
   await ks.stop();
 });
 
+test("service-koa utl", async t => {
+  const sp = new ServiceProvider();
+  const ks = new ServiceKOA(
+    {
+      type: "xxx",
+      name: "my-name",
+      listen: {
+        url: `http://${address()}:1234`
+      }
+    },
+    sp
+  );
+
+  t.is(ks.name, "my-name");
+  t.is(ks.isSecure, false);
+
+  t.is(ks.socket, 1234);
+  t.is(ks.address, address());
+  t.is(ks.url, `http://${address()}:1234`);
+
+  t.is(ks.timeout.server, 120);
+  await ks.stop();
+});
+
 test("service-koa plain http change port", async t => {
   const sp = new ServiceProvider();
   const ks = new ServiceKOA(

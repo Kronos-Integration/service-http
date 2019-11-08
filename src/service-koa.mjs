@@ -43,6 +43,11 @@ export class ServiceKOA extends Service {
           description: "server listen definition",
 
           attributes: {
+            url: {
+              description: "url of the http(s) server",
+              needsRestart: true,
+              type: "url"
+            },
             address: {
               description: "hostname/ip-address of the http(s) server",
               needsRestart: true,
@@ -134,15 +139,28 @@ export class ServiceKOA extends Service {
   }
 
   get url() {
-    return `${this.scheme}://${this.address}:${this.socket}`;
+    const url = this.listen.url;
+    return url ? url : `${this.scheme}://${this.address}:${this.socket}`;
   }
 
   get socket() {
-    return this.listen.socket;
+    const socket = this.listen.socket;
+    if(socket) { return socket; }
+    const url = this.url;
+    if(url) {
+      const u = new URL(url);
+      return Number(u.port);
+    }
   }
 
   get address() {
-    return this.listen.address;
+    const address = this.listen.address;
+    if(address) { return address; }
+    const url = this.url;
+    if(url) {
+      const u = new URL(url);
+      return u.hostname;
+    }
   }
 
   async _start() {
