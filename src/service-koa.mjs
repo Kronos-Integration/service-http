@@ -146,7 +146,7 @@ export class ServiceKOA extends Service {
   get socket() {
     const socket = this.listen.socket;
     if(socket) { return socket; }
-    const url = this.url;
+    const url = this.listen.url;
     if(url) {
       const u = new URL(url);
       return Number(u.port);
@@ -156,7 +156,7 @@ export class ServiceKOA extends Service {
   get address() {
     const address = this.listen.address;
     if(address) { return address; }
-    const url = this.url;
+    const url = this.listen.url;
     if(url) {
       const u = new URL(url);
       return u.hostname;

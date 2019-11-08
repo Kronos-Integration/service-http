@@ -24,8 +24,11 @@ koa backed http server
 ### Table of Contents
 
 -   [ServiceKOA](#servicekoa)
+    -   [Parameters](#parameters)
+    -   [Properties](#properties)
     -   [name](#name)
 -   [RouteSendEndpoint](#routesendendpoint)
+    -   [Parameters](#parameters-1)
 
 ## ServiceKOA
 
@@ -33,10 +36,15 @@ koa backed http server
 
 HTTP server with koa
 
-**Parameters**
+### Parameters
 
 -   `config`  
 -   `owner`  
+
+### Properties
+
+-   `server` **http.Server** only present if state is running
+-   `koa` **koa** 
 
 ### name
 
@@ -48,13 +56,13 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 Endpoint to link against a koa route
 
-**Parameters**
+### Parameters
 
--   `name`  
--   `owner`  
+-   `name`  {string} endpoint name
+-   `owner`  {Step} the owner of the endpoint
 -   `path`  
--   `method`  
--   `serviceName`  
+-   `method`  {string} http method defaults to get
+-   `serviceName`  {string} if present registers the route as a service
 
 # install
 

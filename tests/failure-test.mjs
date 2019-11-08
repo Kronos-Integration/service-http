@@ -7,7 +7,7 @@ class ServiceProvider extends ServiceProviderMixin(Service) {}
 const sp = new ServiceProvider();
 
 test("service-koa failures with already in use port", async t => {
-  const port = 1235;
+  const port = 1238;
 
   const ks1 = new ServiceKOA(
     {
@@ -18,7 +18,6 @@ test("service-koa failures with already in use port", async t => {
     },
     sp
   );
-
   const ks2 = new ServiceKOA(
     {
       name: "my-name2",
@@ -33,7 +32,6 @@ test("service-koa failures with already in use port", async t => {
   t.is(ks1.state, "running");
 
   await t.throwsAsync(() => ks2.start(), Error, 'listen EADDRINUSE: address already in use :::1235');
-
   t.is(ks2.state, "failed");
 
   await ks1.stop();
