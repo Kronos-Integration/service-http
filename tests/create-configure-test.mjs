@@ -2,9 +2,14 @@ import test from "ava";
 import address from "network-address";
 import route from "koa-route";
 import got from "got";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { readFileSync } from "fs";
 
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
+
+const here = dirname(fileURLToPath(import.meta.url));
 
 async function skt(t, config, ...args) {
   let expected = args.pop() || {};
@@ -43,7 +48,11 @@ async function skt(t, config, ...args) {
 }
 
 skt.title = (providedTitle = "", config, updates) => {
-  return `koa ${providedTitle} ${JSON.stringify(config)}${
+  const c = {...config};
+  delete c.key;
+  delete c.cert;
+  
+  return `koa ${providedTitle} ${JSON.stringify(c)}${
     Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""
   }`.trim();
 };
@@ -103,10 +112,26 @@ test(
   {
     adrress: address(),
     socket: 1235,
-      url: `http://${address()}:1235`,
+    url: `http://${address()}:1235`,
     isSecure: false,
     timeout: {
       server: 123.45
     }
   }
 );
+
+test.skip(skt, {
+  key: readFileSync(
+    join(here, "..", "tests", "fixtures", "www.example.com.key")
+  ),
+  cert: readFileSync(
+    join(here, "..", "tests", "fixtures", "www.example.com.cert")
+  ),
+  listen: {
+    address: 'localhost',
+    socket: 1236
+  }
+},{
+  isSecure: true,
+  url: `https://localhost:1236`
+});
