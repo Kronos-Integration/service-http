@@ -3,10 +3,8 @@ import https from "https";
 import Koa from "koa";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
-import { RouteSendEndpoint } from "./route-send-endpoint.mjs";
-import { SocketEndpoint } from "./socket-endpoint.mjs";
-
-export { RouteSendEndpoint, SocketEndpoint };
+export { RouteSendEndpoint, endpointRouter } from "./route-send-endpoint.mjs";
+export { SocketEndpoint } from "./socket-endpoint.mjs";
 
 /**
  * HTTP server with koa
@@ -143,6 +141,7 @@ export class ServiceKOA extends Service {
 
     return undefined;
   }
+
 
   get scheme() {
     return this.isSecure ? "https" : "http";

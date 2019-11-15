@@ -1,3 +1,4 @@
+import { compile, matcher } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
 /**
@@ -26,36 +27,8 @@ export class RouteSendEndpoint extends SendEndpoint {
     return false;
   }
 
-  route() {
-    return async (ctx, next) => {
-      if (!this.matches(ctx)) return next();
-
-      try {
-        const values = {};
-        await this.receive(ctx, values);
-        ctx.body = "OK-AFTER-RECEIVE";
-      } catch (e) {
-        this.owner.error({
-          method: this.method,
-          path: this.path,
-          error: e
-        });
-        ctx.body = e;
-        ctx.status = 500;
-      }
-      // miss
-      //return next();
-    };
-  }
-
-  matches(ctx) {
-    if (ctx.method === this.method) return true;
-    if (this.method === "GET" && ctx.method === "HEAD") return true;
-    return false;
-  }
-
   toString() {
-    return `${this.method} ${this.name}`;
+    return `${this.method} ${this.path}`;
   }
 
   toJSON() {
@@ -69,4 +42,31 @@ export class RouteSendEndpoint extends SendEndpoint {
 
     return json;
   }
+}
+
+export function endpointRouter(ks) {
+  let routingEndpoints = [...Object.values(ks.endpoints)].filter(
+    e => e instanceof RouteSendEndpoint
+  );
+
+  routingEndpoints = compile(routingEndpoints);
+
+  return async (ctx, next) => {
+    const { route, params } = matcher(routingEndpoints, ctx.path);
+
+    if (route && ctx.method === route.method) {
+      try {
+        ctx.body = await route.receive(ctx, params);
+      } catch (e) {
+        ks.error({
+          method: route.method,
+          path: route.path,
+          error: e
+        });
+        ctx.body = e;
+        ctx.status = 500;
+      }
+    }
+    return next();
+  };
 }
