@@ -39,7 +39,7 @@ async function skt(t, config, ...args) {
   await ks.start();
   t.is(ks.state, "running");
 
-  const response = await got(ks.url);
+  const response = await got(ks.url, { ca: config.cert });
   t.is(response.body, "OK");
   t.is(response.statusCode, 200);
 
@@ -48,10 +48,10 @@ async function skt(t, config, ...args) {
 }
 
 skt.title = (providedTitle = "", config, updates) => {
-  const c = {...config};
+  const c = { ...config };
   delete c.key;
   delete c.cert;
-  
+
   return `koa ${providedTitle} ${JSON.stringify(c)}${
     Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""
   }`.trim();
@@ -120,18 +120,22 @@ test(
   }
 );
 
-test.skip(skt, {
-  key: readFileSync(
-    join(here, "..", "tests", "fixtures", "www.example.com.key")
-  ),
-  cert: readFileSync(
-    join(here, "..", "tests", "fixtures", "www.example.com.cert")
-  ),
-  listen: {
-    address: 'localhost',
-    socket: 1236
+test(
+  skt,
+  {
+    key: readFileSync(
+      join(here, "..", "tests", "fixtures", "www.example.com.key")
+    ),
+    cert: readFileSync(
+      join(here, "..", "tests", "fixtures", "www.example.com.cert")
+    ),
+    listen: {
+      address: "localhost",
+      socket: 1236
+    }
+  },
+  {
+    isSecure: true,
+    url: `https://localhost:1236`
   }
-},{
-  isSecure: true,
-  url: `https://localhost:1236`
-});
+);
