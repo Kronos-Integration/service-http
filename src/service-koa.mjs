@@ -3,8 +3,10 @@ import https from "https";
 import Koa from "koa";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
-export { RouteSendEndpoint, endpointRouter } from "./route-send-endpoint.mjs";
+import { RouteSendEndpoint, endpointRouter } from "./route-send-endpoint.mjs";
 export { SocketEndpoint } from "./socket-endpoint.mjs";
+
+export { RouteSendEndpoint, endpointRouter };
 
 /**
  * HTTP server with koa
@@ -127,6 +129,18 @@ export class ServiceKOA extends Service {
     */
   }
 
+  endpointFactoryFromConfig(name, definition) {
+    if (definition.path || name[0] === '/') {
+      return RouteSendEndpoint;
+    }
+
+    return super.endpointFactoryFromConfig(name, definition);
+  }
+
+  endpointOptions(name, definition) {
+    return { ...super.endpointOptions(name, definition), ...definition };
+  }
+
   get isSecure() {
     return this.key !== undefined;
   }
@@ -150,11 +164,11 @@ export class ServiceKOA extends Service {
   get url() {
     const url = this.listen.url;
 
-    if(url) {
-      if(Number.isInteger(this.listen.socket)) {
+    if (url) {
+      if (Number.isInteger(this.listen.socket)) {
         const u = new URL(url);
         u.port = this.socket;
-        return u.toString().replace(/\/$/,'');
+        return u.toString().replace(/\/$/, '');
       }
 
       return url;
@@ -165,9 +179,9 @@ export class ServiceKOA extends Service {
 
   get socket() {
     const socket = this.listen.socket;
-    if(socket) { return socket; }
+    if (socket) { return socket; }
     const url = this.listen.url;
-    if(url) {
+    if (url) {
       const u = new URL(url);
       return Number(u.port);
     }
@@ -175,9 +189,9 @@ export class ServiceKOA extends Service {
 
   get address() {
     const address = this.listen.address;
-    if(address) { return address; }
+    if (address) { return address; }
     const url = this.listen.url;
-    if(url) {
+    if (url) {
       const u = new URL(url);
       return u.hostname;
     }

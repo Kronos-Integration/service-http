@@ -6,21 +6,38 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
  */
 export class RouteSendEndpoint extends SendEndpoint {
   /**
-   * @param name {string} endpoint name
-   * @param owner {Step} the owner of the endpoint
-   * @param method {string} http method defaults to get
+   * @param {string} name  endpoint name
+   * @param {Object} owner owner of the endpoint
+   * @param {Object} options 
+   * @param {string} options.path
+   * @param {string} options.method
    */
-  constructor(name, owner, path, method) {
+  constructor(name, owner, options={}) {
     super(name, owner);
 
-    Object.defineProperties(this, {
-      path: {
-        value: path
-      },
-      method: {
-        value: method ? method.toUpperCase() : "GET"
+    if (options.path !== undefined) {
+      Object.defineProperty(this, 'path', {
+        value: options.path
+      });
+    }
+
+    if (options.method !== undefined) {
+      const method = options.method.toUpperCase();
+
+      if (method !== 'GET') {
+        Object.defineProperty(this, 'method', {
+          value: method
+        });
       }
-    });
+    }
+  }
+
+  get method() {
+    return "GET";
+  }
+
+  get path() {
+    return this.name;
   }
 
   get socket() {
