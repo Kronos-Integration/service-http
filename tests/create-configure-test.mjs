@@ -90,7 +90,7 @@ test(
   {
     adrress: address(),
     socket: 1235,
-    //  url: `http://${address()}:1235`,
+      url: `http://${address()}:1235`,
     isSecure: false,
     timeout: {
       server: 123.45

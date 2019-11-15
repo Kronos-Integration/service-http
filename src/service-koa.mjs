@@ -150,7 +150,18 @@ export class ServiceKOA extends Service {
 
   get url() {
     const url = this.listen.url;
-    return url ? url : `${this.scheme}://${this.address}:${this.socket}`;
+
+    if(url) {
+      if(Number.isInteger(this.listen.socket)) {
+        const u = new URL(url);
+        u.port = this.socket;
+        return u.toString().replace(/\/$/,'');
+      }
+
+      return url;
+    }
+
+    return `${this.scheme}://${this.address}:${this.socket}`;
   }
 
   get socket() {
