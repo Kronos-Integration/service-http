@@ -8,29 +8,16 @@ export class RouteSendEndpoint extends SendEndpoint {
    * @param name {string} endpoint name
    * @param owner {Step} the owner of the endpoint
    * @param method {string} http method defaults to get
-   * @param serviceName {string} if present registers the route as a service
    */
-  constructor(name, owner, path, method, serviceName) {
+  constructor(name, owner, path, method) {
     super(name, owner);
-
-    const keys = [];
-    const re = pathToRegexp(path, keys, {});
 
     Object.defineProperties(this, {
       path: {
         value: path
       },
-      regex: {
-        value: re
-      },
-      keys: {
-        value: keys
-      },
       method: {
         value: method ? method.toUpperCase() : "GET"
-      },
-      serviceName: {
-        value: serviceName
       }
     });
   }
@@ -39,33 +26,25 @@ export class RouteSendEndpoint extends SendEndpoint {
     return false;
   }
 
-  get route() {
-    return (ctx, next) => {
-      if (!this.matches(ctx, this.method)) return next();
+  route() {
+    return async (ctx, next) => {
+      if (!this.matches(ctx)) return next();
 
-      // path
-      const m = this.regex.exec(ctx.path);
-      if (m) {
-        const args = m.slice(1).map(decode);
+      try {
         const values = {};
-        const keys = this.keys;
-        for (const i in args) {
-          values[keys[i].name] = args[i];
-        }
-
-        return this.receive(ctx, values).catch(e => {
-          this.owner.error({
-            method: this.method,
-            path: this.path,
-            error: e
-          });
-          ctx.body = e;
-          ctx.status = 500;
+        await this.receive(ctx, values);
+        ctx.body = "OK-AFTER-RECEIVE";
+      } catch (e) {
+        this.owner.error({
+          method: this.method,
+          path: this.path,
+          error: e
         });
+        ctx.body = e;
+        ctx.status = 500;
       }
-
       // miss
-      return next();
+      //return next();
     };
   }
 
@@ -82,7 +61,7 @@ export class RouteSendEndpoint extends SendEndpoint {
   toJSON() {
     const json = super.toJSON();
 
-    for (const attr of ["serviceName", "method", "path"]) {
+    for (const attr of ["method", "path"]) {
       if (this[attr] !== undefined) {
         json[attr] = this[attr];
       }
