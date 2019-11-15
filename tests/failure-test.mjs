@@ -1,10 +1,9 @@
 import test from "ava";
-import { ServiceProviderMixin, Service } from "@kronos-integration/service";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 
-class ServiceProvider extends ServiceProviderMixin(Service) {}
 
-const sp = new ServiceProvider();
+const sp = new StandaloneServiceProvider();
 
 test("service-koa failures with already in use port", async t => {
   const port = 1238;

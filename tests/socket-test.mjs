@@ -3,14 +3,13 @@ import fs from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import WebSocket from "ws";
-import { ServiceProviderMixin, Service } from "@kronos-integration/service";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 
-class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-const sp = new ServiceProvider();
+const sp = new StandaloneServiceProvider();
 
 test.skip("service-koa socket", async t => {
   const ks1 = new ServiceKOA(

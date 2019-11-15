@@ -6,13 +6,12 @@ import { fileURLToPath } from "url";
 import address from "network-address";
 import route from "koa-route";
 
-import { ServiceProviderMixin, Service } from "@kronos-integration/service";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 
-class ServiceProvider extends ServiceProviderMixin(Service) {}
 
 test("service-koa plain http", async t => {
-  const sp = new ServiceProvider();
+  const sp = new StandaloneServiceProvider();
   const ks = new ServiceKOA(
     {
       type: "xxx",
@@ -38,7 +37,7 @@ test("service-koa plain http", async t => {
 });
 
 test("service-koa utl", async t => {
-  const sp = new ServiceProvider();
+  const sp = new StandaloneServiceProvider();
   const ks = new ServiceKOA(
     {
       type: "xxx",
@@ -62,7 +61,7 @@ test("service-koa utl", async t => {
 });
 
 test("service-koa plain http change port", async t => {
-  const sp = new ServiceProvider();
+  const sp = new StandaloneServiceProvider();
   const ks = new ServiceKOA(
     {
       type: "xxx",
@@ -94,7 +93,7 @@ test("service-koa plain http change port", async t => {
 });
 
 test("service-koa plain http get /", async t => {
-  const sp = new ServiceProvider();
+  const sp = new StandaloneServiceProvider();
   const ks = new ServiceKOA(
     {
       type: "xxx",
@@ -115,7 +114,7 @@ test("service-koa plain http get /", async t => {
 });
 
 test("service-koa plain http get", async t => {
-  const sp = new ServiceProvider();
+  const sp = new StandaloneServiceProvider();
   const ks = new ServiceKOA(
     {
       type: "xxx",
@@ -144,7 +143,7 @@ test("service-koa plain http get", async t => {
 const here = dirname(fileURLToPath(import.meta.url));
 
 test.skip("service-koa plain https get", async t => {
-  const sp = new ServiceProvider();
+  const sp = new StandaloneServiceProvider();
 
   const addr = "localhost"; // address();
   const PORT = 1239;
