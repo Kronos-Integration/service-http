@@ -3,94 +3,10 @@ import got from "got";
 import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import address from "network-address";
 import route from "koa-route";
 
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
-
-
-test("service-koa plain http", async t => {
-  const sp = new StandaloneServiceProvider();
-  const ks = new ServiceKOA(
-    {
-      type: "xxx",
-      name: "my-name",
-      listen: {
-        socket: 1234,
-        address: address()
-      }
-    },
-    sp
-  );
-
-  t.is(ks.name, "my-name");
-  t.is(ks.isSecure, false);
-
-  t.is(ks.socket, 1234);
-
-  t.is(ks.address, address());
-  t.is(ks.url, `http://${address()}:1234`);
-
-  t.is(ks.timeout.server, 120);
-  await ks.stop();
-});
-
-test("service-koa utl", async t => {
-  const sp = new StandaloneServiceProvider();
-  const ks = new ServiceKOA(
-    {
-      type: "xxx",
-      name: "my-name",
-      listen: {
-        url: `http://${address()}:1234`
-      }
-    },
-    sp
-  );
-
-  t.is(ks.name, "my-name");
-  t.is(ks.isSecure, false);
-
-  t.is(ks.socket, 1234);
-  t.is(ks.address, address());
-  t.is(ks.url, `http://${address()}:1234`);
-
-  t.is(ks.timeout.server, 120);
-  await ks.stop();
-});
-
-test("service-koa plain http change port", async t => {
-  const sp = new StandaloneServiceProvider();
-  const ks = new ServiceKOA(
-    {
-      type: "xxx",
-      name: "my-name",
-      listen: {
-        socket: 1234,
-        address: address()
-      }
-    },
-    sp
-  );
-
-  await ks.configure({
-    listen: {
-      socket: 1235
-    }
-  });
-
-  t.is(ks.listen.socket, 1235);
-
-  await ks.configure({
-    timeout: {
-      server: 123.45
-    }
-  });
-
-  t.is(ks.timeout.server, 123.45);
-  await ks.stop();
-});
 
 test("service-koa plain http get /", async t => {
   const sp = new StandaloneServiceProvider();
