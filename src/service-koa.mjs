@@ -235,7 +235,7 @@ export class ServiceKOA extends Service {
     }
   }
 
-  _stop() {
+  async _stop() {
     if (this.server) {
       return new Promise((resolve, reject) => {
         this.trace(`stopping ${this.url}`);
