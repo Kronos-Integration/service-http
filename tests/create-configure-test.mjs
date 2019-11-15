@@ -1,5 +1,7 @@
 import test from "ava";
 import address from "network-address";
+import route from "koa-route";
+import got from "got";
 
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
@@ -26,7 +28,18 @@ async function skt(t, config, ...args) {
     t.is(ks.timeout[name], expected.timeout[name], `timeout ${name}`);
   }
 
+  ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
+
+  t.is(ks.state, "stopped");
+  await ks.start();
+  t.is(ks.state, "running");
+
+  const response = await got(ks.url);
+  t.is(response.body, "OK");
+  t.is(response.statusCode, 200);
+
   await ks.stop();
+  t.is(ks.state, "stopped");
 }
 
 skt.title = (providedTitle = "", config, updates) => {

@@ -8,54 +8,6 @@ import route from "koa-route";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 
-test("service-koa plain http get /", async t => {
-  const sp = new StandaloneServiceProvider();
-  const ks = new ServiceKOA(
-    {
-      type: "xxx",
-      name: "my-name",
-      listen: {
-        socket: 1239,
-        address: "localhost"
-      }
-    },
-    sp
-  );
-
-  ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
-  await ks.start();
-  const response = await got(`http://localhost:${ks.listen.socket}/`);
-  t.is(response.body, "OK");
-  await ks.stop();
-});
-
-test("service-koa plain http get", async t => {
-  const sp = new StandaloneServiceProvider();
-  const ks = new ServiceKOA(
-    {
-      type: "xxx",
-      name: "my-name",
-      listen: {
-        socket: 1234,
-        address: "localhost"
-      }
-    },
-    sp
-  );
-
-  await ks.start();
-  ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
-
-  t.is(ks.url, `http://localhost:1234`);
-
-  const response = await got(`http://localhost:${ks.listen.socket}/`);
-
-  t.is(response.body, "OK");
-  t.is(response.statusCode, 200);
-
-  await ks.stop();
-});
-
 const here = dirname(fileURLToPath(import.meta.url));
 
 test.skip("service-koa plain https get", async t => {
