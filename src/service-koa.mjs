@@ -129,16 +129,18 @@ export class ServiceKOA extends Service {
     */
   }
 
+  /**
+   * 
+   * @param {string} name 
+   * @param {object|string} definition
+   * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
+   */
   endpointFactoryFromConfig(name, definition) {
     if (definition.path || name[0] === '/') {
       return RouteSendEndpoint;
     }
 
     return super.endpointFactoryFromConfig(name, definition);
-  }
-
-  endpointOptions(name, definition) {
-    return { ...super.endpointOptions(name, definition), ...definition };
   }
 
   get isSecure() {
@@ -155,7 +157,6 @@ export class ServiceKOA extends Service {
 
     return undefined;
   }
-
 
   get scheme() {
     return this.isSecure ? "https" : "http";

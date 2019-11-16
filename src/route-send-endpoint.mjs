@@ -2,7 +2,7 @@ import { compile, matcher } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
 /**
- * Endpoint to link against a koa route
+ * Endpoint to link against a http route
  */
 export class RouteSendEndpoint extends SendEndpoint {
   /**

@@ -11,7 +11,7 @@ test("endpoint route basics", async t => {
   const ks = new ServiceKOA(
     {
       listen: {
-        socket: 1239
+        socket: 1240
       }
     },
     sp
@@ -31,15 +31,15 @@ test("endpoint route basics", async t => {
 
   await ks.start();
 
-  let response = await got("http://localhost:1239/r1");
+  let response = await got("http://localhost:1240/r1");
   t.is(response.body, "OK S1");
   t.is(response.statusCode, 200);
 
-  response = await got("http://localhost:1239/r2");
+  response = await got("http://localhost:1240/r2");
   t.is(response.body, "OK S2");
   t.is(response.statusCode, 200);
 
-  //response = await got("http://localhost:1239/r0");
+  //response = await got("http://localhost:1240/r0");
 
   await ks.stop();
 });
@@ -47,14 +47,17 @@ test("endpoint route basics", async t => {
 test("endpoint factory", async t => {
   const sp = new StandaloneServiceProvider();
 
+  const s1 = new SendEndpoint("s1");
+  s1.receive = async () => "OK S1";
+
   const http = await sp.declareService({
     name: 'http',
     type: ServiceKOA,
     listen: {
-      socket: 1239
+      socket: 1241
     },
     endpoints: {
-      '/r1': {},
+      '/r1': { connected: s1 },
       '/r2': { method: 'post' },
       '/r3': { path: '/somwhere' }
     }
@@ -69,4 +72,11 @@ test("endpoint factory", async t => {
   t.is(http.endpoints['/r2'].method, 'POST');
   t.is(http.endpoints['/r3'].path, '/somwhere');
 
+  http.koa.use(endpointRouter(http));
+
+  await http.start();
+
+  let response = await got("http://localhost:1241/r1");
+  t.is(response.body, "OK S1");
+  t.is(response.statusCode, 200);
 });
