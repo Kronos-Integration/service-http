@@ -26,9 +26,11 @@ koa backed http server
 -   [ServiceKOA](#servicekoa)
     -   [Parameters](#parameters)
     -   [Properties](#properties)
+    -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
+        -   [Parameters](#parameters-1)
     -   [name](#name)
 -   [RouteSendEndpoint](#routesendendpoint)
-    -   [Parameters](#parameters-1)
+    -   [Parameters](#parameters-2)
 
 ## ServiceKOA
 
@@ -46,6 +48,15 @@ HTTP server with koa
 -   `server` **http.Server** only present if state is running
 -   `koa` **koa** 
 
+### endpointFactoryFromConfig
+
+#### Parameters
+
+-   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `definition` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) \| [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))** 
+
+Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
+
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'koa'
@@ -54,15 +65,13 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends SendEndpoint**
 
-Endpoint to link against a koa route
+Endpoint to link against a http route
 
 ### Parameters
 
--   `name`  {string} endpoint name
--   `owner`  {Step} the owner of the endpoint
--   `path`  
--   `method`  {string} http method defaults to get
--   `serviceName`  {string} if present registers the route as a service
+-   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
+-   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
+-   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
 
 # install
 

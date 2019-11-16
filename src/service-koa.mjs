@@ -132,7 +132,7 @@ export class ServiceKOA extends Service {
   /**
    * 
    * @param {string} name 
-   * @param {object|string} definition
+   * @param {Object|string} definition
    * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
    */
   endpointFactoryFromConfig(name, definition) {
