@@ -136,7 +136,7 @@ export class ServiceKOA extends Service {
    * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
    */
   endpointFactoryFromConfig(name, definition) {
-    if (definition.path || name[0] === '/') {
+    if (definition.method || definition.path || name[0] === '/') {
       return RouteSendEndpoint;
     }
 
