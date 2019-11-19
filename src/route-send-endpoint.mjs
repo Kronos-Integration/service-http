@@ -1,4 +1,4 @@
-import { compile, matcher } from "multi-path-matcher";
+import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
 /**
@@ -6,17 +6,17 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
  */
 export class RouteSendEndpoint extends SendEndpoint {
   /**
-   * @param {string} name  endpoint name
+   * @param {string} name endpoint name
    * @param {Object} owner owner of the endpoint
-   * @param {Object} options 
-   * @param {string} options.path
-   * @param {string} options.method
+   * @param {Object} options
+   * @param {string} options.path http url path defaults to endpoint name
+   * @param {string} options.method http methos defaults to GET
    */
-  constructor(name, owner, options={}) {
+  constructor(name, owner, options = {}) {
     super(name, owner);
 
     if (options.path !== undefined) {
-      Object.defineProperty(this, 'path', {
+      Object.defineProperty(this, "path", {
         value: options.path
       });
     }
@@ -24,8 +24,8 @@ export class RouteSendEndpoint extends SendEndpoint {
     if (options.method !== undefined) {
       const method = options.method.toUpperCase();
 
-      if (method !== 'GET') {
-        Object.defineProperty(this, 'method', {
+      if (method !== "GET") {
+        Object.defineProperty(this, "method", {
           value: method
         });
       }
@@ -62,28 +62,28 @@ export class RouteSendEndpoint extends SendEndpoint {
 }
 
 export function endpointRouter(ks) {
-  let routingEndpoints = [...Object.values(ks.endpoints)].filter(
+  const routingEndpoints = compile([...Object.values(ks.endpoints)].filter(
     e => e instanceof RouteSendEndpoint
-  );
-
-  routingEndpoints = compile(routingEndpoints);
+  ));
 
   return async (ctx, next) => {
-    const { route, params } = matcher(routingEndpoints, ctx.path);
+    for (const route of routingEndpoints) {
+      const m = ctx.path.match(route.regex);
+      if (m && route.method === ctx.method) {
+        try {
+          ctx.body = await route.receive(ctx, m.groups);
+        } catch (e) {
+          ks.error({
+            method: ctx.method,
+            path: ctx.path,
+            error: e
+          });
+          ctx.body = e;
+          ctx.status = 500;
+        }
 
-    if (route && ctx.method === route.method) {
-      try {
-        ctx.body = await route.receive(ctx, params);
-      } catch (e) {
-        ks.error({
-          method: route.method,
-          path: route.path,
-          error: e
-        });
-        ctx.body = e;
-        ctx.status = 500;
+        return next();
       }
     }
-    return next();
   };
 }
