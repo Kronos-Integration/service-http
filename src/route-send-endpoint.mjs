@@ -44,10 +44,6 @@ export class RouteSendEndpoint extends SendEndpoint {
     return false;
   }
 
-  toString() {
-    return `${this.method} ${this.path}`;
-  }
-
   toJSON() {
     const json = super.toJSON();
 

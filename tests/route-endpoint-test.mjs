@@ -27,8 +27,14 @@ test("endpoint route basics", async t => {
   r1.connected = s1;
 
   const r2 = ks.addEndpoint(
-    new RouteSendEndpoint("/r2", ks, { method: "POST" })
+    new RouteSendEndpoint("/r2", ks, {
+      method: "POST",
+      interceptors: [new BodyParserInterceptor()]
+    })
   );
+  //t.truthy(r2.hasInterceptors);
+  console.log(`r2: ${r2}`);
+
   const s2 = new SendEndpoint("s2");
   s2.receive = async () => "OK S2";
   r2.connected = s2;
@@ -41,7 +47,10 @@ test("endpoint route basics", async t => {
   t.is(response.body, "OK S1");
   t.is(response.statusCode, 200);
 
-  response = await got("http://localhost:1240/r2", { method: "POST", interceptors: [new BodyParserInterceptor()] });
+  response = await got("http://localhost:1240/r2", {
+    body: JSON.stringify({ prop1: "value1", prop2: 2 }),
+    method: "POST"
+  });
   t.is(response.body, "OK S2");
   t.is(response.statusCode, 200);
 
