@@ -13,7 +13,7 @@ export class RouteSendEndpoint extends SendEndpoint {
    * @param {string} options.method http methos defaults to GET
    */
   constructor(name, owner, options = {}) {
-    super(name, owner);
+    super(name, owner, options);
 
     if (options.path !== undefined) {
       Object.defineProperty(this, "path", {

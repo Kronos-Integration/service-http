@@ -32,14 +32,13 @@ test("endpoint route basics", async t => {
       interceptors: [new BodyParserInterceptor()]
     })
   );
-  //t.truthy(r2.hasInterceptors);
-  console.log(`r2: ${r2}`);
+  t.truthy(r2.hasInterceptors);
+  //console.log(`r2: ${r2}`);
   
   const s2 = new SendEndpoint("s2");
   s2.receive = async () => "OK S2";
   r2.connected = s2;
-
-  console.log(`r2: ${r2}`);
+  //console.log(`r2: ${r2}`);
 
   ks.koa.use(endpointRouter(ks));
 
