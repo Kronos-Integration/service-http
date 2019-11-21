@@ -44,6 +44,10 @@ export class RouteSendEndpoint extends SendEndpoint {
     return false;
   }
 
+  get toStringAttributes() {
+    return { ...super.toStringAttributes, method: "method", path: "path" };
+  }
+
   toJSON() {
     const json = super.toJSON();
 
@@ -58,9 +62,9 @@ export class RouteSendEndpoint extends SendEndpoint {
 }
 
 export function endpointRouter(ks) {
-  const routingEndpoints = compile([...Object.values(ks.endpoints)].filter(
-    e => e instanceof RouteSendEndpoint
-  ));
+  const routingEndpoints = compile(
+    [...Object.values(ks.endpoints)].filter(e => e instanceof RouteSendEndpoint)
+  );
 
   return async (ctx, next) => {
     for (const route of routingEndpoints) {
