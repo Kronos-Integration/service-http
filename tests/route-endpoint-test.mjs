@@ -4,7 +4,11 @@ import got from "got";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
-import { RouteSendEndpoint, endpointRouter } from "../src/route-send-endpoint.mjs";
+import {
+  RouteSendEndpoint,
+  endpointRouter
+} from "../src/route-send-endpoint.mjs";
+import { BodyParserInterceptor } from "../src/body-parser-interceptor.mjs";
 
 test("endpoint route basics", async t => {
   const sp = new StandaloneServiceProvider();
@@ -22,7 +26,9 @@ test("endpoint route basics", async t => {
   s1.receive = async () => "OK S1";
   r1.connected = s1;
 
-  const r2 = ks.addEndpoint(new RouteSendEndpoint("/r2", ks));
+  const r2 = ks.addEndpoint(
+    new RouteSendEndpoint("/r2", ks, { method: "POST" })
+  );
   const s2 = new SendEndpoint("s2");
   s2.receive = async () => "OK S2";
   r2.connected = s2;
@@ -35,7 +41,7 @@ test("endpoint route basics", async t => {
   t.is(response.body, "OK S1");
   t.is(response.statusCode, 200);
 
-  response = await got("http://localhost:1240/r2");
+  response = await got("http://localhost:1240/r2", { method: "POST", interceptors: [new BodyParserInterceptor()] });
   t.is(response.body, "OK S2");
   t.is(response.statusCode, 200);
 
@@ -50,27 +56,29 @@ test("endpoint factory", async t => {
   const s1 = new SendEndpoint("s1");
   s1.receive = async () => "OK S1";
 
-  const http = await sp.declareService({
-    name: 'http',
-    type: ServiceKOA,
-    listen: {
-      socket: 1241
+  const http = await sp.declareService(
+    {
+      name: "http",
+      type: ServiceKOA,
+      listen: {
+        socket: 1241
+      },
+      endpoints: {
+        "/r1": { connected: s1 },
+        "/r2": { method: "post" },
+        "/r3": { path: "/somwhere" }
+      }
     },
-    endpoints: {
-      '/r1': { connected: s1 },
-      '/r2': { method: 'post' },
-      '/r3': { path: '/somwhere' }
-    }
-  }, true);
+    true
+  );
 
+  t.is(http.endpoints["/r1"].name, "/r1");
+  t.is(http.endpoints["/r1"].path, "/r1");
+  t.is(http.endpoints["/r1"].method, "GET");
+  t.true(http.endpoints["/r1"] instanceof RouteSendEndpoint);
 
-  t.is(http.endpoints['/r1'].name, '/r1');
-  t.is(http.endpoints['/r1'].path, '/r1');
-  t.is(http.endpoints['/r1'].method, 'GET');
-  t.true(http.endpoints['/r1'] instanceof RouteSendEndpoint);
-
-  t.is(http.endpoints['/r2'].method, 'POST');
-  t.is(http.endpoints['/r3'].path, '/somwhere');
+  t.is(http.endpoints["/r2"].method, "POST");
+  t.is(http.endpoints["/r3"].path, "/somwhere");
 
   http.koa.use(endpointRouter(http));
 

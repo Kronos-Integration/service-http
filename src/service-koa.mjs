@@ -5,6 +5,7 @@ import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { RouteSendEndpoint, endpointRouter } from "./route-send-endpoint.mjs";
 export { SocketEndpoint } from "./socket-endpoint.mjs";
+export { BodyParserInterceptor } from "./body-parser-interceptor.mjs";
 
 export { RouteSendEndpoint, endpointRouter };
 
