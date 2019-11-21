@@ -9,7 +9,7 @@ export class RouteSendEndpoint extends SendEndpoint {
    * @param {string} name endpoint name
    * @param {Object} owner owner of the endpoint
    * @param {Object} options
-   * @param {string} options.path http url path defaults to endpoint name
+   * @param {string} options.path url path defaults to endpoint name
    * @param {string} options.method http methos defaults to GET
    */
   constructor(name, owner, options = {}) {

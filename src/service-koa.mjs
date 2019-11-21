@@ -21,16 +21,6 @@ export class ServiceKOA extends Service {
     return "koa";
   }
 
-  static get endpoints() {
-    return {
-      ...super.endpoints,
-      authentification: {
-        out: true,
-        default: true
-      }
-    };
-  }
-
   static get configurationAttributes() {
     return mergeAttributes(
       Service.configurationAttributes,
@@ -116,21 +106,10 @@ export class ServiceKOA extends Service {
     Object.defineProperties(this, {
       koa: { value: new Koa() }
     });
-
-    /*
-    if (this.auth) {
-      if (this.auth.jwt) {
-        this.koa.use(jwt({
-          secret: '',
-          algorithm: 'RS256'
-        }));
-      }
-    }
-    */
   }
 
   /**
-   * 
+   * on demand create RouteSendEndpoint´s
    * @param {string} name 
    * @param {Object|string} definition
    * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
