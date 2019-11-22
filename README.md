@@ -31,6 +31,12 @@ koa backed http server
     -   [name](#name)
 -   [RouteSendEndpoint](#routesendendpoint)
     -   [Parameters](#parameters-2)
+-   [CTXInterceptor](#ctxinterceptor)
+    -   [name](#name-1)
+-   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
+    -   [name](#name-2)
+-   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
+    -   [name](#name-3)
 
 ## ServiceKOA
 
@@ -49,6 +55,8 @@ HTTP server with koa
 -   `koa` **koa** 
 
 ### endpointFactoryFromConfig
+
+on demand create RouteSendEndpoint´s
 
 #### Parameters
 
@@ -72,6 +80,36 @@ Endpoint to link against a http route
 -   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
 -   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+
+## CTXInterceptor
+
+**Extends Interceptor**
+
+extracts params form request body
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
+
+## CTXBodyParamInterceptor
+
+**Extends Interceptor**
+
+extracts params form request body
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
+
+## CTXJWTVerifyInterceptor
+
+**Extends Interceptor**
+
+only forward requests if a valid jwt token is present
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-jwt-verify'
 
 # install
 
