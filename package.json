@@ -31,8 +31,8 @@
   },
   "dependencies": {
     "@kronos-integration/service": "^6.1.17",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
-    "koa-jwt": "^3.6.0",
     "model-attributes": "^4.1.2",
     "multi-path-matcher": "^2.0.4",
     "ws": "^7.2.0"

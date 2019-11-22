@@ -28,20 +28,6 @@ export class ServiceKOA extends Service {
     return mergeAttributes(
       Service.configurationAttributes,
       createAttributes({
-        auth: {
-          description: "authentification",
-          attributes: {
-            jwt: {
-              description: "json web tokens",
-              attributes: {
-                privateKey: {
-                  description: "private key content"
-                }
-              }
-            }
-          }
-        },
-
         listen: {
           description: "server listen definition",
 
