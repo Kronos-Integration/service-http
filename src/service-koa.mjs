@@ -52,11 +52,13 @@ export class ServiceKOA extends Service {
         key: {
           description: "ssl key",
           needsRestart: true,
+          private: true,
           type: "blob"
         },
         cert: {
           description: "ssl cert",
           needsRestart: true,
+          private: true,
           type: "blob"
         },
         timeout: {
