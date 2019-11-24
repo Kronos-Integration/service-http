@@ -47,8 +47,7 @@ HTTP server with koa
 
 ### Parameters
 
--   `config`  
--   `owner`  
+-   `args` **...any** 
 
 ### Properties
 
@@ -63,6 +62,7 @@ on demand create RouteSendEndpoint´s
 
 -   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `definition` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) \| [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))** 
+-   `ic`  
 
 Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
 

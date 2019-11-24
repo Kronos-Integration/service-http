@@ -6,7 +6,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
-import { StandaloneServiceProvider } from "@kronos-integration/service";
+import { StandaloneServiceProvider, InitializationContext } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -17,7 +17,8 @@ async function skt(t, config, ...args) {
 
   expected = { timeout: { server: 120 }, ...expected };
   const sp = new StandaloneServiceProvider();
-  const ks = new ServiceKOA(config, sp);
+  const ic = new InitializationContext(sp);
+  const ks = new ServiceKOA(config, ic);
 
   for (const u of updates) {
     await ks.configure(u);

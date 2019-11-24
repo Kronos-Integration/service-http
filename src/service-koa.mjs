@@ -91,8 +91,8 @@ export class ServiceKOA extends Service {
     );
   }
 
-  constructor(config, owner) {
-    super(config, owner);
+  constructor(...args) {
+    super(...args);
 
     Object.defineProperties(this, {
       koa: { value: new Koa() }
@@ -105,12 +105,12 @@ export class ServiceKOA extends Service {
    * @param {Object|string} definition
    * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
    */
-  endpointFactoryFromConfig(name, definition) {
+  endpointFactoryFromConfig(name, definition, ic) {
     if (definition.method || definition.path || name[0] === '/') {
       return RouteSendEndpoint;
     }
 
-    return super.endpointFactoryFromConfig(name, definition);
+    return super.endpointFactoryFromConfig(name, definition, ic);
   }
 
   get isSecure() {

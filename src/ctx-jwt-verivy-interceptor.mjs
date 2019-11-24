@@ -15,13 +15,13 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     return "ctx-jwt-verify";
   }
 
-  async receive(ctx, params) {
+  async receive(ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.header);
     if (token) {
       const decoded = await verifyPromisified(token, "xxx");
       // ctx.state[tokenKey] = decoded;
 
-      return await this.connected.receive(ctx, params);
+      return await this.connected.receive(ctx, ...args);
     } else {
       ctx.throw(401);
     }

@@ -2,7 +2,7 @@ import test from "ava";
 import got from "got";
 
 import { SendEndpoint } from "@kronos-integration/endpoint";
-import { StandaloneServiceProvider } from "@kronos-integration/service";
+import { StandaloneServiceProvider,InitializationContext } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 import {
   RouteSendEndpoint,
@@ -13,13 +13,15 @@ import { CTXBodyParamInterceptor } from "../src/ctx-body-param-interceptor.mjs";
 
 test("endpoint route basics", async t => {
   const sp = new StandaloneServiceProvider();
+  const ic = new InitializationContext(sp);
+
   const ks = new ServiceKOA(
     {
       listen: {
         socket: 1240
       }
     },
-    sp
+    ic
   );
 
   const r1 = ks.addEndpoint(
