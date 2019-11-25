@@ -170,6 +170,8 @@ export class ServiceKOA extends Service {
 
   async _start() {
     try {
+      this.koa.use(endpointRouter(this));
+
       this.server = this.isSecure
         ? https.createServer(this.serverOptions, this.koa.callback())
         : http.createServer(this.koa.callback());

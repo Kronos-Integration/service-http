@@ -2,12 +2,12 @@ import test from "ava";
 import got from "got";
 
 import { SendEndpoint } from "@kronos-integration/endpoint";
-import { StandaloneServiceProvider,InitializationContext } from "@kronos-integration/service";
-import { ServiceKOA } from "../src/service-koa.mjs";
 import {
-  RouteSendEndpoint,
-  endpointRouter
-} from "../src/route-send-endpoint.mjs";
+  StandaloneServiceProvider,
+  InitializationContext
+} from "@kronos-integration/service";
+import { ServiceKOA } from "../src/service-koa.mjs";
+import { RouteSendEndpoint } from "../src/route-send-endpoint.mjs";
 import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
 import { CTXBodyParamInterceptor } from "../src/ctx-body-param-interceptor.mjs";
 
@@ -29,8 +29,7 @@ test("endpoint route basics", async t => {
       interceptors: [CTXInterceptor]
     })
   );
-  const s1 = new SendEndpoint("s1", {
-  });
+  const s1 = new SendEndpoint("s1", {});
 
   s1.receive = async () => "OK S1";
   r1.connected = s1;
@@ -43,15 +42,12 @@ test("endpoint route basics", async t => {
   );
   t.truthy(r2.hasInterceptors);
 
-  const s2 = new SendEndpoint("s2", {
-  });
+  const s2 = new SendEndpoint("s2", {});
 
   s2.receive = async body => {
     return { ...body, message: "OK S2" };
   };
   r2.connected = s2;
-
-  ks.koa.use(endpointRouter(ks));
 
   await ks.start();
 
@@ -99,8 +95,6 @@ test("endpoint factory", async t => {
 
   t.is(http.endpoints["/r2"].method, "POST");
   t.is(http.endpoints["/r3"].path, "/somwhere");
-
-  http.koa.use(endpointRouter(http));
 
   await http.start();
 
