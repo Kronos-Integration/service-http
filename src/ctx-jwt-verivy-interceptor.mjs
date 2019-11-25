@@ -1,6 +1,9 @@
-import { Interceptor } from "@kronos-integration/interceptor";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
+
+import { Interceptor } from "@kronos-integration/interceptor";
+import { mergeAttributes, createAttributes } from 'model-attributes';
+
 
 const verifyPromisified = promisify(jwt.verify);
 
@@ -15,10 +18,23 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     return "ctx-jwt-verify";
   }
 
+  static get configurationAttributes() {
+    return mergeAttributes(
+      createAttributes({
+        key: {
+          description: "key to verify token against",
+          private: true,
+          type: "blob"
+        },
+      }),
+      Interceptor.configurationAttributes
+    );
+  }
+
   async receive(ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.header);
     if (token) {
-      const decoded = await verifyPromisified(token, "xxx");
+      const decoded = await verifyPromisified(token, this.key);
       // ctx.state[tokenKey] = decoded;
 
       return await this.connected.receive(ctx, ...args);
