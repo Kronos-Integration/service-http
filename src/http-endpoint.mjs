@@ -44,16 +44,8 @@ export class HTTPEndpoint extends SendEndpoint {
     return { ...super.toStringAttributes, method: "method", path: "path" };
   }
 
-  toJSON() {
-    const json = super.toJSON();
-
-    for (const attr of ["method", "path"]) {
-      if (this[attr] !== undefined) {
-        json[attr] = this[attr];
-      }
-    }
-
-    return json;
+  get jsonAttributes() {
+    return [...super.jsonAttributes, "method", "path"];
   }
 }
 

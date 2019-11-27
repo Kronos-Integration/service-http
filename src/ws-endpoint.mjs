@@ -39,16 +39,8 @@ export class WSEndpoint extends SendEndpoint {
     return { ...super.toStringAttributes, ws: "ws", path: "path" };
   }
 
-  toJSON() {
-    const json = super.toJSON();
-
-    for (const attr of ["path"]) {
-      if (this[attr] !== undefined) {
-        json[attr] = this[attr];
-      }
-    }
-
-    return json;
+  get jsonAttributes() {
+    return [...super.jsonAttributes, "path", "ws"];
   }
 }
 
