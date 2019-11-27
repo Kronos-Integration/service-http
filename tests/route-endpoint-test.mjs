@@ -84,8 +84,7 @@ test("endpoint factory", async t => {
         "/r2": { method: "post" },
         "/r3": { path: "/somwhere" }
       }
-    },
-    true
+    }
   );
 
   t.is(http.endpoints["/r1"].name, "/r1");

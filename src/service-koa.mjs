@@ -4,7 +4,6 @@ import Koa from "koa";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { RouteSendEndpoint, endpointRouter } from "./route-send-endpoint.mjs";
-export { SocketEndpoint } from "./socket-endpoint.mjs";
 export { CTXInterceptor } from "./ctx-interceptor.mjs";
 export { CTXBodyParamInterceptor } from "./ctx-body-param-interceptor.mjs";
 export { CTXJWTVerifyInterceptor } from "./ctx-jwt-verivy-interceptor.mjs";

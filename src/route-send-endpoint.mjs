@@ -40,10 +40,6 @@ export class RouteSendEndpoint extends SendEndpoint {
     return this.name;
   }
 
-  get socket() {
-    return false;
-  }
-
   get toStringAttributes() {
     return { ...super.toStringAttributes, method: "method", path: "path" };
   }
