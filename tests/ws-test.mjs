@@ -2,7 +2,8 @@ import test from "ava";
 import WebSocket from "ws";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
-import { ServiceKOA, RouteSendEndpoint } from "../src/service-koa.mjs";
+import { ServiceKOA } from "../src/service-koa.mjs";
+import { WSEndpoint } from "../src/ws-endpoint.mjs";
 
 async function wait(msecs = 1000) {
   return new Promise((resolve, reject) => {
@@ -32,14 +33,10 @@ test("ws send", async t => {
       }
     }
   );
-
-  /*
   t.is(http.endpoints["/r1"].name, "/r1");
   t.is(http.endpoints["/r1"].path, "/r1");
-  t.is(s1.ws, true);
-  t.is(http.endpoints["/r1"].method, "GET");
-  t.true(http.endpoints["/r1"] instanceof RouteSendEndpoint);
-*/
+  t.is(http.endpoints["/r1"].ws, true);
+  t.true(http.endpoints["/r1"] instanceof WSEndpoint);
 
   await http.start();
 

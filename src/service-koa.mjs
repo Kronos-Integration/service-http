@@ -1,15 +1,15 @@
 import http from "http";
 import https from "https";
 import Koa from "koa";
-import WebSocket from "ws";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
-import { RouteSendEndpoint, endpointRouter } from "./route-send-endpoint.mjs";
+import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";
+import { WSEndpoint, initializeWS } from "./ws-endpoint.mjs";
 export { CTXInterceptor } from "./ctx-interceptor.mjs";
 export { CTXBodyParamInterceptor } from "./ctx-body-param-interceptor.mjs";
 export { CTXJWTVerifyInterceptor } from "./ctx-jwt-verivy-interceptor.mjs";
 
-export { RouteSendEndpoint, endpointRouter };
+export { HTTPEndpoint, WSEndpoint };
 
 /**
  * HTTP server with koa
@@ -101,13 +101,17 @@ export class ServiceKOA extends Service {
 
   /**
    * on demand create RouteSendEndpoint´s
-   * @param {string} name 
+   * @param {string} name
    * @param {Object|string} definition
    * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
    */
   endpointFactoryFromConfig(name, definition, ic) {
-    if (definition.method || definition.path || name[0] === '/') {
-      return RouteSendEndpoint;
+    if (definition.ws) {
+      return WSEndpoint;
+    }
+
+    if (definition.method || definition.path || name[0] === "/") {
+      return HTTPEndpoint;
     }
 
     return super.endpointFactoryFromConfig(name, definition, ic);
@@ -139,7 +143,7 @@ export class ServiceKOA extends Service {
       if (Number.isInteger(this.listen.socket)) {
         const u = new URL(url);
         u.port = this.socket;
-        return u.toString().replace(/\/$/, '');
+        return u.toString().replace(/\/$/, "");
       }
 
       return url;
@@ -150,7 +154,9 @@ export class ServiceKOA extends Service {
 
   get socket() {
     const socket = this.listen.socket;
-    if (socket) { return socket; }
+    if (socket) {
+      return socket;
+    }
     const url = this.listen.url;
     if (url) {
       const u = new URL(url);
@@ -160,7 +166,9 @@ export class ServiceKOA extends Service {
 
   get address() {
     const address = this.listen.address;
-    if (address) { return address; }
+    if (address) {
+      return address;
+    }
     const url = this.listen.url;
     if (url) {
       const u = new URL(url);
@@ -177,7 +185,6 @@ export class ServiceKOA extends Service {
         : http.createServer(this.koa.callback());
 
       const server = this.server;
-
 
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
@@ -197,17 +204,13 @@ export class ServiceKOA extends Service {
           }
         };
 
-        server.on('error', handler);
+        server.on("error", handler);
 
         try {
           if (this.listen.address === undefined) {
             server.listen(this.listen.socket, handler);
           } else {
-            server.listen(
-              this.listen.socket,
-              this.listen.address,
-              handler
-            );
+            server.listen(this.listen.socket, this.listen.address, handler);
           }
         } catch (err) {
           delete this.server;
@@ -216,16 +219,7 @@ export class ServiceKOA extends Service {
         }
       });
 
-      this.wss = new WebSocket.Server({ server });
-
-      this.wss.on("connection", ws => {
-        ws.on("message", message => {
-          console.log("received: %s", message);
-        });
-
-        ws.send("from server");
-        ws.close();
-      });
+      initializeWS(this);
     } catch (e) {
       delete this.server;
       throw e;

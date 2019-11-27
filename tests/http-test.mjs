@@ -7,7 +7,7 @@ import {
   InitializationContext
 } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
-import { RouteSendEndpoint } from "../src/route-send-endpoint.mjs";
+import { HTTPEndpoint } from "../src/http-endpoint.mjs";
 import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
 import { CTXBodyParamInterceptor } from "../src/ctx-body-param-interceptor.mjs";
 
@@ -25,7 +25,7 @@ test("endpoint route basics", async t => {
   );
 
   const r1 = ks.addEndpoint(
-    new RouteSendEndpoint("/r1", ks, {
+    new HTTPEndpoint("/r1", ks, {
       interceptors: [CTXInterceptor]
     })
   );
@@ -35,7 +35,7 @@ test("endpoint route basics", async t => {
   r1.connected = s1;
 
   const r2 = ks.addEndpoint(
-    new RouteSendEndpoint("/r2", ks, {
+    new HTTPEndpoint("/r2", ks, {
       method: "POST",
       interceptors: [CTXBodyParamInterceptor]
     })
@@ -90,7 +90,7 @@ test("endpoint factory", async t => {
   t.is(http.endpoints["/r1"].name, "/r1");
   t.is(http.endpoints["/r1"].path, "/r1");
   t.is(http.endpoints["/r1"].method, "GET");
-  t.true(http.endpoints["/r1"] instanceof RouteSendEndpoint);
+  t.true(http.endpoints["/r1"] instanceof HTTPEndpoint);
 
   t.is(http.endpoints["/r2"].method, "POST");
   t.is(http.endpoints["/r3"].path, "/somwhere");

@@ -27,8 +27,10 @@ koa backed http server
     -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
         -   [Parameters](#parameters-1)
     -   [name](#name)
--   [RouteSendEndpoint](#routesendendpoint)
+-   [HTTPEndpoint](#httpendpoint)
     -   [Parameters](#parameters-2)
+-   [WSEndpoint](#wsendpoint)
+    -   [Parameters](#parameters-3)
 -   [CTXInterceptor](#ctxinterceptor)
     -   [name](#name-1)
 -   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
@@ -67,11 +69,23 @@ Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'koa'
 
-## RouteSendEndpoint
+## HTTPEndpoint
 
 **Extends SendEndpoint**
 
 Endpoint to link against a http route
+
+### Parameters
+
+-   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
+-   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
+-   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+
+## WSEndpoint
+
+**Extends SendEndpoint**
+
+Endpoint to link against a websocket route
 
 ### Parameters
 

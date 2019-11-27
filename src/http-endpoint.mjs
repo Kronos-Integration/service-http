@@ -4,7 +4,7 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
 /**
  * Endpoint to link against a http route
  */
-export class RouteSendEndpoint extends SendEndpoint {
+export class HTTPEndpoint extends SendEndpoint {
   /**
    * @param {string} name endpoint name
    * @param {Object} owner owner of the endpoint
@@ -59,7 +59,7 @@ export class RouteSendEndpoint extends SendEndpoint {
 
 export function endpointRouter(ks) {
   const routingEndpoints = compile(
-    [...Object.values(ks.endpoints)].filter(e => e instanceof RouteSendEndpoint)
+    [...Object.values(ks.endpoints)].filter(e => e instanceof HTTPEndpoint)
   );
 
   return async (ctx, next) => {
