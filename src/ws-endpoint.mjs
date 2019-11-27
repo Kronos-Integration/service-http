@@ -2,6 +2,11 @@ import WebSocket from "ws";
 import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
+
+import bufferutil from "bufferutil";
+import utf8Validate from "utf-8-validate";
+
+
 /**
  * Endpoint to link against a websocket route
  */
