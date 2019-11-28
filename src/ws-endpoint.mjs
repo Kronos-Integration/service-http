@@ -18,6 +18,8 @@ export class WSEndpoint extends SendEndpoint {
    * @param {string} options.path url path defaults to endpoint name
    */
   constructor(name, owner, options = {}) {
+    options.opposite = {};
+
     super(name, owner, options);
 
     if (options.path !== undefined) {
@@ -56,16 +58,20 @@ export function initializeWS(service) {
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
-        console.log("FOUND", endpoint.path);
-        //    endpoint.request()
+       // console.log("FOUND", endpoint);
+
+      
+        endpoint.opposite.receive = message => ws.send(message);
+
+        ws.on("message", async message => {
+          console.log("received: %s", message);
+     //     const response = await endpoint.receive(message);
+        //  ws.send(response);
+        });
       }
     }
 
-    ws.on("message", message => {
-      console.log("received: %s", message);
-    });
-
-    ws.send("from server");
-    ws.close();
+    //  ws.send("from server");
+    //  ws.close();
   });
 }
