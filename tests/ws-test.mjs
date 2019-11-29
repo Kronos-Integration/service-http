@@ -1,6 +1,6 @@
 import test from "ava";
 import WebSocket from "ws";
-import { SendEndpoint } from "@kronos-integration/endpoint";
+import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceKOA } from "../src/service-koa.mjs";
 import { WSEndpoint } from "../src/ws-endpoint.mjs";
@@ -11,14 +11,20 @@ async function wait(msecs = 1000) {
   });
 }
 
+const owner = {
+  endpointIdentifier(ep) {
+    return `owner.${ep.name}`;
+  }
+};
+
 test("ws send", async t => {
   const sp = new StandaloneServiceProvider();
 
   let severOppositeOpened = 0;
 
-  const r1 = new SendEndpoint("r1", {
+  const r1 = new ReceiveEndpoint("r1", owner, {
     opposite: {
-      opened: () => {
+      opened: endpoint => {
         console.log("opposite opened");
       }
     },
@@ -35,9 +41,6 @@ test("ws send", async t => {
     },
     receive: message => `${message} OK R1`
   });
-
-
-  console.log(r1.receive);
 
   const http = await sp.declareService({
     name: "http",
@@ -57,20 +60,10 @@ test("ws send", async t => {
   t.is(w1.ws, true);
   t.true(w1 instanceof WSEndpoint);
 
-  /*
-  w1.connected = undefined;
-  w1.connected = r1;
-  */
-
-
-  r1.receive = message => `${message} OK R1`;
-  console.log(r1.receive, await r1.receive('A'));
-
-
   t.is(w1.connected, r1);
   t.is(r1.sender, w1);
-  //t.true(w1.isOpen);
-  //t.true(r1.isOpen);
+  t.true(w1.isOpen);
+  t.true(r1.isOpen);
 
   await http.start();
 

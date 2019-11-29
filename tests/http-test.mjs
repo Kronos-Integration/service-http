@@ -1,7 +1,7 @@
 import test from "ava";
 import got from "got";
 
-import { SendEndpoint } from "@kronos-integration/endpoint";
+import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 import {
   StandaloneServiceProvider,
   InitializationContext
@@ -10,6 +10,12 @@ import { ServiceKOA } from "../src/service-koa.mjs";
 import { HTTPEndpoint } from "../src/http-endpoint.mjs";
 import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
 import { CTXBodyParamInterceptor } from "../src/ctx-body-param-interceptor.mjs";
+
+const owner = {
+  endpointIdentifier(ep) {
+    return `owner.${ep.name}`;
+  }
+};
 
 test("endpoint route basics", async t => {
   const sp = new StandaloneServiceProvider();
@@ -24,43 +30,44 @@ test("endpoint route basics", async t => {
     ic
   );
 
-  const r1 = ks.addEndpoint(
-    new HTTPEndpoint("/r1", ks, {
-      interceptors: [CTXInterceptor]
+  const r1 = new ReceiveEndpoint("r1", owner);
+  r1.receive = async () => "OK R1";
+
+  const s1 = ks.addEndpoint(
+    new HTTPEndpoint("/s1", ks, {
+      interceptors: [CTXInterceptor],
+      connected: r1
     })
   );
-  const s1 = new SendEndpoint("s1", {});
 
-  s1.receive = async () => "OK S1";
-  r1.connected = s1;
+  const r2 = new ReceiveEndpoint("s2", owner);
 
-  const r2 = ks.addEndpoint(
-    new HTTPEndpoint("/r2", ks, {
+  const s2 = ks.addEndpoint(
+    new HTTPEndpoint("/s2", ks, {
       method: "POST",
-      interceptors: [CTXBodyParamInterceptor]
+      interceptors: [CTXBodyParamInterceptor],
+      connected: r2
     })
   );
-  t.truthy(r2.hasInterceptors);
 
-  const s2 = new SendEndpoint("s2", {});
+  t.truthy(s2.hasInterceptors);
 
-  s2.receive = async body => {
-    return { ...body, message: "OK S2" };
+  r2.receive = async body => {
+    return { ...body, message: "OK R2" };
   };
-  r2.connected = s2;
 
   await ks.start();
 
-  let response = await got("http://localhost:1240/r1");
-  t.is(response.body, "OK S1");
+  let response = await got("http://localhost:1240/s1");
+  t.is(response.body, "OK R1");
   t.is(response.statusCode, 200);
 
-  response = await got("http://localhost:1240/r2", {
+  response = await got("http://localhost:1240/s2", {
     json: true,
     body: { prop1: "value1", prop2: 2 },
     method: "POST"
   });
-  t.deepEqual(response.body, { prop1: "value1", prop2: 2, message: "OK S2" });
+  t.deepEqual(response.body, { prop1: "value1", prop2: 2, message: "OK R2" });
   t.is(response.statusCode, 200);
 
   await ks.stop();
@@ -69,35 +76,33 @@ test("endpoint route basics", async t => {
 test("endpoint factory", async t => {
   const sp = new StandaloneServiceProvider();
 
-  const s1 = new SendEndpoint("s1");
-  s1.receive = async () => "OK S1";
+  const r1 = new ReceiveEndpoint("r1", owner);
+  r1.receive = async () => "OK R1";
 
-  const http = await sp.declareService(
-    {
-      name: "http",
-      type: ServiceKOA,
-      listen: {
-        socket: 1241
-      },
-      endpoints: {
-        "/r1": { connected: s1, interceptors: [CTXInterceptor] },
-        "/r2": { method: "post" },
-        "/r3": { path: "/somwhere" }
-      }
+  const http = await sp.declareService({
+    name: "http",
+    type: ServiceKOA,
+    listen: {
+      socket: 1241
+    },
+    endpoints: {
+      "/s1": { connected: r1, interceptors: [CTXInterceptor] },
+      "/s2": { method: "post" },
+      "/s3": { path: "/somwhere" }
     }
-  );
+  });
 
-  t.is(http.endpoints["/r1"].name, "/r1");
-  t.is(http.endpoints["/r1"].path, "/r1");
-  t.is(http.endpoints["/r1"].method, "GET");
-  t.true(http.endpoints["/r1"] instanceof HTTPEndpoint);
+  t.is(http.endpoints["/s1"].name, "/s1");
+  t.is(http.endpoints["/s1"].path, "/s1");
+  t.is(http.endpoints["/s1"].method, "GET");
+  t.true(http.endpoints["/s1"] instanceof HTTPEndpoint);
 
-  t.is(http.endpoints["/r2"].method, "POST");
-  t.is(http.endpoints["/r3"].path, "/somwhere");
+  t.is(http.endpoints["/s2"].method, "POST");
+  t.is(http.endpoints["/s3"].path, "/somwhere");
 
   await http.start();
 
-  let response = await got("http://localhost:1241/r1");
-  t.is(response.body, "OK S1");
+  let response = await got("http://localhost:1241/s1");
+  t.is(response.body, "OK R1");
   t.is(response.statusCode, 200);
 });
