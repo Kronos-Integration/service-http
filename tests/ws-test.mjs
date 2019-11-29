@@ -17,7 +17,11 @@ test("ws send", async t => {
   let severOppositeOpened = 0;
 
   const s1 = new SendEndpoint("s1", {
-    opposite: { opened: () => { console.log("opposite opened"); } },
+    opposite: {
+      opened: () => {
+        console.log("opposite opened");
+      }
+    },
 
     opened: endpoint => {
       console.log("s1 opened");
@@ -25,47 +29,38 @@ test("ws send", async t => {
       const o = endpoint.opposite;
       endpoint.receive(o.receive());
 
-      const interval = setInterval(
-        () => endpoint.receive(o.receive()),
-        1000
-      );
+      const interval = setInterval(() => endpoint.receive(o.receive()), 500);
 
       return () => clearInterval(interval);
     },
-
-    receive: message => {
-     // console.log(message);
-      return "OK S1";
-    }
+    receive: message => `${message} OK S1`
   });
 
-  const http = await sp.declareService(
-    {
-      name: "http",
-      type: ServiceKOA,
-      listen: {
-        socket: 1236
-      },
-      endpoints: {
-        "/r1": { connected: s1, ws: true }
-      }
+  const http = await sp.declareService({
+    name: "http",
+    type: ServiceKOA,
+    listen: {
+      socket: 1236
+    },
+    endpoints: {
+      "/r1": { connected: s1, ws: true }
     }
-  );
+  });
   t.is(http.endpoints["/r1"].name, "/r1");
   t.is(http.endpoints["/r1"].path, "/r1");
   t.is(http.endpoints["/r1"].ws, true);
   t.true(http.endpoints["/r1"] instanceof WSEndpoint);
 
-  s1.receive = message => {
-    // console.log(message);
-     return "OK S1";
-   };
+  /*
+  http.endpoints["/r1"].connected = undefined;
+  http.endpoints["/r1"].connected = s1;
+  */
 
+  s1.receive = message => `${message} OK S1`;
   await http.start();
 
   const socketUrl = "ws://localhost:1236/r1";
   const ws = new WebSocket(socketUrl, {});
-
 
   let disconnected = 0;
   let opened = 0;
@@ -76,8 +71,7 @@ test("ws send", async t => {
     ws.send("form client", {
       mask: true
     });
-  }
-  );
+  });
 
   const messages = [];
 
@@ -92,8 +86,9 @@ test("ws send", async t => {
 
   await wait(2000);
 
+  console.log(messages);
   t.is(opened, 1);
-  t.is(messages[0],"OK S1")
- // t.is(severOppositeOpened, 1);
+  t.is(messages[0], "form client OK S1");
+  // t.is(severOppositeOpened, 1);
   //t.is(disconnected, 1);
 });

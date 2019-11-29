@@ -2,10 +2,8 @@ import WebSocket from "ws";
 import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
-
 import bufferutil from "bufferutil";
 import utf8Validate from "utf-8-validate";
-
 
 /**
  * Endpoint to link against a websocket route
@@ -54,12 +52,17 @@ export function initializeWS(service) {
   service.wss = new WebSocket.Server({ server: service.server });
   service.wss.on("connection", (ws, req) => {
     const path = req.url;
-    console.log("connection", req.url);
+    service.trace({ message: `connection ${path}`, url: path });
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
-
-        console.log("FOUND", endpoint.path, endpoint.isConnected, endpoint.isOpen, endpoint.connected.name);
+        console.log(
+          "FOUND",
+          endpoint.path,
+          endpoint.isConnected,
+          endpoint.isOpen,
+          endpoint.connected.name
+        );
 
         endpoint.opposite.receive = message => ws.send(message);
 
