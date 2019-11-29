@@ -61,7 +61,7 @@ export function initializeWS(service) {
           endpoint.path,
           endpoint.isConnected,
           endpoint.isOpen,
-          endpoint.connected.name
+          endpoint.connected.identifier
         );
 
         endpoint.opposite.receive = message => ws.send(message);
