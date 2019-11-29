@@ -16,7 +16,7 @@ test("ws send", async t => {
 
   let severOppositeOpened = 0;
 
-  const s1 = new SendEndpoint("s1", {
+  const r1 = new SendEndpoint("r1", {
     opposite: {
       opened: () => {
         console.log("opposite opened");
@@ -24,7 +24,7 @@ test("ws send", async t => {
     },
 
     opened: endpoint => {
-      console.log("s1 opened");
+      console.log("r1 opened");
       severOppositeOpened++;
       const o = endpoint.opposite;
       endpoint.receive(o.receive());
@@ -33,8 +33,11 @@ test("ws send", async t => {
 
       return () => clearInterval(interval);
     },
-    receive: message => `${message} OK S1`
+    receive: message => `${message} OK R1`
   });
+
+
+  console.log(r1.receive);
 
   const http = await sp.declareService({
     name: "http",
@@ -43,23 +46,35 @@ test("ws send", async t => {
       socket: 1236
     },
     endpoints: {
-      "/r1": { connected: s1, ws: true }
+      "/w1": { connected: r1, ws: true }
     }
   });
-  t.is(http.endpoints["/r1"].name, "/r1");
-  t.is(http.endpoints["/r1"].path, "/r1");
-  t.is(http.endpoints["/r1"].ws, true);
-  t.true(http.endpoints["/r1"] instanceof WSEndpoint);
+
+  const w1 = http.endpoints["/w1"];
+
+  t.is(w1.name, "/w1");
+  t.is(w1.path, "/w1");
+  t.is(w1.ws, true);
+  t.true(w1 instanceof WSEndpoint);
 
   /*
-  http.endpoints["/r1"].connected = undefined;
-  http.endpoints["/r1"].connected = s1;
+  w1.connected = undefined;
+  w1.connected = r1;
   */
 
-  s1.receive = message => `${message} OK S1`;
+
+  r1.receive = message => `${message} OK R1`;
+  console.log(r1.receive, await r1.receive('A'));
+
+
+  t.is(w1.connected, r1);
+  t.is(r1.sender, w1);
+  //t.true(w1.isOpen);
+  //t.true(r1.isOpen);
+
   await http.start();
 
-  const socketUrl = "ws://localhost:1236/r1";
+  const socketUrl = "ws://localhost:1236/w1";
   const ws = new WebSocket(socketUrl, {});
 
   let disconnected = 0;
@@ -88,7 +103,7 @@ test("ws send", async t => {
 
   console.log(messages);
   t.is(opened, 1);
-  t.is(messages[0], "form client OK S1");
+  t.is(messages[0], "form client OK R1");
   // t.is(severOppositeOpened, 1);
   //t.is(disconnected, 1);
 });
