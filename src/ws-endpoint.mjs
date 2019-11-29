@@ -58,15 +58,15 @@ export function initializeWS(service) {
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
-       // console.log("FOUND", endpoint);
 
-      
+        console.log("FOUND", endpoint.path, endpoint.isConnected, endpoint.isOpen, endpoint.connected.name);
+
         endpoint.opposite.receive = message => ws.send(message);
 
         ws.on("message", async message => {
           console.log("received: %s", message);
-     //     const response = await endpoint.receive(message);
-        //  ws.send(response);
+          const response = await endpoint.receive(message);
+          ws.send(response);
         });
       }
     }

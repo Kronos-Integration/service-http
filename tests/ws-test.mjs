@@ -14,13 +14,14 @@ async function wait(msecs = 1000) {
 test("ws send", async t => {
   const sp = new StandaloneServiceProvider();
 
-  let sererOppositeOpened = 0;
+  let severOppositeOpened = 0;
 
   const s1 = new SendEndpoint("s1", {
-    opposite: { opened: () => { console.log("opened"); } },
+    opposite: { opened: () => { console.log("opposite opened"); } },
 
     opened: endpoint => {
-      sererOppositeOpened++;
+      console.log("s1 opened");
+      severOppositeOpened++;
       const o = endpoint.opposite;
       endpoint.receive(o.receive());
 
@@ -55,6 +56,11 @@ test("ws send", async t => {
   t.is(http.endpoints["/r1"].ws, true);
   t.true(http.endpoints["/r1"] instanceof WSEndpoint);
 
+  s1.receive = message => {
+    // console.log(message);
+     return "OK S1";
+   };
+
   await http.start();
 
   const socketUrl = "ws://localhost:1236/r1";
@@ -73,7 +79,10 @@ test("ws send", async t => {
   }
   );
 
+  const messages = [];
+
   ws.on("message", message => {
+    messages.push(message);
     console.log("from server:", message);
   });
 
@@ -84,8 +93,7 @@ test("ws send", async t => {
   await wait(2000);
 
   t.is(opened, 1);
- // t.is(sererOppositeOpened, 1);
-
-  
+  t.is(messages[0],"OK S1")
+ // t.is(severOppositeOpened, 1);
   //t.is(disconnected, 1);
 });
