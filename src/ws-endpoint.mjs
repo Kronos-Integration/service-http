@@ -56,15 +56,14 @@ export function initializeWS(service) {
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
+        endpoint.opposite.receive = message => ws.send(message);
+
         console.log(
           "FOUND",
-          endpoint.path,
-          endpoint.isConnected,
-          endpoint.isOpen,
-          endpoint.connected.identifier
+          endpoint.toJSON(),
+          endpoint.opposite.toJSON(),
+          endpoint.connected.opposite.toJSON()
         );
-
-        endpoint.opposite.receive = message => ws.send(message);
 
         ws.on("message", async message => {
           console.log("received: %s", message);

@@ -61,7 +61,7 @@ test("ws send", async t => {
   t.true(w1 instanceof WSEndpoint);
 
   t.is(w1.connected, r1);
-  t.is(r1.sender, w1);
+  t.is(r1.connected, w1);
   t.true(w1.isOpen);
   t.true(r1.isOpen);
 
