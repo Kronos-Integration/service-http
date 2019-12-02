@@ -63,11 +63,10 @@ test("endpoint route basics", async t => {
   t.is(response.statusCode, 200);
 
   response = await got("http://localhost:1240/s2", {
-    json: true,
-    body: { prop1: "value1", prop2: 2 },
+    json: { prop1: "value1", prop2: 2 },
     method: "POST"
   });
-  t.deepEqual(response.body, { prop1: "value1", prop2: 2, message: "OK R2" });
+  t.deepEqual(JSON.parse(response.body), { prop1: "value1", prop2: 2, message: "OK R2" });
   t.is(response.statusCode, 200);
 
   await ks.stop();
