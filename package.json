@@ -1,11 +1,10 @@
 {
   "name": "@kronos-integration/service-http",
   "version": "0.0.0-semantic-release",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": false,
-  "type": "module",
   "main": "src/service-http.mjs",
   "module": "src/service-http.mjs",
   "description": "http server",
@@ -56,12 +55,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kronos-Integration/service-koa.git"
+    "url": "https://github.com/Kronos-Integration/service-http.git"
   },
   "bugs": {
-    "url": "https://github.com/Kronos-Integration/service-koa/issues"
+    "url": "https://github.com/Kronos-Integration/service-http/issues"
   },
-  "homepage": "https://github.com/Kronos-Integration/service-koa#readme",
+  "homepage": "https://github.com/Kronos-Integration/service-http#readme",
   "ava": {
     "files": [
       "tests/*-test.mjs"
@@ -79,5 +78,6 @@
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template-esm-only.git"
     }
-  }
+  },
+  "sideEffects": false
 }
