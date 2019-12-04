@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
 import { StandaloneServiceProvider, InitializationContext } from "@kronos-integration/service";
-import { ServiceKOA } from "../src/service-koa.mjs";
+import { ServiceHTTP } from "../src/service-http.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -18,7 +18,7 @@ async function skt(t, config, ...args) {
   expected = { timeout: { server: 120 }, ...expected };
   const sp = new StandaloneServiceProvider();
   const ic = new InitializationContext(sp);
-  const ks = new ServiceKOA(config, ic);
+  const ks = new ServiceHTTP(config, ic);
 
   for (const u of updates) {
     await ks.configure(u);
@@ -53,7 +53,7 @@ skt.title = (providedTitle = "", config, updates) => {
   delete c.key;
   delete c.cert;
 
-  return `koa ${providedTitle} ${JSON.stringify(c)}${
+  return `http ${providedTitle} ${JSON.stringify(c)}${
     Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""
   }`.trim();
 };

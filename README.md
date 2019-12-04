@@ -21,7 +21,7 @@ koa backed http server
 
 ### Table of Contents
 
--   [ServiceKOA](#servicekoa)
+-   [ServiceHTTP](#servicehttp)
     -   [Parameters](#parameters)
     -   [Properties](#properties)
     -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
@@ -38,11 +38,11 @@ koa backed http server
 -   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
     -   [name](#name-3)
 
-## ServiceKOA
+## ServiceHTTP
 
 **Extends Service**
 
-HTTP server with koa
+HTTP server
 
 ### Parameters
 
@@ -67,7 +67,7 @@ Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
 
 ### name
 
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'koa'
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'http'
 
 ## HTTPEndpoint
 

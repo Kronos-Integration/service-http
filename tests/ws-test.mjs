@@ -2,7 +2,7 @@ import test from "ava";
 import WebSocket from "ws";
 import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
-import { ServiceKOA } from "../src/service-koa.mjs";
+import { ServiceHTTP } from "../src/service-http.mjs";
 import { WSEndpoint } from "../src/ws-endpoint.mjs";
 
 async function wait(msecs = 1000) {
@@ -61,8 +61,7 @@ test.skip("ws send", async t => {
   });
 
   const http = await sp.declareService({
-    name: "http",
-    type: ServiceKOA,
+    type: ServiceHTTP,
     listen: {
       socket: 1236
     },

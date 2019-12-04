@@ -1,8 +1,8 @@
 import test from "ava";
 import { StandaloneServiceProvider,InitializationContext } from "@kronos-integration/service";
-import { ServiceKOA } from "../src/service-koa.mjs";
+import { ServiceHTTP } from "../src/service-http.mjs";
 
-test("service-koa failures with already in use port", async t => {
+test("http failures with already in use port", async t => {
   const sp = new StandaloneServiceProvider();
   const ic = new InitializationContext(sp);
 
@@ -10,14 +10,14 @@ test("service-koa failures with already in use port", async t => {
     socket: 1238
   };
 
-  const ks1 = new ServiceKOA(
+  const ks1 = new ServiceHTTP(
     {
       name: "my-name1",
       listen
     },
     ic
   );
-  const ks2 = new ServiceKOA(
+  const ks2 = new ServiceHTTP(
     {
       name: "my-name2",
       listen

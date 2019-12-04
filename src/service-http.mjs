@@ -12,16 +12,16 @@ export { CTXJWTVerifyInterceptor } from "./ctx-jwt-verivy-interceptor.mjs";
 export { HTTPEndpoint, WSEndpoint };
 
 /**
- * HTTP server with koa
+ * HTTP server
  * @property {http.Server} server only present if state is running
  * @property {koa} koa
  */
-export class ServiceKOA extends Service {
+export class ServiceHTTP extends Service {
   /**
-   * @return {string} 'koa'
+   * @return {string} 'http'
    */
   static get name() {
-    return "koa";
+    return "http";
   }
 
   static get configurationAttributes() {
@@ -243,4 +243,4 @@ export class ServiceKOA extends Service {
   }
 }
 
-export default ServiceKOA;
+export default ServiceHTTP;

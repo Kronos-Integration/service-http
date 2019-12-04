@@ -6,7 +6,7 @@ import {
   StandaloneServiceProvider,
   InitializationContext
 } from "@kronos-integration/service";
-import { ServiceKOA } from "../src/service-koa.mjs";
+import { ServiceHTTP } from "../src/service-http.mjs";
 import { HTTPEndpoint } from "../src/http-endpoint.mjs";
 import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
 import { CTXBodyParamInterceptor } from "../src/ctx-body-param-interceptor.mjs";
@@ -21,7 +21,7 @@ test("endpoint route basics", async t => {
   const sp = new StandaloneServiceProvider();
   const ic = new InitializationContext(sp);
 
-  const ks = new ServiceKOA(
+  const ks = new ServiceHTTP(
     {
       listen: {
         socket: 1240
@@ -79,8 +79,7 @@ test("endpoint factory", async t => {
   r1.receive = async () => "OK R1";
 
   const http = await sp.declareService({
-    name: "http",
-    type: ServiceKOA,
+    type: ServiceHTTP,
     listen: {
       socket: 1241
     },
