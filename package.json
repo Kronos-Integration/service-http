@@ -1,13 +1,14 @@
 {
-  "name": "@kronos-integration/service-koa",
+  "name": "@kronos-integration/service-http",
   "version": "0.0.0-semantic-release",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": false,
+  "type": "module",
   "main": "src/service-http.mjs",
   "module": "src/service-http.mjs",
-  "description": "koa backed http server",
+  "description": "http server",
   "keywords": [
     "kronos-service"
   ],
@@ -78,6 +79,5 @@
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template-esm-only.git"
     }
-  },
-  "sideEffects": false
+  }
 }
