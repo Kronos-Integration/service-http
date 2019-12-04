@@ -15,31 +15,30 @@ const owner = {
   name: "owner"
 };
 
-function client() {
+function client(name) {
   const socketUrl = "ws://localhost:1236/w1";
 
   const ws = new WebSocket(socketUrl, {});
 
-  const r = { messages: [], ws, disconnected: 0, opened:0 };
+  const r = { name, messages: [], ws, disconnected: 0, opened: 0 };
 
   ws.on("open", () => {
     r.opened++;
 
-    ws.send("form client ", {
+    ws.send(`form ${name} `, {
       mask: true
     });
   });
 
-
   ws.on("message", message => {
-    console.log("from server", message);
+   // console.log("from server", message);
     r.messages.push(message);
   });
 
   ws.on("close", () => {
     r.disconnected++;
   });
-  
+
   return r;
 }
 
@@ -84,12 +83,14 @@ test.skip("ws send", async t => {
 
   await http.start();
 
-  const c1 = client();
+  const clients = [1,2].map(i => client(i));
 
   await wait(1200);
 
-  t.is(c1.opened, 1);
-  t.is(c1.messages[0], "form client OK R1");
-  t.is(c1.messages[1], "OK R1");
-  t.is(c1.messages[2], "OK R1");
+  for (const c of clients) {
+    t.is(c.opened, 1, "opened");
+    t.is(c.messages[0], `form ${c.name} OK R1`, "server message 0");
+    t.is(c.messages[1], "OK R1", "server message 1");
+    t.is(c.messages[2], "OK R1", "server message 2");
+  }
 });

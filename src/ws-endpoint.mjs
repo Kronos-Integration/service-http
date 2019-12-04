@@ -33,13 +33,29 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   addSocket(ws) {
+    //this.ws = ws;
+
     this.sockets.add(ws);
+
+    ws.on("message", async message => {
+      const response = await this.send(message);
+      ws.send(response);
+    });
   }
 
   async receive(...args) {
-    for (const s of this.sockets) {
-      s.send(...args);
+/*
+    this.ws.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(...args);
+      }
+    });
+*/
+    
+    for (const socket of this.sockets) {
+      socket.send(...args);
     }
+    
   }
 
   get isIn() {
@@ -69,21 +85,14 @@ export function initializeWS(service) {
   );
 
   service.wss = new WebSocket.Server({ server: service.server });
-  service.wss.on("connection", (ws, req) => {
-    const path = req.url;
-    service.trace({ message: `connection ${path}`, url: path });
+  service.wss.on("connection", (ws, request, client) => {
+    const path = request.url;
+    service.trace({ message: `connection ${path} ${client}`, url: path });
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
         console.log("FOUND", endpoint.toJSON());
-
         endpoint.addSocket(ws);
-
-        ws.on("message", async message => {
-          console.log("received: %s", message);
-          const response = await endpoint.send(message);
-          ws.send(response);
-        });
       }
     }
   });
