@@ -12,34 +12,53 @@ async function wait(msecs = 1000) {
 }
 
 const owner = {
-  endpointIdentifier(ep) {
-    return `owner.${ep.name}`;
-  }
+  name: "owner"
 };
 
-test("ws send", async t => {
+function client() {
+  const socketUrl = "ws://localhost:1236/w1";
+
+  const ws = new WebSocket(socketUrl, {});
+
+  const r = { messages: [], ws, disconnected: 0, opened:0 };
+
+  ws.on("open", () => {
+    r.opened++;
+
+    ws.send("form client ", {
+      mask: true
+    });
+  });
+
+
+  ws.on("message", message => {
+    console.log("from server", message);
+    r.messages.push(message);
+  });
+
+  ws.on("close", () => {
+    r.disconnected++;
+  });
+  
+  return r;
+}
+
+test.skip("ws send", async t => {
   const sp = new StandaloneServiceProvider();
 
-  let severOppositeOpened = 0;
-
   const r1 = new ReceiveEndpoint("r1", owner, {
-    opposite: {
-      opened: endpoint => {
-        console.log("opposite opened");
-      }
-    },
+    didConnect: endpoint => {
+      console.log(`didConnect: ${endpoint} ${endpoint.connected}`);
+      endpoint.send(endpoint.receive(""));
 
-    opened: endpoint => {
-      console.log("r1 opened");
-      severOppositeOpened++;
-      const o = endpoint.opposite;
-      endpoint.receive(o.receive());
-
-      const interval = setInterval(() => endpoint.receive(o.receive()), 500);
+      const interval = setInterval(
+        () => endpoint.send(endpoint.receive("")),
+        300
+      );
 
       return () => clearInterval(interval);
     },
-    receive: message => `${message} OK R1`
+    receive: message => `${message}OK R1`
   });
 
   const http = await sp.declareService({
@@ -62,41 +81,15 @@ test("ws send", async t => {
 
   t.is(w1.connected, r1);
   t.is(r1.connected, w1);
-  t.true(w1.isOpen);
-  t.true(r1.isOpen);
 
   await http.start();
 
-  const socketUrl = "ws://localhost:1236/w1";
-  const ws = new WebSocket(socketUrl, {});
+  const c1 = client();
 
-  let disconnected = 0;
-  let opened = 0;
+  await wait(1200);
 
-  ws.on("open", () => {
-    opened++;
-
-    ws.send("form client", {
-      mask: true
-    });
-  });
-
-  const messages = [];
-
-  ws.on("message", message => {
-    messages.push(message);
-    console.log("from server:", message);
-  });
-
-  ws.on("close", () => {
-    disconnected++;
-  });
-
-  await wait(2000);
-
-  console.log(messages);
-  t.is(opened, 1);
-  t.is(messages[0], "form client OK R1");
-  // t.is(severOppositeOpened, 1);
-  //t.is(disconnected, 1);
+  t.is(c1.opened, 1);
+  t.is(c1.messages[0], "form client OK R1");
+  t.is(c1.messages[1], "OK R1");
+  t.is(c1.messages[2], "OK R1");
 });

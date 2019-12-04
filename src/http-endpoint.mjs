@@ -59,7 +59,7 @@ export function endpointRouter(ks) {
       const m = ctx.path.match(route.regex);
       if (m && route.method === ctx.method) {
         try {
-          await route.receive(ctx, m.groups);
+          await route.send(ctx, m.groups);
         } catch (e) {
           ks.error({
             method: ctx.method,

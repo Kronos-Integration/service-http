@@ -15,16 +15,35 @@ export class WSEndpoint extends SendEndpoint {
    * @param {Object} options
    * @param {string} options.path url path defaults to endpoint name
    */
-  constructor(name, owner, options = {}) {
-    options.opposite = {};
 
+  constructor(name, owner, options = {}) {
     super(name, owner, options);
 
+    const properties = {
+      sockets: { value: new Set() }
+    };
+
     if (options.path !== undefined) {
-      Object.defineProperty(this, "path", {
+      properties.path = {
         value: options.path
-      });
+      };
     }
+
+    Object.defineProperties(this, properties);
+  }
+
+  addSocket(ws) {
+    this.sockets.add(ws);
+  }
+
+  async receive(...args) {
+    for (const s of this.sockets) {
+      s.send(...args);
+    }
+  }
+
+  get isIn() {
+    true;
   }
 
   get path() {
@@ -56,24 +75,16 @@ export function initializeWS(service) {
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
-        endpoint.opposite.receive = message => ws.send(message);
+        console.log("FOUND", endpoint.toJSON());
 
-        console.log(
-          "FOUND",
-          endpoint.toJSON(),
-          endpoint.opposite.toJSON(),
-          endpoint.connected.opposite.toJSON()
-        );
+        endpoint.addSocket(ws);
 
         ws.on("message", async message => {
           console.log("received: %s", message);
-          const response = await endpoint.receive(message);
+          const response = await endpoint.send(message);
           ws.send(response);
         });
       }
     }
-
-    //  ws.send("from server");
-    //  ws.close();
   });
 }

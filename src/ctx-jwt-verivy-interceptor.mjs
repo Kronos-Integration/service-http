@@ -31,13 +31,13 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     );
   }
 
-  async receive(ctx, ...args) {
+  async receive(endpoint, next, ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.header);
     if (token) {
       const decoded = await verifyPromisified(token, this.key);
       // ctx.state[tokenKey] = decoded;
 
-      return await this.connected.receive(ctx, ...args);
+      return await next(ctx, ...args);
     } else {
       ctx.throw(401);
     }
