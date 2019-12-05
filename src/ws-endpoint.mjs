@@ -32,10 +32,20 @@ export class WSEndpoint extends SendEndpoint {
     Object.defineProperties(this, properties);
   }
 
-  addSocket(ws) {
+  addSocket(ws, request) {
+    this.owner.info(`${ws.readyState} ${request.url} <> ${this}`);
+
     //this.ws = ws;
 
     this.sockets.add(ws);
+
+    ws.on("error", (error) => {
+      this.owner.error(`${this} error ${error}`);
+    });
+
+    ws.on("close", (code, reason) => {
+      this.owner.trace(`${this} close ${code} ${reason}`);
+    });
 
     ws.on("message", async message => {
       const response = await this.send(message);
@@ -55,7 +65,6 @@ export class WSEndpoint extends SendEndpoint {
     for (const socket of this.sockets) {
       socket.send(...args);
     }
-    
   }
 
   get isIn() {
@@ -91,8 +100,7 @@ export function initializeWS(service) {
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
-        console.log("FOUND", endpoint.toJSON());
-        endpoint.addSocket(ws);
+        endpoint.addSocket(ws, request);
       }
     }
   });

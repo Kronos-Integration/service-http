@@ -12,7 +12,10 @@ async function wait(msecs = 1000) {
 }
 
 const owner = {
-  name: "owner"
+  name: "owner",
+  info(...args) { console.log(...args); },
+  trace(...args) { console.log(...args); },
+  error(...args) { console.log(...args); }
 };
 
 function client(name) {
@@ -31,7 +34,6 @@ function client(name) {
   });
 
   ws.on("message", message => {
-   // console.log("from server", message);
     r.messages.push(message);
   });
 
