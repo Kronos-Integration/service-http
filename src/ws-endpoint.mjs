@@ -16,30 +16,24 @@ export class WSEndpoint extends SendEndpoint {
    * @param {string} options.path url path defaults to endpoint name
    */
 
+  sockets = new Set();
+
   constructor(name, owner, options = {}) {
     super(name, owner, options);
 
-    const properties = {
-      sockets: { value: new Set() }
-    };
-
     if (options.path !== undefined) {
-      properties.path = {
+      Object.defineProperty(this, "path", {
         value: options.path
-      };
+      });
     }
-
-    Object.defineProperties(this, properties);
   }
 
   addSocket(ws, request) {
     this.owner.info(`${ws.readyState} ${request.url} <> ${this}`);
 
-    //this.ws = ws;
-
     this.sockets.add(ws);
 
-    ws.on("error", (error) => {
+    ws.on("error", error => {
       this.owner.error(`${this} error ${error}`);
     });
 
@@ -54,14 +48,14 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   async receive(...args) {
-/*
+    /*
     this.ws.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(...args);
       }
     });
 */
-    
+
     for (const socket of this.sockets) {
       socket.send(...args);
     }

@@ -91,13 +91,7 @@ export class ServiceHTTP extends Service {
     );
   }
 
-  constructor(...args) {
-    super(...args);
-
-    Object.defineProperties(this, {
-      koa: { value: new Koa() }
-    });
-  }
+  koa = new Koa();
 
   /**
    * on demand create RouteSendEndpoint´s

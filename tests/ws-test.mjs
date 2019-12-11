@@ -1,6 +1,6 @@
 import test from "ava";
 import WebSocket from "ws";
-import { ReceiveEndpoint } from "@kronos-integration/endpoint";
+import { SendEndpoint,ReceiveEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceHTTP } from "../src/service-http.mjs";
 import { WSEndpoint } from "../src/ws-endpoint.mjs";
@@ -44,13 +44,13 @@ function client(name) {
   return r;
 }
 
-test.skip("ws send", async t => {
+test("ws send", async t => {
   const sp = new StandaloneServiceProvider();
 
-  const r1 = new ReceiveEndpoint("r1", owner, {
+  const r1 = new SendEndpoint("r1", owner, {
     didConnect: endpoint => {
       console.log(`didConnect: ${endpoint} ${endpoint.connected}`);
-      endpoint.send(endpoint.receive(""));
+     // endpoint.send(endpoint.receive(""));
 
       const interval = setInterval(
         () => endpoint.send(endpoint.receive("")),
@@ -79,8 +79,8 @@ test.skip("ws send", async t => {
   t.is(w1.ws, true);
   t.true(w1 instanceof WSEndpoint);
 
-  t.is(w1.connected, r1);
-  t.is(r1.connected, w1);
+  t.true(w1.isConnected(r1));
+  t.true(r1.isConnected(w1));
 
   await http.start();
 
