@@ -50,7 +50,7 @@ test("ws send", async t => {
   const r1 = new SendEndpoint("r1", owner, {
     didConnect: endpoint => {
       console.log(`didConnect: ${endpoint} ${endpoint.connected}`);
-     // endpoint.send(endpoint.receive(""));
+      endpoint.send(endpoint.receive(""));
 
       const interval = setInterval(
         () => endpoint.send(endpoint.receive("")),
