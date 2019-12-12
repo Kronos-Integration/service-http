@@ -33,18 +33,32 @@ export class WSEndpoint extends SendEndpoint {
 
     this.sockets.add(ws);
 
+    for (const other of this.connections()) {
+      this.openConnection(other);
+    }
+
     ws.on("error", error => {
       this.owner.error(`${this} error ${error}`);
     });
 
     ws.on("close", (code, reason) => {
       this.owner.trace(`${this} close ${code} ${reason}`);
+      this.sockets.delete(ws);
+      if (!this.isOpen) {
+        for (const other of this.connections()) {
+          this.closeConnection(other);
+        }
+      }
     });
 
     ws.on("message", async message => {
       const response = await this.send(message);
       ws.send(response);
     });
+  }
+
+  get isOpen() {
+    return this.sockets.size > 0;
   }
 
   async receive(...args) {

@@ -1,6 +1,6 @@
 import test from "ava";
 import WebSocket from "ws";
-import { SendEndpoint,ReceiveEndpoint } from "@kronos-integration/endpoint";
+import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceHTTP } from "../src/service-http.mjs";
 import { WSEndpoint } from "../src/ws-endpoint.mjs";
@@ -13,9 +13,15 @@ async function wait(msecs = 1000) {
 
 const owner = {
   name: "owner",
-  info(...args) { console.log(...args); },
-  trace(...args) { console.log(...args); },
-  error(...args) { console.log(...args); }
+  info(...args) {
+    console.log(...args);
+  },
+  trace(...args) {
+    console.log(...args);
+  },
+  error(...args) {
+    console.log(...args);
+  }
 };
 
 function client(name) {
@@ -34,6 +40,7 @@ function client(name) {
   });
 
   ws.on("message", message => {
+    console.log("MESSAGE", name, message);
     r.messages.push(message);
   });
 
@@ -50,7 +57,7 @@ test("ws send", async t => {
   const r1 = new SendEndpoint("r1", owner, {
     didConnect: endpoint => {
       console.log(`didConnect: ${endpoint} ${endpoint.connected}`);
-      endpoint.send(endpoint.receive(""));
+      //endpoint.send(endpoint.receive(""));
 
       const interval = setInterval(
         () => endpoint.send(endpoint.receive("")),
@@ -84,7 +91,7 @@ test("ws send", async t => {
 
   await http.start();
 
-  const clients = [1,2].map(i => client(i));
+  const clients = [1, 2].map(i => client(i));
 
   await wait(1200);
 
