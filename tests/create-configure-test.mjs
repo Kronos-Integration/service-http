@@ -15,7 +15,7 @@ async function skt(t, config, ...args) {
   let expected = args.pop() || {};
   const updates = args.pop() || [];
 
-  expected = { timeout: { server: 120 }, ...expected };
+  expected = { isSecure: false, timeout: { server: 120 }, ...expected };
   const sp = new StandaloneServiceProvider();
   const ic = new InitializationContext(sp);
   const ks = new ServiceHTTP(config, ic);
@@ -71,8 +71,7 @@ test(
     name: "my-name",
     adrress: address(),
     socket: 1234,
-    url: `http://${address()}:1234`,
-    isSecure: false
+    url: `http://${address()}:1234`
   }
 );
 
@@ -86,8 +85,7 @@ test(
   {
     adrress: address(),
     socket: 1234,
-    url: `http://${address()}:1234`,
-    isSecure: false
+    url: `http://${address()}:1234`
   }
 );
 
@@ -114,7 +112,6 @@ test(
     adrress: address(),
     socket: 1235,
     url: `http://${address()}:1235`,
-    isSecure: false,
     timeout: {
       server: 123.45
     }
