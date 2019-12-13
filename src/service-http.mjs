@@ -94,6 +94,14 @@ export class ServiceHTTP extends Service {
   koa = new Koa();
 
   /**
+   * @return {string} name with url
+   */
+  get extendetName()
+  {
+    return `${this.name}(${this.url})`;
+  }
+
+  /**
    * on demand create RouteSendEndpoint´s
    * @param {string} name
    * @param {Object|string} definition
