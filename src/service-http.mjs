@@ -189,8 +189,6 @@ export class ServiceHTTP extends Service {
       }
 
       await new Promise((resolve, reject) => {
-        this.trace(`starting ${this.url}`);
-
         const handler = err => {
           if (err) {
             delete this.server;
@@ -227,7 +225,6 @@ export class ServiceHTTP extends Service {
   async _stop() {
     if (this.server) {
       return new Promise((resolve, reject) => {
-        this.trace(`stopping ${this.url}`);
         this.server.close(err => {
           if (err) {
             reject(err);
