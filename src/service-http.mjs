@@ -133,17 +133,21 @@ export class ServiceHTTP extends Service {
   get url() {
     const url = this.listen.url;
 
+    const socket = this.socket;
+
     if (url) {
       if (Number.isInteger(this.listen.socket)) {
         const u = new URL(url);
-        u.port = this.socket;
+        u.port = socket;
         return u.toString().replace(/\/$/, "");
       }
 
       return url;
     }
 
-    return `${this.scheme}://${this.address}:${this.socket}`;
+    return Number.isInteger(socket)
+      ? `${this.scheme}://${this.address}:${socket}`
+      : `fd:///${socket.fd}`;
   }
 
   get socket() {

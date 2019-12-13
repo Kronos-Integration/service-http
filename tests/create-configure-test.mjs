@@ -6,7 +6,10 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
-import { StandaloneServiceProvider, InitializationContext } from "@kronos-integration/service";
+import {
+  StandaloneServiceProvider,
+  InitializationContext
+} from "@kronos-integration/service";
 import { ServiceHTTP } from "../src/service-http.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -24,7 +27,13 @@ async function skt(t, config, ...args) {
     await ks.configure(u);
   }
 
-  ["name", "isSecure", "socket", "url", "address"].forEach(a => {
+  ["socket"].forEach(a => {
+    if (expected[a] !== undefined) {
+      t.deepEqual(ks[a], expected[a], a);
+    }
+  });
+
+  ["name", "isSecure", "url", "address"].forEach(a => {
     if (expected[a] !== undefined) {
       t.is(ks[a], expected[a], a);
     }
@@ -72,6 +81,19 @@ test(
     adrress: address(),
     socket: 1234,
     url: `http://${address()}:1234`
+  }
+);
+
+test.skip(
+  skt,
+  {
+    listen: {
+      socket: { fd: 4, name: "service.http" }
+    }
+  },
+  {
+    socket: { fd: 4, name: "service.http" },
+    url: `fd:///4`
   }
 );
 
