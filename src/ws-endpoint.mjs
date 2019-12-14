@@ -35,6 +35,8 @@ export class WSEndpoint extends SendEndpoint {
 
     for (const other of this.connections()) {
       this.openConnection(other);
+      console.log(`${this} ${this.getConnectionState(other) ? 'state' :''}`);
+      console.log(`${other} ${other.getConnectionState(this) ? 'state' :''}`);
     }
 
     ws.on("error", error => {
@@ -58,18 +60,11 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   get isOpen() {
-    return this.sockets.size > 0;
+    return true;
+//    return this.sockets.size > 0;
   }
 
   async receive(...args) {
-    /*
-    this.ws.clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(...args);
-      }
-    });
-*/
-
     for (const socket of this.sockets) {
       socket.send(...args);
     }
