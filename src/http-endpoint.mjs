@@ -49,9 +49,9 @@ export class HTTPEndpoint extends SendEndpoint {
   }
 }
 
-export function endpointRouter(ks) {
+export function endpointRouter(httpService) {
   const routingEndpoints = compile(
-    [...Object.values(ks.endpoints)].filter(e => e instanceof HTTPEndpoint)
+    [...Object.values(httpService.endpoints)].filter(e => e instanceof HTTPEndpoint)
   );
 
   return async (ctx, next) => {
@@ -61,7 +61,7 @@ export function endpointRouter(ks) {
         try {
           await route.send(ctx, m.groups);
         } catch (e) {
-          ks.error({
+          httpService.error({
             method: ctx.method,
             path: ctx.path,
             error: e
