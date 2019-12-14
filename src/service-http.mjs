@@ -92,8 +92,7 @@ export class ServiceHTTP extends Service {
   /**
    * @return {string} name with url
    */
-  get extendetName()
-  {
+  get extendetName() {
     return `${this.name}(${this.url})`;
   }
 
@@ -180,9 +179,9 @@ export class ServiceHTTP extends Service {
 
   async _start() {
     try {
-      const server = this.server = this.isSecure
+      const server = (this.server = this.isSecure
         ? https.createServer(this.serverOptions, endpointRouter(this))
-        : http.createServer(endpointRouter(this));
+        : http.createServer(endpointRouter(this)));
 
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
@@ -206,7 +205,11 @@ export class ServiceHTTP extends Service {
           if (this.listen.address === undefined) {
             server.listen(this.listen.socket, listenHandler);
           } else {
-            server.listen(this.listen.socket, this.listen.address, listenHandler);
+            server.listen(
+              this.listen.socket,
+              this.listen.address,
+              listenHandler
+            );
           }
         } catch (err) {
           delete this.server;
@@ -225,11 +228,16 @@ export class ServiceHTTP extends Service {
   async _stop() {
     if (this.server) {
       return new Promise((resolve, reject) => {
-        this.server.getConnections((err,count) => {
-          this.info("${count} connections still open");
-        });
-        
+        const openConnectionsInfoTimer = setTimeout(
+          () =>
+            this.server.getConnections((err, count) =>
+              this.info(`${count} connections still open`)
+            ),
+          2000
+        );
+
         this.server.close(err => {
+          clearTimeout(openConnectionsInfoTimer);
           if (err) {
             reject(err);
           } else {
