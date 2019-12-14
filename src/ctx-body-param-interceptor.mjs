@@ -17,7 +17,8 @@ export class CTXBodyParamInterceptor extends Interceptor {
       for await (const chunk of ctx.req) {
         chunks.push(chunk);
       }
-      ctx.body = await next(JSON.parse(chunks.join("")));
+      ctx.res.writeHead(200, { "Content-Type": "application/json" });
+      ctx.res.end(JSON.stringify(await next(JSON.parse(chunks.join("")))));
     } else {
       ctx.throw(415, "no json");
     }

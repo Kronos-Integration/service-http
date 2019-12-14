@@ -1,6 +1,5 @@
 import http from "http";
 import https from "https";
-import Koa from "koa";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";
@@ -14,7 +13,6 @@ export { HTTPEndpoint, WSEndpoint };
 /**
  * HTTP server
  * @property {http.Server} server only present if state is running
- * @property {koa} koa
  */
 export class ServiceHTTP extends Service {
   /**
@@ -90,8 +88,6 @@ export class ServiceHTTP extends Service {
       })
     );
   }
-
-  koa = new Koa();
 
   /**
    * @return {string} name with url
@@ -184,11 +180,9 @@ export class ServiceHTTP extends Service {
 
   async _start() {
     try {
-      this.koa.use(endpointRouter(this));
-
       this.server = this.isSecure
-        ? https.createServer(this.serverOptions, this.koa.callback())
-        : http.createServer(this.koa.callback());
+        ? https.createServer(this.serverOptions, endpointRouter(this))
+        : http.createServer(endpointRouter(this));
 
       const server = this.server;
 

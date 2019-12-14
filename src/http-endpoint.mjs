@@ -51,27 +51,47 @@ export class HTTPEndpoint extends SendEndpoint {
 
 export function endpointRouter(httpService) {
   const routingEndpoints = compile(
-    [...Object.values(httpService.endpoints)].filter(e => e instanceof HTTPEndpoint)
+    [...Object.values(httpService.endpoints)].filter(
+      e => e instanceof HTTPEndpoint
+    )
   );
 
-  return async (ctx, next) => {
+  return async (req, res) => {
+    const ctx = {
+      req,
+      res,
+      is(mime) {return true;},
+      throw(code) {
+        throw new Error(code);
+      }
+    };
+
+    const method = req.method;
+    const path = req.url;
+
     for (const route of routingEndpoints) {
-      const m = ctx.path.match(route.regex);
-      if (m && route.method === ctx.method) {
+      const m = path.match(route.regex);
+
+      if (m && route.method === method) {
         try {
           await route.send(ctx, m.groups);
         } catch (e) {
           httpService.error({
-            method: ctx.method,
-            path: ctx.path,
+            method,
+            path,
             error: e
           });
-          ctx.body = e;
-          ctx.status = 500;
+
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.write(e);
+          res.end();
         }
 
-        return next();
+        return;
       }
     }
+
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end();
   };
 }

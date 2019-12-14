@@ -53,7 +53,7 @@ test("endpoint route basics", async t => {
   await ks.start();
 
   let response = await got("http://localhost:1240/s1");
-  t.is(response.body, "OK R1");
+  t.is(response.body, '"OK R1"');
   t.is(response.statusCode, 200);
 
   response = await got("http://localhost:1240/s2", {
@@ -95,6 +95,6 @@ test("endpoint factory", async t => {
   await http.start();
 
   let response = await got("http://localhost:1241/s1");
-  t.is(response.body, "OK R1");
+  t.is(response.body, '"OK R1"');
   t.is(response.statusCode, 200);
 });

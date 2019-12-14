@@ -55,17 +55,12 @@ async function skt(t, config, ...args) {
     })
   );
 
-
-
-
- // ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
-
   t.is(ks.state, "stopped");
   await ks.start();
   t.is(ks.state, "running");
 
   const response = await got(ks.url, { ca: config.cert });
-  t.is(response.body, "OK");
+  t.is(response.body, '"OK"');
   t.is(response.statusCode, 200);
 
   await ks.stop();

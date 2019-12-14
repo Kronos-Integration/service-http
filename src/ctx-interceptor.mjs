@@ -12,6 +12,7 @@ export class CTXInterceptor extends Interceptor {
   }
 
   async receive(endpoint, next, ctx, params) {
-    ctx.body = await next(params);
+    ctx.res.writeHead(200, { "Content-Type": "application/json" });
+    ctx.res.end(JSON.stringify(await next(params)));
   }
 }
