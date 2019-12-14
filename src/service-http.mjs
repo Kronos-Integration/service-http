@@ -225,6 +225,10 @@ export class ServiceHTTP extends Service {
   async _stop() {
     if (this.server) {
       return new Promise((resolve, reject) => {
+        this.server.getConnections((err,count) => {
+          this.info("${count} connections still open");
+        });
+        
         this.server.close(err => {
           if (err) {
             reject(err);
