@@ -11,22 +11,6 @@ async function wait(msecs = 1000) {
   });
 }
 
-const owner = {
-  name: "owner",
-  warn(...args) {
-    console.log(...args);
-  },
-  info(...args) {
-    console.log(...args);
-  },
-  trace(...args) {
-    console.log(...args);
-  },
-  error(...args) {
-    console.log(...args);
-  }
-};
-
 function client(name) {
   const socketUrl = "ws://localhost:1236/w1";
 
@@ -57,7 +41,7 @@ function client(name) {
 test("ws send", async t => {
   const sp = new StandaloneServiceProvider();
 
-  const r1 = new SendEndpoint("r1", owner, {
+  const r1 = new SendEndpoint("r1", sp, {
     didConnect: endpoint => {
       //endpoint.send(endpoint.receive(""));
 

@@ -35,8 +35,7 @@ export class WSEndpoint extends SendEndpoint {
 
     for (const other of this.connections()) {
       this.openConnection(other);
-      console.log(`${this} ${this.getConnectionState(other) ? 'state' :''}`);
-      console.log(`${other} ${other.getConnectionState(this) ? 'state' :''}`);
+      console.log(`open ${other}`);
     }
 
     ws.on("error", error => {
@@ -49,6 +48,7 @@ export class WSEndpoint extends SendEndpoint {
       if (!this.isOpen) {
         for (const other of this.connections()) {
           this.closeConnection(other);
+          console.log(`close ${other}`);
         }
       }
     });

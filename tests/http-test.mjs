@@ -11,12 +11,6 @@ import { HTTPEndpoint } from "../src/http-endpoint.mjs";
 import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
 import { CTXBodyParamInterceptor } from "../src/ctx-body-param-interceptor.mjs";
 
-const owner = {
-  endpointIdentifier(ep) {
-    return `owner.${ep.name}`;
-  }
-};
-
 test("endpoint route basics", async t => {
   const sp = new StandaloneServiceProvider();
   const ic = new InitializationContext(sp);
@@ -30,7 +24,7 @@ test("endpoint route basics", async t => {
     ic
   );
 
-  const r1 = new ReceiveEndpoint("r1", owner);
+  const r1 = new ReceiveEndpoint("r1", sp);
   r1.receive = async () => "OK R1";
 
   const s1 = ks.addEndpoint(
@@ -40,7 +34,7 @@ test("endpoint route basics", async t => {
     })
   );
 
-  const r2 = new ReceiveEndpoint("s2", owner);
+  const r2 = new ReceiveEndpoint("s2", sp);
 
   const s2 = ks.addEndpoint(
     new HTTPEndpoint("/s2", ks, {
@@ -75,7 +69,7 @@ test("endpoint route basics", async t => {
 test("endpoint factory", async t => {
   const sp = new StandaloneServiceProvider();
 
-  const r1 = new ReceiveEndpoint("r1", owner);
+  const r1 = new ReceiveEndpoint("r1", sp);
   r1.receive = async () => "OK R1";
 
   const http = await sp.declareService({

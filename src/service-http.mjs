@@ -197,7 +197,7 @@ export class ServiceHTTP extends Service {
       }
 
       await new Promise((resolve, reject) => {
-        const handler = err => {
+        const listenHandler = err => {
           if (err) {
             delete this.server;
             this.error(err);
@@ -208,13 +208,13 @@ export class ServiceHTTP extends Service {
           }
         };
 
-        server.on("error", handler);
+        server.on("error", listenHandler);
 
         try {
           if (this.listen.address === undefined) {
-            server.listen(this.listen.socket, handler);
+            server.listen(this.listen.socket, listenHandler);
           } else {
-            server.listen(this.listen.socket, this.listen.address, handler);
+            server.listen(this.listen.socket, this.listen.address, listenHandler);
           }
         } catch (err) {
           delete this.server;
