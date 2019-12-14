@@ -35,7 +35,7 @@ export class WSEndpoint extends SendEndpoint {
 
     for (const other of this.connections()) {
       this.openConnection(other);
-      console.log(`open ${other}`);
+      console.log(`${this} open ${other}`);
     }
 
     ws.on("error", error => {
@@ -48,7 +48,7 @@ export class WSEndpoint extends SendEndpoint {
       if (!this.isOpen) {
         for (const other of this.connections()) {
           this.closeConnection(other);
-          console.log(`close ${other}`);
+          console.log(`${this} close ${other}`);
         }
       }
     });
@@ -65,6 +65,7 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   async receive(...args) {
+    console.log(`${this} send`,...args);
     for (const socket of this.sockets) {
       socket.send(...args);
     }
