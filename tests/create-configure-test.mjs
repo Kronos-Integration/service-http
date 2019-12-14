@@ -1,16 +1,18 @@
 import test from "ava";
 import address from "network-address";
-import route from "koa-route";
 import got from "got";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
+import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 import {
   StandaloneServiceProvider,
   InitializationContext
 } from "@kronos-integration/service";
 import { ServiceHTTP } from "../src/service-http.mjs";
+import { HTTPEndpoint } from "../src/http-endpoint.mjs";
+import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -43,7 +45,20 @@ async function skt(t, config, ...args) {
     t.is(ks.timeout[name], expected.timeout[name], `timeout ${name}`);
   }
 
-  ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
+  const r = new ReceiveEndpoint("r1", ks);
+  r.receive = async () => "OK";
+
+  const s = ks.addEndpoint(
+    new HTTPEndpoint("/", ks, {
+      interceptors: [CTXInterceptor],
+      connected: r
+    })
+  );
+
+
+
+
+ // ks.koa.use(route.get("/", ctx => (ctx.body = "OK")));
 
   t.is(ks.state, "stopped");
   await ks.start();
