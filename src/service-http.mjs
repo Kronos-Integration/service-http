@@ -180,11 +180,9 @@ export class ServiceHTTP extends Service {
 
   async _start() {
     try {
-      this.server = this.isSecure
+      const server = this.server = this.isSecure
         ? https.createServer(this.serverOptions, endpointRouter(this))
         : http.createServer(endpointRouter(this));
-
-      const server = this.server;
 
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
