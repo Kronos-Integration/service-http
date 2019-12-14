@@ -83,8 +83,7 @@ export function endpointRouter(httpService) {
           });
 
           res.writeHead(500, { "Content-Type": "text/plain" });
-          res.write(e);
-          res.end();
+          res.end(e.message);
         }
 
         return;
