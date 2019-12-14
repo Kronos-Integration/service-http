@@ -228,16 +228,16 @@ export class ServiceHTTP extends Service {
   async _stop() {
     if (this.server) {
       return new Promise((resolve, reject) => {
-        const openConnectionsInfoTimer = setTimeout(
+        const openConnectionsInfoInterval = setInterval(
           () =>
             this.server.getConnections((err, count) =>
-              this.info(`${count} connections still open`)
+              this.info(`${this.fullName}: ${count} connections still open`)
             ),
           2000
         );
 
         this.server.close(err => {
-          clearTimeout(openConnectionsInfoTimer);
+          clearInterval(openConnectionsInfoInterval);
           if (err) {
             reject(err);
           } else {
