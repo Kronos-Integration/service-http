@@ -53,14 +53,18 @@ test("endpoint route basics", async t => {
   await ks.start();
 
   let response = await got("http://localhost:1240/s1");
-  t.is(response.body, '"OK R1"');
+  t.is(response.body, "OK R1");
   t.is(response.statusCode, 200);
 
   response = await got("http://localhost:1240/s2", {
     json: { prop1: "value1", prop2: 2 },
     method: "POST"
   });
-  t.deepEqual(JSON.parse(response.body), { prop1: "value1", prop2: 2, message: "OK R2" });
+  t.deepEqual(JSON.parse(response.body), {
+    prop1: "value1",
+    prop2: 2,
+    message: "OK R2"
+  });
   t.is(response.statusCode, 200);
 
   await ks.stop();
@@ -95,6 +99,6 @@ test("endpoint factory", async t => {
   await http.start();
 
   let response = await got("http://localhost:1241/s1");
-  t.is(response.body, '"OK R1"');
+  t.is(response.body, "OK R1");
   t.is(response.statusCode, 200);
 });
