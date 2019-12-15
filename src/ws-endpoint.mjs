@@ -29,26 +29,26 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   addSocket(ws, request) {
-    this.owner.info(`${ws.readyState} ${request.url} <> ${this}`);
+    const owner = this.owner;
+
+    owner.info(`${ws.readyState} ${request.url} <> ${this}`);
 
     this.sockets.add(ws);
 
     for (const other of this.connections()) {
       this.openConnection(other);
-      console.log(`${this} open ${other}`);
+      owner.trace(`${this} open ${other}`);
     }
 
-    ws.on("error", error => {
-      this.owner.error(`${this} error ${error}`);
-    });
+    ws.on("error", error => owner.error(`${this} error ${error}`));
 
     ws.on("close", (code, reason) => {
-      this.owner.trace(`${this} close ${code} ${reason}`);
+      owner.trace(`${this} close ${code} ${reason}`);
       this.sockets.delete(ws);
       if (!this.isOpen) {
         for (const other of this.connections()) {
           this.closeConnection(other);
-          console.log(`${this} close ${other}`);
+          owner.trace(`${this} close ${other}`);
         }
       }
     });
@@ -64,10 +64,10 @@ export class WSEndpoint extends SendEndpoint {
 //    return this.sockets.size > 0;
   }
 
-  async receive(...args) {
-    console.log(`${this} send`,...args);
+  async receive(arg) {
+    this.owner.trace(`${this}: send ${arg}`);
     for (const socket of this.sockets) {
-      socket.send(...args);
+      socket.send(arg);
     }
   }
 
