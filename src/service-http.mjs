@@ -3,7 +3,7 @@ import https from "https";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";
-import { WSEndpoint, initializeWS } from "./ws-endpoint.mjs";
+import { WSEndpoint, initializeWS, closeWS } from "./ws-endpoint.mjs";
 export { CTXInterceptor } from "./ctx-interceptor.mjs";
 export { CTXBodyParamInterceptor } from "./ctx-body-param-interceptor.mjs";
 export { CTXJWTVerifyInterceptor } from "./ctx-jwt-verivy-interceptor.mjs";
@@ -227,25 +227,30 @@ export class ServiceHTTP extends Service {
 
   async _stop() {
     if (this.server) {
-      return new Promise((resolve, reject) => {
-        const openConnectionsInfoInterval = setInterval(
-          () =>
-            this.server.getConnections((err, count) =>
-              this.info(`${this.fullName}: ${count} connections still open`)
-            ),
-          2000
-        );
+      const openConnectionsInfoInterval = setInterval(
+        () =>
+          this.server.getConnections((err, count) =>
+            this.info(`${this.fullName}: ${count} connection(s) still open`)
+          ),
+        2000
+      );
 
-        this.server.close(err => {
-          clearInterval(openConnectionsInfoInterval);
-          if (err) {
-            reject(err);
-          } else {
-            this.server = undefined;
-            resolve();
-          }
+      try {
+        closeWS(this);
+
+        await new Promise((resolve, reject) => {
+          this.server.close(err => {
+            if (err) {
+              reject(err);
+            } else {
+              this.server = undefined;
+              resolve();
+            }
+          });
         });
-      });
+      } finally {
+        clearInterval(openConnectionsInfoInterval);
+      }
     }
   }
 }

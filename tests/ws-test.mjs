@@ -43,7 +43,7 @@ test("ws send", async t => {
 
   const r1 = new SendEndpoint("r1", sp, {
     didConnect: endpoint => {
-      //endpoint.send(endpoint.receive(""));
+      endpoint.send(endpoint.receive("didConnect"));
 
       const interval = setInterval(
         () => endpoint.send(endpoint.receive("")),
@@ -87,4 +87,6 @@ test("ws send", async t => {
     t.is(c.messages[1], "OK R1", "server message 1");
     t.is(c.messages[2], "OK R1", "server message 2");
   }
+
+  await http.stop();
 });

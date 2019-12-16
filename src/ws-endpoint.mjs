@@ -28,6 +28,10 @@ export class WSEndpoint extends SendEndpoint {
     }
   }
 
+  closeSockets() {
+    this.sockets.forEach(ws => ws.terminate());
+  }
+
   addSocket(ws, request) {
     const owner = this.owner;
 
@@ -35,12 +39,13 @@ export class WSEndpoint extends SendEndpoint {
 
     this.sockets.add(ws);
 
-    for (const other of this.connections()) {
-      this.openConnection(other);
-      owner.trace(`${this} open ${other}`);
-    }
-
     ws.on("error", error => owner.error(`${this} error ${error}`));
+    ws.on("open", () => {
+      for (const other of this.connections()) {
+        this.openConnection(other);
+        owner.trace(`${this} open ${other}`);
+      }
+    });
 
     ws.on("close", (code, reason) => {
       owner.trace(`${this} close ${code} ${reason}`);
@@ -61,7 +66,7 @@ export class WSEndpoint extends SendEndpoint {
 
   get isOpen() {
     return true;
-//    return this.sockets.size > 0;
+    //    return this.sockets.size > 0;
   }
 
   async receive(arg) {
@@ -94,13 +99,16 @@ export class WSEndpoint extends SendEndpoint {
 
 export function initializeWS(service) {
   const wsEndpoints = compile(
-    [...Object.values(service.endpoints)].filter(e => e instanceof WSEndpoint)
+    Object.values(service.endpoints).filter(e => e instanceof WSEndpoint)
   );
 
   service.wss = new WebSocket.Server({ server: service.server });
-  service.wss.on("connection", (ws, request, client) => {
+
+  service.wss.on("error", error => service.error(error));
+
+  service.wss.on("connection", (ws, request) => {
     const path = request.url;
-    service.trace({ message: `connection ${path} ${client}`, url: path });
+    service.trace({ message: `connection ${path}`, url: path });
 
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
@@ -108,4 +116,10 @@ export function initializeWS(service) {
       }
     }
   });
+}
+
+export function closeWS(service) {
+  Object.values(service.endpoints).filter(
+    e => e instanceof WSEndpoint
+  ).forEach(e => e.closeSockets());
 }
