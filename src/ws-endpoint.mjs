@@ -41,6 +41,7 @@ export class WSEndpoint extends SendEndpoint {
 
     ws.on("error", error => owner.error(`${this} error ${error}`));
     ws.on("open", () => {
+      owner.trace(`${this} open`);
       for (const other of this.connections()) {
         this.openConnection(other);
         owner.trace(`${this} open ${other}`);
