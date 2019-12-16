@@ -148,6 +148,10 @@ export class ServiceHTTP extends Service {
       return url;
     }
 
+    if(socket === undefined) {
+      return undefined;
+    }
+    
     return Number.isInteger(socket)
       ? `${this.scheme}://${this.address}:${socket}`
       : `fd:///${socket.fd}`;

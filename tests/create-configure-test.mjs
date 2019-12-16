@@ -55,6 +55,10 @@ async function skt(t, config, ...args) {
     })
   );
 
+  if (ks.url === undefined) {
+    return;
+  }
+
   t.is(ks.state, "stopped");
   await ks.start();
   t.is(ks.state, "running");
@@ -93,6 +97,8 @@ test(
     url: `http://${address()}:1234`
   }
 );
+
+test(skt, {}, {});
 
 test.skip(
   skt,
