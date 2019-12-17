@@ -32,7 +32,7 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
   }
 
   async receive(endpoint, next, ctx, ...args) {
-    const token = tokenFromAuthorizationHeader(ctx.header);
+    const token = tokenFromAuthorizationHeader(ctx.req.header);
     if (token) {
       const decoded = await verifyPromisified(token, this.key);
       // ctx.state[tokenKey] = decoded;
