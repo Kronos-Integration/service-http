@@ -2,8 +2,7 @@ import jwt from "jsonwebtoken";
 import { promisify } from "util";
 
 import { Interceptor } from "@kronos-integration/interceptor";
-import { mergeAttributes, createAttributes } from 'model-attributes';
-
+import { mergeAttributes, createAttributes } from "model-attributes";
 
 const verifyPromisified = promisify(jwt.verify);
 
@@ -25,7 +24,7 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
           description: "key to verify token against",
           private: true,
           type: "blob"
-        },
+        }
       }),
       Interceptor.configurationAttributes
     );
