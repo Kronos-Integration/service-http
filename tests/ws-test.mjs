@@ -27,7 +27,7 @@ function client(name) {
   });
 
   ws.on("message", message => {
-    console.log("MESSAGE", name, message);
+    //console.log("MESSAGE", name, message);
     r.messages.push(message);
   });
 
@@ -43,7 +43,7 @@ test("ws send", async t => {
 
   const r1 = new SendEndpoint("r1", sp, {
     didConnect: endpoint => {
-      endpoint.send(endpoint.receive("didConnect"));
+      //endpoint.send("R1 didConnect");
 
       const interval = setInterval(
         () => endpoint.send(endpoint.receive("")),

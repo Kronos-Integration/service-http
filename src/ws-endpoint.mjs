@@ -39,14 +39,14 @@ export class WSEndpoint extends SendEndpoint {
 
     this.sockets.add(ws);
 
+    for (const other of this.connections()) {
+      owner.trace(`${this} open ${other}`);
+      this.openConnection(other);
+      other.openConnection(this);
+    }
+
     ws.on("error", error => owner.error(`${this} error ${error}`));
-    ws.on("open", () => {
-      owner.trace(`${this} open`);
-      for (const other of this.connections()) {
-        this.openConnection(other);
-        owner.trace(`${this} open ${other}`);
-      }
-    });
+    ws.on("open", () => owner.trace(`${this} open`));
 
     ws.on("close", (code, reason) => {
       owner.trace(`${this} close ${code} ${reason}`);
@@ -66,8 +66,7 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   get isOpen() {
-    return true;
-    //    return this.sockets.size > 0;
+    return this.sockets.size > 0;
   }
 
   async receive(arg) {
