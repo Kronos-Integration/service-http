@@ -32,7 +32,7 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
   }
 
   async receive(endpoint, next, ctx, ...args) {
-    const token = tokenFromAuthorizationHeader(ctx.req.header);
+    const token = tokenFromAuthorizationHeader(ctx.req.headers);
     if (token) {
       const decoded = await verifyPromisified(token, this.key);
       // ctx.state[tokenKey] = decoded;
@@ -44,9 +44,9 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
   }
 }
 
-function tokenFromAuthorizationHeader(header) {
-  if (header.authorization) {
-    const parts = header.authorization.split(" ");
+function tokenFromAuthorizationHeader(headers) {
+  if (headers.authorization) {
+    const parts = headers.authorization.split(" ");
 
     if (parts.length === 2) {
       const [scheme, credentials] = parts;
