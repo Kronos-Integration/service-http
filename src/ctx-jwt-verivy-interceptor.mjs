@@ -33,12 +33,19 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
   async receive(endpoint, next, ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.req.headers);
     if (token) {
-      const decoded = await verifyPromisified(token, this.key);
-      // ctx.state[tokenKey] = decoded;
+      try {
+        const decoded = await verifyPromisified(token, this.key);
+        // ctx.state[tokenKey] = decoded;
+      } catch (e) {
+        ctx.res.writeHead(401, { "Content-Type": "text/plain" });
+        ctx.res.end(e.message);
+        return;
+      }
 
       return await next(ctx, ...args);
     } else {
-      ctx.throw(401);
+      ctx.res.writeHead(401, { "Content-Type": "text/plain" });
+      ctx.res.end("missing token");
     }
   }
 }

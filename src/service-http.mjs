@@ -198,7 +198,7 @@ export class ServiceHTTP extends Service {
             this.error(err);
             reject(err);
           } else {
-            this.trace(`listening on ${this.url} (${this.socket})`);
+            this.trace(`listening on ${this.url} (${JSON.stringify(this.socket)})`);
             resolve();
           }
         };
