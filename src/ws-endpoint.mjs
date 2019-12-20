@@ -77,7 +77,7 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   get isIn() {
-    true;
+    return true;
   }
 
   get path() {
