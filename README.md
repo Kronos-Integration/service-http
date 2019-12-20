@@ -22,15 +22,17 @@ koa backed http server
 ### Table of Contents
 
 -   [ServiceHTTP](#servicehttp)
-    -   [Parameters](#parameters)
     -   [Properties](#properties)
+    -   [extendetName](#extendetname)
     -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
-        -   [Parameters](#parameters-1)
+        -   [Parameters](#parameters)
     -   [name](#name)
 -   [HTTPEndpoint](#httpendpoint)
-    -   [Parameters](#parameters-2)
+    -   [Parameters](#parameters-1)
 -   [WSEndpoint](#wsendpoint)
-    -   [Parameters](#parameters-3)
+    -   [Parameters](#parameters-2)
+    -   [sockets](#sockets)
+        -   [Parameters](#parameters-3)
 -   [CTXInterceptor](#ctxinterceptor)
     -   [name](#name-1)
 -   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
@@ -44,14 +46,13 @@ koa backed http server
 
 HTTP server
 
-### Parameters
-
--   `args` **...any** 
-
 ### Properties
 
 -   `server` **http.Server** only present if state is running
--   `koa` **koa** 
+
+### extendetName
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name with url
 
 ### endpointFactoryFromConfig
 
@@ -89,9 +90,18 @@ Endpoint to link against a websocket route
 
 ### Parameters
 
+-   `name`  
+-   `owner`  
+-   `options`   (optional, default `{}`)
+
+### sockets
+
+#### Parameters
+
 -   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
 -   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
--   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+-   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path defaults to endpoint name
 
 ## CTXInterceptor
 
