@@ -53,8 +53,10 @@ export class WSEndpoint extends SendEndpoint {
       this.sockets.delete(ws);
       if (!this.isOpen) {
         for (const other of this.connections()) {
-          this.closeConnection(other);
           owner.trace(`${this} close ${other}`);
+
+          this.closeConnection(other);
+          other.closeConnection(this);
         }
       }
     });
