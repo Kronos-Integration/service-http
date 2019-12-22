@@ -1,10 +1,11 @@
 {
   "name": "@kronos-integration/service-http",
   "version": "0.0.0-semantic-release",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": false,
+  "type": "module",
   "main": "src/service-http.mjs",
   "module": "src/service-http.mjs",
   "description": "http server",
@@ -46,10 +47,10 @@
     "got": "^10.0.4",
     "markdown-doctest": "^1.0.0",
     "network-address": "^1.1.2",
-    "semantic-release": "^15.13.31"
+    "semantic-release": "^15.14.0"
   },
   "engines": {
-    "node": ">=12.13.1"
+    "node": ">=12.14.0"
   },
   "repository": {
     "type": "git",
@@ -76,6 +77,5 @@
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template-esm-only.git"
     }
-  },
-  "sideEffects": false
+  }
 }
