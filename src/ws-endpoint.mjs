@@ -7,14 +7,12 @@ import utf8Validate from "utf-8-validate";
 
 /**
  * Endpoint to link against a websocket route
+ * @param {string} name endpoint name
+ * @param {Object} owner owner of the endpoint
+ * @param {Object} options
+ * @param {string} options.path url path defaults to endpoint name
  */
 export class WSEndpoint extends SendEndpoint {
-  /**
-   * @param {string} name endpoint name
-   * @param {Object} owner owner of the endpoint
-   * @param {Object} options
-   * @param {string} options.path url path defaults to endpoint name
-   */
 
   sockets = new Set();
 
@@ -110,8 +108,6 @@ export function initializeWS(service) {
 
   service.wss.on("connection", (ws, request) => {
     const path = request.url;
-    service.trace({ message: `connection ${path}`, url: path });
-
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
         endpoint.addSocket(ws, request);
