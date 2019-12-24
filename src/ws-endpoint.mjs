@@ -40,7 +40,6 @@ export class WSEndpoint extends SendEndpoint {
     for (const other of this.connections()) {
       owner.trace(`${this} open ${other}`);
       this.openConnection(other);
-      other.openConnection(this);
     }
 
     ws.on("error", error => owner.error(`${this} error ${error}`));
@@ -54,7 +53,6 @@ export class WSEndpoint extends SendEndpoint {
           owner.trace(`${this} close ${other}`);
 
           this.closeConnection(other);
-          other.closeConnection(this);
         }
       }
     });
