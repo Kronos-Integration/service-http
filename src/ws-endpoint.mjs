@@ -94,9 +94,28 @@ export class WSEndpoint extends SendEndpoint {
   }
 }
 
-function authenticate(service, request, cb) {
-  service.trace(`authenticate: ${JSON.stringify(request.headers)}`);
-  cb(undefined);
+/**
+ * check sec-websocket-protocol header for presence of
+ * 'access_token' and the token
+ * @param {Service} service
+ * @param {*} request
+ */
+async function authenticate(service, request) {
+  const protocol = request.headers["sec-websocket-protocol"];
+
+  if(protocol) {
+    const protocols = protocol.split(/\s*,\s*/);
+
+    const ia = protocols.indexOf('access_token');
+    if(ia >= 0) {
+      const token = protocols[ia + 1];
+
+      service.trace(`authenticate: ${token}`);
+      return;
+    }
+  }
+
+  throw new Error('invalid access_token in sec-websocket-protocol');
 }
 
 export function initializeWS(service) {
@@ -120,14 +139,14 @@ export function initializeWS(service) {
     }
   });
 
-  server.on("upgrade", (request, socket, head) => {
-    authenticate(service, request, (err) => {
-      if (err) {
-        service.error(err);
-        socket.destroy();
-        return;
-      }
-    });
+  server.on("upgrade", async (request, socket, head) => {
+    try {
+      await authenticate(service, request);
+    }
+    catch(err) {
+      service.error(err);
+      socket.destroy();
+    }
   });
 }
 

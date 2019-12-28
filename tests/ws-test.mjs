@@ -14,7 +14,7 @@ async function wait(msecs = 1000) {
 function client(name) {
   const socketUrl = "ws://localhost:1236/w1";
 
-  const ws = new WebSocket(socketUrl, {});
+  const ws = new WebSocket(socketUrl, ['access_token', '123456']);
 
   const r = { name, messages: [], ws, disconnected: 0, opened: 0 };
 
