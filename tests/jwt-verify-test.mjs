@@ -8,11 +8,14 @@ test("jwt malformed", async t => {
   const interceptor = new CTXJWTVerifyInterceptor();
 
   let raisedError;
-  let end;
+  let end, code, headers;
 
   const ctx = {
     res: {
-      writeHead() {},
+      writeHead(c, h) {
+        code = c;
+        headers = h;
+      },
       end(arg) {
         end = arg;
       }
@@ -27,6 +30,8 @@ test("jwt malformed", async t => {
 
   await interceptor.receive(endpoint, (ctx, a, b, c) => {}, ctx, 1, 2, 3);
 
+  t.is(code, 401);
+  t.regex(headers["WWW-Authenticate"], /Bearer,error/);
   t.is(end, "jwt malformed");
 
   //t.is(raisedError, 401);
@@ -37,11 +42,14 @@ test("jwt not configured", async t => {
   const interceptor = new CTXJWTVerifyInterceptor();
 
   let raisedError;
-  let end;
+  let end, code, headers;
 
   const ctx = {
     res: {
-      writeHead() {},
+      writeHead(c, h) {
+        code = c;
+        headers = h;
+      },
       end(arg) {
         end = arg;
       }
@@ -59,5 +67,7 @@ test("jwt not configured", async t => {
 
   await interceptor.receive(endpoint, (ctx, a, b, c) => {}, ctx, 1, 2, 3);
 
+  t.is(code, 401);
+  t.regex(headers["WWW-Authenticate"], /Bearer,error/);
   t.is(end, "secret or public key must be provided");
 });

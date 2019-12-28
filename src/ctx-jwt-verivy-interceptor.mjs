@@ -36,16 +36,14 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
       try {
         const decoded = await verifyPromisified(token, this.key);
         // ctx.state[tokenKey] = decoded;
-      } catch (e) {
-        ctx.res.writeHead(401, { "Content-Type": "text/plain" });
-        ctx.res.end(e.message);
+      } catch (error) {
+        reportError(ctx, error);
         return;
       }
 
       return await next(ctx, ...args);
     } else {
-      ctx.res.writeHead(401, { "Content-Type": "text/plain" });
-      ctx.res.end("missing token");
+      reportError(ctx);
     }
   }
 }
@@ -61,4 +59,17 @@ function tokenFromAuthorizationHeader(headers) {
       }
     }
   }
+}
+
+function reportError(ctx, error) {
+  const description = error ? error.message : "missing token";
+
+  ctx.res.writeHead(401, { 
+    "WWW-Authenticate": `Bearer,error_description=${description}`,
+    /*
+                    error="invalid_token",
+*/
+    "Content-Type": "text/plain" });
+
+    ctx.res.end(description);
 }
