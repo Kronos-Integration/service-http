@@ -13,7 +13,6 @@ import utf8Validate from "utf-8-validate";
  * @param {string} options.path url path defaults to endpoint name
  */
 export class WSEndpoint extends SendEndpoint {
-
   sockets = new Set();
 
   constructor(name, owner, options = {}) {
@@ -95,16 +94,24 @@ export class WSEndpoint extends SendEndpoint {
   }
 }
 
+function authenticate(service, request, cb) {
+  service.trace(`authenticate: ${JSON.stringify(request.headers)}`);
+  cb(undefined);
+}
+
 export function initializeWS(service) {
   const wsEndpoints = compile(
     Object.values(service.endpoints).filter(e => e instanceof WSEndpoint)
   );
 
-  service.wss = new WebSocket.Server({ server: service.server });
+  const server = service.server;
 
-  service.wss.on("error", error => service.error(error));
+  const wss = new WebSocket.Server({ server });
+  service.wss = wss;
 
-  service.wss.on("connection", (ws, request) => {
+  wss.on("error", error => service.error(error));
+
+  wss.on("connection", (ws, request) => {
     const path = request.url;
     for (const endpoint of wsEndpoints) {
       if (path.match(endpoint.regex)) {
@@ -112,10 +119,20 @@ export function initializeWS(service) {
       }
     }
   });
+
+  server.on("upgrade", (request, socket, head) => {
+    authenticate(service, request, (err) => {
+      if (err) {
+        service.error(err);
+        socket.destroy();
+        return;
+      }
+    });
+  });
 }
 
 export function closeWS(service) {
-  Object.values(service.endpoints).filter(
-    e => e instanceof WSEndpoint
-  ).forEach(e => e.closeSockets());
+  Object.values(service.endpoints)
+    .filter(e => e instanceof WSEndpoint)
+    .forEach(e => e.closeSockets());
 }
