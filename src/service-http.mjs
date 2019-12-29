@@ -26,6 +26,17 @@ export class ServiceHTTP extends Service {
     return mergeAttributes(
       Service.configurationAttributes,
       createAttributes({
+        jwt: {
+          description: "jwt related",
+          attributes: {
+            public: {
+              description: "public key to check token against",
+              mandatory: true,
+              private: true,
+              type: "blob"
+            }
+          }
+        },
         listen: {
           description: "server listen definition",
 

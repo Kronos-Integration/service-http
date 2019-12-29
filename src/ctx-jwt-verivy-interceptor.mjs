@@ -1,10 +1,7 @@
-import jwt from "jsonwebtoken";
-import { promisify } from "util";
-
+import { verifyJWT } from './util.mjs';
 import { Interceptor } from "@kronos-integration/interceptor";
 import { mergeAttributes, createAttributes } from "model-attributes";
 
-const verifyPromisified = promisify(jwt.verify);
 
 /**
  * only forward requests if a valid jwt token is present
@@ -34,7 +31,7 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     const token = tokenFromAuthorizationHeader(ctx.req.headers);
     if (token) {
       try {
-        const decoded = await verifyPromisified(token, this.key);
+        const decoded = await verifyJWT(token, this.key);
         // ctx.state[tokenKey] = decoded;
       } catch (error) {
         reportError(ctx, error);
