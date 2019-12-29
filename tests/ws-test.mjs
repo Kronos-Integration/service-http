@@ -1,9 +1,21 @@
 import test from "ava";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { readFileSync } from "fs";
+
+import jwt from "jsonwebtoken";
 import WebSocket from "ws";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceHTTP } from "../src/service-http.mjs";
 import { WSEndpoint } from "../src/ws-endpoint.mjs";
+
+const here = dirname(fileURLToPath(import.meta.url));
+
+const token = jwt.sign({}, readFileSync(join(here, "fixtures", "demo.rsa")), {
+  algorithm: "RS256",
+  expiresIn: "12h"
+});
 
 async function wait(msecs = 1000) {
   return new Promise((resolve, reject) => {
@@ -14,7 +26,7 @@ async function wait(msecs = 1000) {
 function client(name) {
   const socketUrl = "ws://localhost:1236/w1";
 
-  const ws = new WebSocket(socketUrl, ['access_token', '123456']);
+  const ws = new WebSocket(socketUrl, ["access_token", token]);
 
   const r = { name, messages: [], ws, disconnected: 0, opened: 0 };
 
@@ -59,6 +71,9 @@ test("ws send", async t => {
     type: ServiceHTTP,
     listen: {
       socket: 1236
+    },
+    jwt: {
+      public: readFileSync(join(here, "fixtures", "demo.rsa.pub"))
     },
     endpoints: {
       "/w1": { connected: r1, ws: true }

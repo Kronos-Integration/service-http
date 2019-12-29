@@ -5,6 +5,8 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
 import bufferutil from "bufferutil";
 import utf8Validate from "utf-8-validate";
 
+import { verifyJWT } from './util.mjs';
+
 /**
  * Endpoint to link against a websocket route
  * @param {string} name endpoint name
@@ -111,6 +113,8 @@ async function authenticate(service, request) {
       const token = protocols[ia + 1];
 
       service.trace(`authenticate: ${token}`);
+
+      await verifyJWT(token, service.jwt.public);
       return;
     }
   }
