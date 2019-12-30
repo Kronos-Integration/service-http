@@ -111,15 +111,12 @@ async function authenticate(service, request) {
     const ia = protocols.indexOf('access_token');
     if(ia >= 0) {
       const token = protocols[ia + 1];
-
-      service.trace(`authenticate: ${token}`);
-
       await verifyJWT(token, service.jwt.public);
       return;
     }
   }
 
-  throw new Error('invalid access_token in sec-websocket-protocol');
+  throw new Error('Invalid access_token in sec-websocket-protocol');
 }
 
 export function initializeWS(service) {
