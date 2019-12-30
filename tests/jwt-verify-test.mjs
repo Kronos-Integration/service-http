@@ -1,10 +1,24 @@
 import test from "ava";
-import { SendEndpoint } from "@kronos-integration/endpoint";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { readFileSync } from "fs";
+import jwt from "jsonwebtoken";
 
+import { SendEndpoint } from "@kronos-integration/endpoint";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
+import { ServiceHTTP } from "../src/service-http.mjs";
 import { CTXJWTVerifyInterceptor } from "../src/ctx-jwt-verivy-interceptor.mjs";
 
+const here = dirname(fileURLToPath(import.meta.url));
+const pubKey = readFileSync(join(here, "fixtures", "demo.rsa.pub"));
+
 test("jwt malformed", async t => {
-  const endpoint = new SendEndpoint("e", {});
+  const sp = new StandaloneServiceProvider();
+  const http = await sp.declareService({
+    type: ServiceHTTP,
+    jwt: { public: pubKey }
+  });
+  const endpoint = new SendEndpoint("e", http);
   const interceptor = new CTXJWTVerifyInterceptor();
 
   let raisedError;
@@ -38,7 +52,12 @@ test("jwt malformed", async t => {
 });
 
 test("jwt not configured", async t => {
-  const endpoint = new SendEndpoint("e", {});
+  const sp = new StandaloneServiceProvider();
+  const http = await sp.declareService({
+    type: ServiceHTTP,
+  //  jwt: { public: pubKey }
+  });
+  const endpoint = new SendEndpoint("e", http);
   const interceptor = new CTXJWTVerifyInterceptor();
 
   let raisedError;
@@ -70,4 +89,48 @@ test("jwt not configured", async t => {
   t.is(code, 401);
   t.regex(headers["WWW-Authenticate"], /Bearer,error/);
   t.is(end, "secret or public key must be provided");
+});
+
+test("jwt virify ok", async t => {
+  const sp = new StandaloneServiceProvider();
+  const http = await sp.declareService({
+    type: ServiceHTTP,
+    jwt: { public: pubKey }
+  });
+  const endpoint = new SendEndpoint("e", http);
+  const interceptor = new CTXJWTVerifyInterceptor();
+
+  const token = jwt.sign({}, readFileSync(join(here, "fixtures", "demo.rsa")), {
+    algorithm: "RS256",
+    expiresIn: "12h"
+  });
+  
+  let raisedError;
+  let end, code, headers;
+
+  const ctx = {
+    res: {
+      writeHead(c, h) {
+        code = c;
+        headers = h;
+      },
+      end(arg) {
+        end = arg;
+      }
+    },
+    req: {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    },
+    throw(code) {
+      raisedError = code;
+    }
+  };
+
+  let next = false;
+
+  await interceptor.receive(endpoint, (ctx, a, b, c) => { next = true; }, ctx, 1, 2, 3);
+
+  t.true(next);
 });

@@ -1,6 +1,5 @@
 import { verifyJWT } from './util.mjs';
 import { Interceptor } from "@kronos-integration/interceptor";
-import { mergeAttributes, createAttributes } from "model-attributes";
 
 
 /**
@@ -14,24 +13,12 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     return "ctx-jwt-verify";
   }
 
-  static get configurationAttributes() {
-    return mergeAttributes(
-      createAttributes({
-        key: {
-          description: "key to verify token against",
-          private: true,
-          type: "blob"
-        }
-      }),
-      Interceptor.configurationAttributes
-    );
-  }
-
   async receive(endpoint, next, ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.req.headers);
     if (token) {
       try {
-        const decoded = await verifyJWT(token, this.key);
+        const key = endpoint.owner.jwt.public;
+        /*ctx.jwt =*/ await verifyJWT(token, key);
         // ctx.state[tokenKey] = decoded;
       } catch (error) {
         reportError(ctx, error);
