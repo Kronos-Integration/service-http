@@ -24,7 +24,7 @@ async function wait(msecs = 1000) {
 }
 
 function client(name) {
-  const socketUrl = "ws://localhost:1236/w1";
+  const socketUrl = "ws://localhost:1250/w1";
 
   const ws = new WebSocket(socketUrl, ["access_token", token]);
 
@@ -70,7 +70,7 @@ test("ws send", async t => {
   const http = await sp.declareService({
     type: ServiceHTTP,
     listen: {
-      socket: 1236
+      socket: 1250
     },
     jwt: {
       public: readFileSync(join(here, "fixtures", "demo.rsa.pub"))
