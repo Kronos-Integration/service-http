@@ -18,7 +18,7 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     if (token) {
       try {
         const key = endpoint.owner.jwt.public;
-        /*ctx.jwt =*/ await verifyJWT(token, key);
+        /*const decoded =*/ await verifyJWT(token, key);
         // ctx.state[tokenKey] = decoded;
       } catch (error) {
         reportError(ctx, error);

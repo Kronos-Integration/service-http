@@ -91,7 +91,55 @@ test("jwt not configured", async t => {
   t.is(end, "secret or public key must be provided");
 });
 
-test("jwt virify ok", async t => {
+test.only("jwt verify none alg as not supported", async t => {
+  const sp = new StandaloneServiceProvider();
+  const http = await sp.declareService({
+    type: ServiceHTTP,
+    jwt: { public: pubKey }
+  });
+  const endpoint = new SendEndpoint("e", http);
+  const interceptor = new CTXJWTVerifyInterceptor();
+
+  const token = jwt.sign({}, "" /*readFileSync(join(here, "fixtures", "demo.rsa"))*/, {
+    algorithm: "none",
+    expiresIn: "12h"
+  });
+  
+  let raisedError;
+  let end, code, headers;
+
+  const ctx = {
+    res: {
+      writeHead(c, h) {
+        code = c;
+        headers = h;
+      },
+      end(arg) {
+        end = arg;
+      }
+    },
+    req: {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    },
+    throw(code) {
+      raisedError = code;
+    }
+  };
+
+  let next = false;
+
+  await interceptor.receive(endpoint, (ctx, a, b, c) => { next = true; }, ctx, 1, 2, 3);
+
+  t.false(next);
+
+  t.is(code, 401);
+  t.regex(headers["WWW-Authenticate"], /Bearer,error/);
+  t.is(end, "jwt signature is required");
+});
+
+test("jwt verify ok", async t => {
   const sp = new StandaloneServiceProvider();
   const http = await sp.declareService({
     type: ServiceHTTP,
