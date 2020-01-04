@@ -44,7 +44,7 @@
     "c8": "^7.0.0",
     "documentation": "^12.1.4",
     "esm": "^3.2.25",
-    "got": "^10.0.4",
+    "got": "^10.2.1",
     "markdown-doctest": "^1.0.0",
     "network-address": "^1.1.2",
     "semantic-release": "^15.14.0"
