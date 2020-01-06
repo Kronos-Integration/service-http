@@ -46,7 +46,7 @@ test("jwt malformed", async t => {
 
   t.is(code, 401);
   t.regex(headers["WWW-Authenticate"], /Bearer,error/);
-  t.is(end, "jwt malformed");
+  t.is(end, "error: jwt malformed");
 
   //t.is(raisedError, 401);
 });
@@ -88,10 +88,10 @@ test("jwt not configured", async t => {
 
   t.is(code, 401);
   t.regex(headers["WWW-Authenticate"], /Bearer,error/);
-  t.is(end, "secret or public key must be provided");
+  t.is(end, "error: secret or public key must be provided");
 });
 
-test.only("jwt verify none alg as not supported", async t => {
+test("jwt verify none alg as not supported", async t => {
   const sp = new StandaloneServiceProvider();
   const http = await sp.declareService({
     type: ServiceHTTP,
@@ -136,7 +136,7 @@ test.only("jwt verify none alg as not supported", async t => {
 
   t.is(code, 401);
   t.regex(headers["WWW-Authenticate"], /Bearer,error/);
-  t.is(end, "jwt signature is required");
+  t.is(end, "error: jwt signature is required");
 });
 
 test("jwt verify ok", async t => {

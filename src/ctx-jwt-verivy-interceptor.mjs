@@ -1,9 +1,8 @@
-import { verifyJWT } from './util.mjs';
+import { verifyJWT } from "./util.mjs";
 import { Interceptor } from "@kronos-integration/interceptor";
 
-
 /**
- * only forward requests if a valid jwt token is present
+ * only forward requests if a valid JWT token is present
  */
 export class CTXJWTVerifyInterceptor extends Interceptor {
   /**
@@ -45,15 +44,30 @@ function tokenFromAuthorizationHeader(headers) {
   }
 }
 
-function reportError(ctx, error) {
-  const description = error ? error.message : "missing token";
+/**
+ * Write WWW-Authenticate header
+ *
+ * @param {*} ctx
+ * @param {*} error
+ * @param {*} description
+ */
+function reportError(ctx, error, description) {
 
-  ctx.res.writeHead(401, { 
-    "WWW-Authenticate": `Bearer,error_description=${description}`,
-    /*
-                    error="invalid_token",
-*/
-    "Content-Type": "text/plain" });
+  const entries = Object.entries({
+    error: error ? error.message : "missing token",
+    description
+  }).filter(([name,value])=> value !== undefined);
 
-    ctx.res.end(description);
+  ctx.res.writeHead(401, {
+    "WWW-Authenticate":
+      "Bearer," +
+      entries
+        .map(([name, value]) => `${name}="${value}"`)
+        .join(","),
+    "Content-Type": "text/plain"
+  });
+
+  ctx.res.end(entries
+    .map(([name, value]) => `${name}: ${value}`)
+    .join("\n"));
 }
