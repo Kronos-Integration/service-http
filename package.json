@@ -47,7 +47,7 @@
     "got": "^10.2.1",
     "markdown-doctest": "^1.0.0",
     "network-address": "^1.1.2",
-    "semantic-release": "^16.0.2"
+    "semantic-release": "^16.0.3"
   },
   "engines": {
     "node": ">=12.14.1"
