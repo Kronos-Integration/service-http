@@ -1,0 +1,10 @@
+{
+  "name": "@kronos-integration/service-http",
+  "description": "http server",
+  "icons": [
+    {
+      "src": "facicon.ico",
+      "sizes": "16x16"
+    }
+  ]
+}
