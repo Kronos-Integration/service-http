@@ -44,7 +44,7 @@
     "documentation": "^12.1.4",
     "got": "^10.5.7",
     "network-address": "^1.1.2",
-    "semantic-release": "^17.0.3"
+    "semantic-release": "^17.0.4"
   },
   "engines": {
     "node": ">=13.8.0"
