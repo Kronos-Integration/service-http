@@ -13,6 +13,8 @@ import { verifyJWT } from './util.mjs';
  * @param {Object} owner owner of the endpoint
  * @param {Object} options
  * @param {string} options.path url path defaults to endpoint name
+ * 
+ * @property {Set<WebSocket>} sockets
  */
 export class WSEndpoint extends SendEndpoint {
   sockets = new Set();
