@@ -10,7 +10,8 @@
   "module": "src/service-http.mjs",
   "description": "http server",
   "keywords": [
-    "kronos-service"
+    "kronos-service",
+    "http"
   ],
   "contributors": [
     {
@@ -30,7 +31,7 @@
     "lint": "documentation lint src/service-http.mjs"
   },
   "dependencies": {
-    "@kronos-integration/service": "^8.3.23",
+    "@kronos-integration/service": "^8.3.24",
     "bufferutil": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.6",

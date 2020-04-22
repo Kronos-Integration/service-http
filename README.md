@@ -39,6 +39,8 @@ koa backed http server
     -   [name](#name-2)
 -   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
     -   [name](#name-3)
+-   [reportError](#reporterror)
+    -   [Parameters](#parameters-4)
 
 ## ServiceHTTP
 
@@ -129,11 +131,21 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends Interceptor**
 
-only forward requests if a valid jwt token is present
+only forward requests if a valid JWT token is present
 
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-jwt-verify'
+
+## reportError
+
+Write WWW-Authenticate header
+
+### Parameters
+
+-   `ctx` **any** 
+-   `error` **any** 
+-   `description` **any** 
 
 # install
 
