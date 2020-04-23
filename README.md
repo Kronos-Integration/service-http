@@ -31,6 +31,7 @@ koa backed http server
     -   [Parameters](#parameters-1)
 -   [WSEndpoint](#wsendpoint)
     -   [Parameters](#parameters-2)
+    -   [Properties](#properties-1)
 -   [authenticate](#authenticate)
     -   [Parameters](#parameters-3)
 -   [CTXInterceptor](#ctxinterceptor)
@@ -96,6 +97,10 @@ Endpoint to link against a websocket route
 -   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
     -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path defaults to endpoint name
+
+### Properties
+
+-   `sockets` **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)&lt;[WebSocket](https://developer.mozilla.org/docs/WebSockets)>** 
 
 ## authenticate
 

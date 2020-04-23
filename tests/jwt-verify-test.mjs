@@ -22,10 +22,15 @@ test("jwt malformed", async t => {
   const interceptor = new CTXJWTVerifyInterceptor();
 
   let raisedError;
-  let end, code, headers;
+  let end,
+    code,
+    headers = {};
 
   const ctx = {
     res: {
+      setHeader(k, v) {
+        headers[k] = v;
+      },
       writeHead(c, h) {
         code = c;
         headers = h;
@@ -54,17 +59,20 @@ test("jwt malformed", async t => {
 test("jwt not configured", async t => {
   const sp = new StandaloneServiceProvider();
   const http = await sp.declareService({
-    type: ServiceHTTP,
-  //  jwt: { public: pubKey }
+    type: ServiceHTTP
+    //  jwt: { public: pubKey }
   });
   const endpoint = new SendEndpoint("e", http);
   const interceptor = new CTXJWTVerifyInterceptor();
 
   let raisedError;
-  let end, code, headers;
+  let end, code, headers ={};
 
   const ctx = {
     res: {
+      setHeader(k, v) {
+        headers[k] = v;
+      },
       writeHead(c, h) {
         code = c;
         headers = h;
@@ -100,11 +108,15 @@ test("jwt verify none alg as not supported", async t => {
   const endpoint = new SendEndpoint("e", http);
   const interceptor = new CTXJWTVerifyInterceptor();
 
-  const token = jwt.sign({}, "" /*readFileSync(join(here, "fixtures", "demo.rsa"))*/, {
-    algorithm: "none",
-    expiresIn: "12h"
-  });
-  
+  const token = jwt.sign(
+    {},
+    "" /*readFileSync(join(here, "fixtures", "demo.rsa"))*/,
+    {
+      algorithm: "none",
+      expiresIn: "12h"
+    }
+  );
+
   let raisedError;
   let end, code, headers;
 
@@ -130,7 +142,16 @@ test("jwt verify none alg as not supported", async t => {
 
   let next = false;
 
-  await interceptor.receive(endpoint, (ctx, a, b, c) => { next = true; }, ctx, 1, 2, 3);
+  await interceptor.receive(
+    endpoint,
+    (ctx, a, b, c) => {
+      next = true;
+    },
+    ctx,
+    1,
+    2,
+    3
+  );
 
   t.false(next);
 
@@ -152,7 +173,7 @@ test("jwt verify ok", async t => {
     algorithm: "RS256",
     expiresIn: "12h"
   });
-  
+
   let raisedError;
   let end, code, headers;
 
@@ -178,7 +199,16 @@ test("jwt verify ok", async t => {
 
   let next = false;
 
-  await interceptor.receive(endpoint, (ctx, a, b, c) => { next = true; }, ctx, 1, 2, 3);
+  await interceptor.receive(
+    endpoint,
+    (ctx, a, b, c) => {
+      next = true;
+    },
+    ctx,
+    1,
+    2,
+    3
+  );
 
   t.true(next);
 });
