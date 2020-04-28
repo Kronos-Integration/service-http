@@ -1,26 +1,25 @@
 export class TestContext {
-  constructor() {
-
+  constructor(options = {}) {
     this.headers = {};
-    
+
     this.res = {
-      setHeader(k, v) {
-        headers[k] = v;
+      setHeader: (k, v) => {
+        this.headers[k] = v;
       },
-      writeHead(c, h) {
-        code = c;
-        headers = h;
+      writeHead: (c, h) => {
+        this.code = c;
+        this.headers = h;
       },
-      end(arg) {
-        end = arg;
+      end: (arg) => {
+        this.end = arg;
       }
     };
 
     this.req = {
-      headers: {}
+      headers: { ...options.headers }
     };
   }
   throw(code) {
-    raisedError = code;
+    this.raisedError = code;
   }
 }

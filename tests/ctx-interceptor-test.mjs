@@ -1,4 +1,5 @@
 import test from "ava";
+import { TestContext } from "./helpers/context.mjs";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceHTTP } from "../src/service-http.mjs";
@@ -17,9 +18,7 @@ test("default headers", async t => {
   const endpoint = new SendEndpoint("e", http);
 
   const configuredHeaders = {
-    "Cache-Control": "no-store, no-cache, must-revalidate",
-    Pragma: "no-cache",
-    Expires: 0
+    "Cache-Control": "no-store, no-cache, must-revalidate"
   };
 
   const interceptor = new CTXInterceptor({
@@ -28,34 +27,10 @@ test("default headers", async t => {
 
   t.deepEqual(interceptor.headers, configuredHeaders);
 
-  let raisedError;
-  let end,
-    code,
-    headers = {};
-
-  const ctx = {
-    res: {
-      setHeader(k, v) {
-        headers[k] = v;
-      },
-      writeHead(c, h) {
-        code = c;
-        headers = h;
-      },
-      end(arg) {
-        end = arg;
-      }
-    },
-    req: {
-      headers: {}
-    },
-    throw(code) {
-      raisedError = code;
-    }
-  };
+  const ctx = new TestContext();
 
   await interceptor.receive(endpoint, (ctx, a, b, c) => {}, ctx, 1, 2, 3);
 
-  t.is(code, 200);
-  t.is(headers["Cache-Control"], "no-store, no-cache, must-revalidate");
+  t.is(ctx.code, 200);
+  t.is(ctx.headers["Cache-Control"], "no-store, no-cache, must-revalidate");
 });
