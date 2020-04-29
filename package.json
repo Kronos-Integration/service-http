@@ -7,7 +7,6 @@
   "sideEffects": false,
   "type": "module",
   "main": "src/service-http.mjs",
-  "module": "src/service-http.mjs",
   "description": "http server",
   "keywords": [
     "kronos-service",
