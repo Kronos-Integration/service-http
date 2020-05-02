@@ -6,10 +6,12 @@ import {
   StandaloneServiceProvider,
   InitializationContext
 } from "@kronos-integration/service";
-import { ServiceHTTP } from "../src/service-http.mjs";
-import { HTTPEndpoint } from "../src/http-endpoint.mjs";
-import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
-import { CTXBodyParamInterceptor } from "../src/ctx-body-param-interceptor.mjs";
+import {
+  ServiceHTTP,
+  HTTPEndpoint,
+  CTXInterceptor,
+  CTXBodyParamInterceptor
+} from "@kronos-integration/service-http";
 
 test("endpoint route basics", async t => {
   const sp = new StandaloneServiceProvider();

@@ -10,9 +10,11 @@ import {
   StandaloneServiceProvider,
   InitializationContext
 } from "@kronos-integration/service";
-import { ServiceHTTP } from "../src/service-http.mjs";
-import { HTTPEndpoint } from "../src/http-endpoint.mjs";
-import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
+import {
+  ServiceHTTP,
+  HTTPEndpoint,
+  CTXInterceptor
+} from "@kronos-integration/service-http";
 
 const here = dirname(fileURLToPath(import.meta.url));
 

@@ -7,8 +7,7 @@ import jwt from "jsonwebtoken";
 import WebSocket from "ws";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
-import { ServiceHTTP } from "../src/service-http.mjs";
-import { WSEndpoint } from "../src/ws-endpoint.mjs";
+import { ServiceHTTP, WSEndpoint } from "@kronos-integration/service-http";
 
 const here = dirname(fileURLToPath(import.meta.url));
 

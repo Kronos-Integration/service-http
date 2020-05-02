@@ -2,8 +2,7 @@ import test from "ava";
 import { TestContext } from "./helpers/context.mjs";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
-import { ServiceHTTP } from "../src/service-http.mjs";
-import { CTXInterceptor } from "../src/ctx-interceptor.mjs";
+import { ServiceHTTP, CTXInterceptor } from "@kronos-integration/service-http";
 
 test("defaults", async t => {
   const interceptor = new CTXInterceptor();

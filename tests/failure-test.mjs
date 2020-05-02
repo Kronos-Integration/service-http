@@ -1,6 +1,6 @@
 import test from "ava";
 import { StandaloneServiceProvider,InitializationContext } from "@kronos-integration/service";
-import { ServiceHTTP } from "../src/service-http.mjs";
+import { ServiceHTTP } from "@kronos-integration/service-http";
 
 test("http failures with already in use port", async t => {
   const sp = new StandaloneServiceProvider();
