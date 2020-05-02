@@ -6,9 +6,9 @@
   },
   "sideEffects": false,
   "type": "module",
-  "main": "src/service-http.mjs",
+  "main": "./src/service-http.mjs",
   "exports": {
-    ".": "src/service-http.mjs",
+    ".": "./src/service-http.mjs",
     "./": "./"
   },
   "description": "http server",
@@ -30,11 +30,11 @@
   "scripts": {
     "test": "ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme src/service-http.mjs --section=API",
-    "lint": "documentation lint src/service-http.mjs"
+    "docs": "documentation readme ./src/service-http.mjs --section=API",
+    "lint": "documentation lint ./src/service-http.mjs"
   },
   "dependencies": {
-    "@kronos-integration/service": "^8.3.25",
+    "@kronos-integration/service": "^8.3.26",
     "bufferutil": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.6",
