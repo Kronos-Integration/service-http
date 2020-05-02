@@ -8,7 +8,8 @@
   "type": "module",
   "main": "src/service-http.mjs",
   "exports": {
-    ".": "./src/service-http.mjs"
+    ".": "./src/service-http.mjs",
+    "./": "./"
   },
   "description": "http server",
   "keywords": [
