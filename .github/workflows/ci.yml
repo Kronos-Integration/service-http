@@ -1,40 +1,33 @@
 name: CI
-'on':
-  - push
+
+on: push
+
 jobs:
-  Tests:
-    runs-on: '${{ matrix.os }}'
-    strategy:
-      matrix:
-        node-version:
-          - '14'
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macOS-latest
+  build:
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '${{ matrix.node-version }}'
-      - run: npm i
-      - run: npm run cover
-  Release:
-    runs-on: '${{ matrix.os }}'
-    strategy:
-      matrix:
-        node-version:
-          - '14'
-        os:
-          - ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '${{ matrix.node-version }}'
-      - run: npm i
-      - run: npx semantic-release
-        env:
-          CI: 'true'
-          NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+    - uses: actions/checkout@v2
+
+    - name: Cache node modules
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Test
+      run: npm run cover
+
+    - name: Release
+      run: npx semantic-release
+      env:
+        CI: true
