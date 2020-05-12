@@ -1,7 +1,7 @@
 import { Interceptor } from "@kronos-integration/interceptor";
 
 /**
- * extracts params form request body
+ * Extracts params from request body
  */
 export class CTXBodyParamInterceptor extends Interceptor {
   /**

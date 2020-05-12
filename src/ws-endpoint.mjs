@@ -100,7 +100,8 @@ export class WSEndpoint extends SendEndpoint {
 
 /**
  * check sec-websocket-protocol header for presence of
- * 'access_token' and the token
+ * 'access_token' and the token.
+ * Throws if no valid token is present
  * @param {Service} service
  * @param {*} request
  */
