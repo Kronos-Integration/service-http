@@ -60,7 +60,9 @@ export function endpointRouter(httpService) {
     const ctx = {
       req,
       res,
-      is(mime) {return true;},
+      is(mime) {
+        return true;
+      },
       throw(code) {
         throw new Error(code);
       }
