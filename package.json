@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^8.1.1",
-    "@kronos-integration/service": "^8.5.0",
+    "@kronos-integration/service": "^8.5.1",
     "bufferutil": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.6",
@@ -64,8 +64,8 @@
   "homepage": "https://github.com/Kronos-Integration/service-http#readme",
   "template": {
     "inheritFrom": [
-      "arlac77/template-kronos-module",
-      "arlac77/template-github"
+      "arlac77/template-github-action",
+      "arlac77/template-kronos-module"
     ]
   }
 }
