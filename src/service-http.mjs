@@ -159,10 +159,10 @@ export class ServiceHTTP extends Service {
       return url;
     }
 
-    if(socket === undefined) {
+    if (socket === undefined) {
       return undefined;
     }
-    
+
     return Number.isInteger(socket)
       ? `${this.scheme}://${this.address}:${socket}`
       : `fd:///${socket.fd}`;
@@ -193,6 +193,8 @@ export class ServiceHTTP extends Service {
   }
 
   async _start() {
+    await super._start();
+
     try {
       const server = (this.server = this.isSecure
         ? https.createServer(this.serverOptions, endpointRouter(this))
@@ -209,7 +211,9 @@ export class ServiceHTTP extends Service {
             this.error(err);
             reject(err);
           } else {
-            this.trace(`listening on ${this.url} (${JSON.stringify(this.socket)})`);
+            this.trace(
+              `Listening on ${this.url} (${JSON.stringify(this.socket)})`
+            );
             resolve();
           }
         };
@@ -267,6 +271,7 @@ export class ServiceHTTP extends Service {
         clearInterval(openConnectionsInfoInterval);
       }
     }
+    return super._stop();
   }
 }
 
