@@ -104,7 +104,8 @@ Endpoint to link against a websocket route
 ## authenticate
 
 check sec-websocket-protocol header for presence of
-'access_token' and the token
+'access_token' and the token.
+Throws if no valid token is present
 
 ### Parameters
 
@@ -115,7 +116,7 @@ check sec-websocket-protocol header for presence of
 
 **Extends Interceptor**
 
-extracts params form request body
+Basic interceptor providing/consuming http request/response
 
 ### name
 
@@ -125,7 +126,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends Interceptor**
 
-extracts params form request body
+Extracts params from request body
 
 ### name
 
