@@ -51,9 +51,7 @@ export class HTTPEndpoint extends SendEndpoint {
 
 export function endpointRouter(httpService) {
   const routingEndpoints = compile(
-    [...Object.values(httpService.endpoints)].filter(
-      e => e instanceof HTTPEndpoint
-    )
+    Object.values(httpService.endpoints).filter(e => e instanceof HTTPEndpoint)
   );
 
   return async (req, res) => {
