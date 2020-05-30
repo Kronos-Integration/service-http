@@ -33,12 +33,12 @@
     "lint": "documentation lint ./src/service-http.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.0.0",
-    "@kronos-integration/service": "^8.5.11",
+    "@kronos-integration/endpoint": "^9.0.1",
+    "@kronos-integration/service": "^8.5.12",
     "bufferutil": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.6",
-    "multi-path-matcher": "^2.0.12",
+    "multi-path-matcher": "^2.0.14",
     "utf-8-validate": "^5.0.2",
     "ws": "^7.3.0"
   },
