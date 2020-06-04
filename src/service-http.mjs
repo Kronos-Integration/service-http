@@ -145,18 +145,20 @@ export class ServiceHTTP extends Service {
   }
 
   get url() {
-    const url = this.listen.url;
-
     const socket = this.socket;
 
-    if (url) {
-      if (Number.isInteger(this.listen.socket)) {
-        const u = new URL(url);
-        u.port = socket;
-        return u.toString().replace(/\/$/, "");
-      }
+    if(this.listen) {
+      const url = this.listen.url;
 
-      return url;
+      if (url) {
+        if (Number.isInteger(this.listen.socket)) {
+          const u = new URL(url);
+          u.port = socket;
+          return u.toString().replace(/\/$/, "");
+        }
+
+        return url;
+      }
     }
 
     if (socket === undefined) {
