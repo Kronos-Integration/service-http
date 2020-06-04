@@ -78,9 +78,9 @@ skt.title = (providedTitle = "", config, updates) => {
   delete c.key;
   delete c.cert;
 
-  return `http ${providedTitle} ${JSON.stringify(c)}${
-    Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""
-  }`.trim();
+  return `http ${providedTitle} ${
+    config === undefined ? "" : JSON.stringify(c)
+  }${Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""}`.trim();
 };
 
 test(
@@ -100,7 +100,21 @@ test(
   }
 );
 
-test(skt, {}, {});
+test(
+  skt,
+  {},
+  {
+    isSecure: false,
+    url: undefined,
+    socket: undefined
+  }
+);
+
+test(skt, undefined, {
+  isSecure: false,
+  url: undefined,
+  socket: undefined
+});
 
 test.skip(
   skt,
