@@ -12,8 +12,8 @@
   },
   "description": "http server",
   "keywords": [
-    "kronos-service",
-    "http"
+    "http",
+    "kronos-service"
   ],
   "contributors": [
     {
