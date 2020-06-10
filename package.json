@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^9.0.1",
-    "@kronos-integration/service": "^8.5.12",
+    "@kronos-integration/service": "^8.5.14",
     "bufferutil": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.6",
@@ -51,7 +51,7 @@
     "semantic-release": "^17.0.8"
   },
   "engines": {
-    "node": ">=14.3.0"
+    "node": ">=14.4.0"
   },
   "repository": {
     "type": "git",
