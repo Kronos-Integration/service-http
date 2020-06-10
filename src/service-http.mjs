@@ -1,5 +1,5 @@
-import http from "http";
-import https from "https";
+import { createServer as httpCreateServer } from "http";
+import { createServer as httpsCreateServer } from "https";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";
@@ -108,7 +108,7 @@ export class ServiceHTTP extends Service {
   }
 
   /**
-   * on demand create RouteSendEndpoint´s
+   * On demand create RouteSendEndpoint´s
    * @param {string} name
    * @param {Object|string} definition
    * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
@@ -199,8 +199,8 @@ export class ServiceHTTP extends Service {
 
     try {
       const server = (this.server = this.isSecure
-        ? https.createServer(this.serverOptions, endpointRouter(this))
-        : http.createServer(endpointRouter(this)));
+        ? httpsCreateServer(this.serverOptions, endpointRouter(this))
+        : httpCreateServer(endpointRouter(this)));
 
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
