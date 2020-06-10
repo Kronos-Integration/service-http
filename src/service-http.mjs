@@ -136,8 +136,6 @@ export class ServiceHTTP extends Service {
         cert: this.cert
       };
     }
-
-    return undefined;
   }
 
   get scheme() {
@@ -145,20 +143,22 @@ export class ServiceHTTP extends Service {
   }
 
   get url() {
+    if (this.listen === undefined) {
+      return undefined;
+    }
+
     const socket = this.socket;
 
-    if(this.listen) {
-      const url = this.listen.url;
+    const url = this.listen.url;
 
-      if (url) {
-        if (Number.isInteger(this.listen.socket)) {
-          const u = new URL(url);
-          u.port = socket;
-          return u.toString().replace(/\/$/, "");
-        }
-
-        return url;
+    if (url) {
+      if (Number.isInteger(this.listen.socket)) {
+        const u = new URL(url);
+        u.port = socket;
+        return u.toString().replace(/\/$/, "");
       }
+
+      return url;
     }
 
     if (socket === undefined) {
@@ -171,6 +171,10 @@ export class ServiceHTTP extends Service {
   }
 
   get socket() {
+    if (this.listen === undefined) {
+      return undefined;
+    }
+
     const socket = this.listen.socket;
     if (socket) {
       return socket;
@@ -183,6 +187,10 @@ export class ServiceHTTP extends Service {
   }
 
   get address() {
+    if (this.listen === undefined) {
+      return undefined;
+    }
+
     const address = this.listen.address;
     if (address) {
       return address;
