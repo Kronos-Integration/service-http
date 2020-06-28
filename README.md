@@ -58,7 +58,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### endpointFactoryFromConfig
 
-on demand create RouteSendEndpoint´s
+On demand create RouteSendEndpoint´s
 
 #### Parameters
 
