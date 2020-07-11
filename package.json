@@ -13,7 +13,9 @@
   "description": "http server",
   "keywords": [
     "http",
-    "kronos-service"
+    "kronos-service",
+    "websocket",
+    "jwt"
   ],
   "contributors": [
     {
@@ -33,14 +35,14 @@
     "lint": "documentation lint ./src/service-http.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.0.1",
-    "@kronos-integration/service": "^8.5.14",
+    "@kronos-integration/endpoint": "^9.0.3",
+    "@kronos-integration/service": "^8.5.15",
     "bufferutil": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.6",
-    "multi-path-matcher": "^2.0.14",
+    "multi-path-matcher": "^2.0.15",
     "utf-8-validate": "^5.0.2",
-    "ws": "^7.3.0"
+    "ws": "^7.3.1"
   },
   "devDependencies": {
     "ava": "^3.10.1",
@@ -51,7 +53,7 @@
     "semantic-release": "^17.1.1"
   },
   "engines": {
-    "node": ">=14.4.0"
+    "node": ">=14.5.0"
   },
   "repository": {
     "type": "git",
