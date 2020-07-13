@@ -13,9 +13,9 @@
   "description": "http server",
   "keywords": [
     "http",
+    "jwt",
     "kronos-service",
-    "websocket",
-    "jwt"
+    "websocket"
   ],
   "contributors": [
     {
