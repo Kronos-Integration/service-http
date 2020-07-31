@@ -16,7 +16,6 @@ import {
 test("endpoint route basics", async t => {
   const sp = new StandaloneServiceProvider();
   const ic = new InitializationContext(sp);
-
   const ks = new ServiceHTTP(
     {
       listen: {
