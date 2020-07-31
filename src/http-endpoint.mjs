@@ -74,7 +74,8 @@ export function endpointRouter(httpService) {
 
       if (m && route.method === method) {
         try {
-          await route.send(ctx, m.groups);
+          const params = Object.fromEntries(route.keys.map((k, i) => [k, m[i + 1]]))
+          await route.send(ctx, params);
         } catch (e) {
           httpService.error({
             method,

@@ -26,10 +26,12 @@ test("endpoint route basics", async t => {
   );
 
   const r1 = new ReceiveEndpoint("r1", sp);
-  r1.receive = async () => "OK R1";
+  r1.receive = async params => {
+    return `OK R1 ${params.key}`;
+  };
 
   const s1 = ks.addEndpoint(
-    new HTTPEndpoint("/s1", ks, {
+    new HTTPEndpoint("/s1/:key", ks, {
       interceptors: [CTXInterceptor],
       connected: r1
     })
@@ -53,8 +55,8 @@ test("endpoint route basics", async t => {
 
   await ks.start();
 
-  let response = await got("http://localhost:1240/s1");
-  t.is(response.body, "OK R1");
+  let response = await got("http://localhost:1240/s1/abc");
+  t.is(response.body, "OK R1 abc");
   t.is(response.statusCode, 200);
 
   response = await got("http://localhost:1240/s2", {
