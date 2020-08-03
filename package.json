@@ -45,8 +45,8 @@
     "ws": "^7.3.1"
   },
   "devDependencies": {
-    "ava": "^3.11.0",
-    "c8": "^7.2.1",
+    "ava": "^3.11.1",
+    "c8": "^7.3.0",
     "documentation": "^13.0.2",
     "got": "^11.3.0",
     "network-address": "^1.1.2",
