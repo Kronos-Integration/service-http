@@ -6,6 +6,7 @@ import { readFileSync } from "fs";
 import jwt from "jsonwebtoken";
 import WebSocket from "ws";
 import { SendEndpoint } from "@kronos-integration/endpoint";
+import { Interceptor } from "@kronos-integration/interceptor";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceHTTP, WSEndpoint } from "@kronos-integration/service-http";
 
@@ -18,6 +19,12 @@ const token = jwt.sign({}, readFileSync(join(here, "fixtures", "demo.rsa")), {
 
 async function wait(msecs = 1000) {
   return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
+}
+
+export class WSTestInterceptor extends Interceptor {
+  async receive(endpoint, next, arg) {
+    return next("<" + arg + ">");
+  }
 }
 
 function client(name) {
@@ -73,7 +80,11 @@ test("ws send", async t => {
       public: readFileSync(join(here, "fixtures", "demo.rsa.pub"))
     },
     endpoints: {
-      "/w1": { connected: r1, ws: true }
+      "/w1": {
+        connected: r1,
+        ws: true,
+        receivingInterceptors: [new WSTestInterceptor()]
+      }
     }
   });
 
@@ -96,8 +107,8 @@ test("ws send", async t => {
   for (const c of clients) {
     t.is(c.opened, 1, "opened");
     t.is(c.messages[0], `form ${c.name} OK R1`, "server message 0");
-    t.is(c.messages[1], "OK R1", "server message 1");
-    t.is(c.messages[2], "OK R1", "server message 2");
+    t.is(c.messages[1], "<OK R1>", "server message 1");
+    t.is(c.messages[2], "<OK R1>", "server message 2");
   }
 
   await http.stop();

@@ -5,7 +5,7 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
 import bufferutil from "bufferutil";
 import utf8Validate from "utf-8-validate";
 
-import { verifyJWT } from './util.mjs';
+import { verifyJWT } from "./util.mjs";
 
 /**
  * Endpoint to link against a websocket route
@@ -13,7 +13,7 @@ import { verifyJWT } from './util.mjs';
  * @param {Object} owner owner of the endpoint
  * @param {Object} options
  * @param {string} options.path url path defaults to endpoint name
- * 
+ *
  * @property {Set<WebSocket>} sockets
  */
 export class WSEndpoint extends SendEndpoint {
@@ -27,6 +27,9 @@ export class WSEndpoint extends SendEndpoint {
         value: options.path
       });
     }
+
+    // todo move into base impl
+    this.receivingInterceptors = options.receivingInterceptors || [];
   }
 
   closeSockets() {
@@ -72,9 +75,21 @@ export class WSEndpoint extends SendEndpoint {
 
   async receive(arg) {
     this.owner.trace(`${this}: send ${arg}`);
-    for (const socket of this.sockets) {
-      socket.send(arg);
-    }
+
+    const interceptors = this.receivingInterceptors;
+    let c = 0;
+
+    const next = async arg => {
+      if (c >= interceptors.length) {
+        for (const socket of this.sockets) {
+          socket.send(arg);
+        }
+      } else {
+        return interceptors[c++].receive(this, next, arg);
+      }
+    };
+
+    return next(arg);
   }
 
   get isIn() {
@@ -108,18 +123,18 @@ export class WSEndpoint extends SendEndpoint {
 async function authenticate(service, request) {
   const protocol = request.headers["sec-websocket-protocol"];
 
-  if(protocol) {
+  if (protocol) {
     const protocols = protocol.split(/\s*,\s*/);
 
-    const ia = protocols.indexOf('access_token');
-    if(ia >= 0) {
+    const ia = protocols.indexOf("access_token");
+    if (ia >= 0) {
       const token = protocols[ia + 1];
       await verifyJWT(token, service.jwt.public);
       return;
     }
   }
 
-  throw new Error('Invalid access_token in sec-websocket-protocol');
+  throw new Error("Invalid access_token in sec-websocket-protocol");
 }
 
 export function initializeWS(service) {
@@ -146,8 +161,7 @@ export function initializeWS(service) {
   server.on("upgrade", async (request, socket, head) => {
     try {
       await authenticate(service, request);
-    }
-    catch(err) {
+    } catch (err) {
       service.error(err);
       socket.destroy();
     }
