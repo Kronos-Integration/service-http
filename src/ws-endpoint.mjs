@@ -9,7 +9,7 @@ import { verifyJWT } from './util.mjs';
 
 /**
  * Endpoint to link against a websocket route
- * @param {string} name endpoint name
+ * @param {string} name endpoint name
  * @param {Object} owner owner of the endpoint
  * @param {Object} options
  * @param {string} options.path url path defaults to endpoint name
