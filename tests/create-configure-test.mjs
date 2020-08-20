@@ -65,7 +65,9 @@ async function skt(t, config, ...args) {
   await ks.start();
   t.is(ks.state, "running");
 
-  const response = await got(ks.url, { ca: config.cert });
+  const response = await got(ks.url, {
+    https: { certificateAuthority: config.cert }
+  });
   t.is(response.body, "OK");
   t.is(response.statusCode, 200);
 
