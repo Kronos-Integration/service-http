@@ -17,9 +17,7 @@ const token = jwt.sign({}, readFileSync(join(here, "fixtures", "demo.rsa")), {
 });
 
 async function wait(msecs = 1000) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), msecs);
-  });
+  return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
 }
 
 function client(name) {
