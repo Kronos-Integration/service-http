@@ -27,9 +27,6 @@ export class WSEndpoint extends SendEndpoint {
         value: options.path
       });
     }
-
-    // todo move into base impl
-    this.receivingInterceptors = options.receivingInterceptors || [];
   }
 
   closeSockets() {
