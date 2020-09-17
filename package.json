@@ -50,7 +50,7 @@
     "documentation": "^13.0.2",
     "got": "^11.3.0",
     "network-address": "^1.1.2",
-    "semantic-release": "^17.1.1"
+    "semantic-release": "^17.1.2"
   },
   "engines": {
     "node": ">=14.11.0"
