@@ -6,7 +6,7 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
  */
 export class HTTPEndpoint extends SendEndpoint {
   /**
-   * @param {string} name endpoint name
+   * @param {string} name endpoint name
    * @param {Object} owner owner of the endpoint
    * @param {Object} options
    * @param {string} options.path url path defaults to endpoint name

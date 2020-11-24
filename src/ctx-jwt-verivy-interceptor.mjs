@@ -2,7 +2,7 @@ import { verifyJWT } from "./util.mjs";
 import { Interceptor } from "@kronos-integration/interceptor";
 
 /**
- * only forward requests if a valid JWT token is present
+ * Only forward requests if a valid JWT token is present.
  */
 export class CTXJWTVerifyInterceptor extends Interceptor {
   /**

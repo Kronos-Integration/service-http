@@ -2,7 +2,7 @@ import { mergeAttributes, createAttributes } from "model-attributes";
 import { Interceptor } from "@kronos-integration/interceptor";
 
 /**
- * Basic interceptor providing/consuming http request/response
+ * Basic interceptor providing/consuming http request/response.
  */
 export class CTXInterceptor extends Interceptor {
   /**
