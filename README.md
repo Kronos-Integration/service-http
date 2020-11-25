@@ -112,7 +112,7 @@ Throws if no valid token is present
 
 **Extends Interceptor**
 
-Basic interceptor providing/consuming http request/response
+Basic interceptor providing/consuming http request/response.
 
 ### name
 
@@ -120,7 +120,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## CTXBodyParamInterceptor
 
-**Extends Interceptor**
+**Extends CTXInterceptor**
 
 Extracts params from request body
 
@@ -132,7 +132,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends Interceptor**
 
-only forward requests if a valid JWT token is present
+Only forward requests if a valid JWT token is present.
 
 ### name
 
