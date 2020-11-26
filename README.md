@@ -122,7 +122,10 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends CTXInterceptor**
 
-Extracts params from request body
+Extracts params from request body.
+Supported content types are:
+
+-   application/json
 
 ### name
 
