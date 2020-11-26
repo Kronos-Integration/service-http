@@ -55,9 +55,10 @@ test("CTXBodyParamInterceptor application/json", async t => {
   t.is(ctx.code, 200);
 });
 
-
 function encode(params) {
- return Object.entries(params).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
+  return Object.entries(params)
+    .map(([k, v]) => encodeURIComponent(k) + "=" + encodeURIComponent(v))
+    .join("&");
 }
 
 test("CTXBodyParamInterceptor application/x-www-form-urlencoded", async t => {

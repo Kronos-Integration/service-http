@@ -21,7 +21,7 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
         chunks.push(chunk);
       }
       
-      const params = Object.fromEntries(chunks.join("").split(/&/).map(p => p.split(/=/)));
+      const params = Object.fromEntries(chunks.join("").split(/&/).map(p => p.split(/=/).map(x => decodeURIComponent(x))));
 
       ctx.res.writeHead(200, {
         ...this.headers,
