@@ -54,3 +54,37 @@ test("CTXBodyParamInterceptor application/json", async t => {
 
   t.is(ctx.code, 200);
 });
+
+
+function encode(params) {
+ return Object.entries(params).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
+}
+
+test("CTXBodyParamInterceptor application/x-www-form-urlencoded", async t => {
+  const sp = new StandaloneServiceProvider();
+  const http = await sp.declareService({
+    type: ServiceHTTP
+  });
+  const endpoint = new SendEndpoint("e", http);
+  const interceptor = new CTXBodyParamInterceptor();
+
+  const deliverdContent = { a: "1" };
+  const ctx = new TestContext({
+    body: encode(deliverdContent),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+
+  await interceptor.receive(
+    endpoint,
+    (content, params) => {
+      t.deepEqual(content, deliverdContent);
+      t.deepEqual(params, { k: "v" });
+    },
+    ctx,
+    { k: "v" }
+  );
+
+  t.is(ctx.code, 200);
+});
