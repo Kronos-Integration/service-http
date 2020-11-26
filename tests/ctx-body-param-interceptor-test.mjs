@@ -7,24 +7,50 @@ import {
   CTXBodyParamInterceptor
 } from "@kronos-integration/service-http";
 
+test("CTXBodyParamInterceptor text/html", async t => {
+  const sp = new StandaloneServiceProvider();
+  const http = await sp.declareService({
+    type: ServiceHTTP
+  });
+  const endpoint = new SendEndpoint("e", http);
+  const interceptor = new CTXBodyParamInterceptor();
+
+  const ctx = new TestContext({
+    headers: {
+      "Content-Type": "text/html"
+    }
+  });
+
+  await interceptor.receive(endpoint, () => {}, ctx);
+
+  t.is(ctx.code, 415);
+});
+
 test("CTXBodyParamInterceptor application/json", async t => {
   const sp = new StandaloneServiceProvider();
   const http = await sp.declareService({
     type: ServiceHTTP
   });
   const endpoint = new SendEndpoint("e", http);
-
   const interceptor = new CTXBodyParamInterceptor();
 
+  const deliverdContent = { a: 1 };
   const ctx = new TestContext({
-    body: "{}",
+    body: JSON.stringify(deliverdContent),
     headers: {
       "Content-Type": "application/json"
     }
   });
 
-  await interceptor.receive(endpoint, (ctx, a, b, c) => {}, ctx, 1, 2, 3);
+  await interceptor.receive(
+    endpoint,
+    (content, params) => {
+      t.deepEqual(content, deliverdContent);
+      t.deepEqual(params, { k: "v" });
+    },
+    ctx,
+    { k: "v" }
+  );
 
   t.is(ctx.code, 200);
-  // t.is(ctx.headers["Cache-Control"], "no-store, no-cache, must-revalidate");
 });

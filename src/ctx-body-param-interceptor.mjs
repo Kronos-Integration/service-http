@@ -13,7 +13,7 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
     return "ctx-body-param";
   }
 
-  async receive(endpoint, next, ctx, params) {
+  async receive(endpoint, next, ctx, ...args) {
     if (ctx.is("application/json")) {
       const chunks = [];
       for await (const chunk of ctx.req) {
@@ -21,8 +21,11 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
       }
       ctx.res.writeHead(200, {
         ...this.headers,
-        "Content-Type": "application/json" });
-      ctx.res.end(JSON.stringify(await next(JSON.parse(chunks.join("")))));
+        "Content-Type": "application/json"
+      });
+      ctx.res.end(
+        JSON.stringify(await next(JSON.parse(chunks.join("")), ...args))
+      );
     } else {
       ctx.throw(415, "no json");
     }

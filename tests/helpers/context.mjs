@@ -6,8 +6,8 @@ export class TestContext {
       setHeader: (k, v) => {
         this.headers[k] = v;
       },
-      writeHead: (c, h) => {
-        this.code = c;
+      writeHead: (code, h) => {
+        this.code = code;
         this.headers = lowercaseKeys(h);
       },
       end: arg => {
@@ -19,7 +19,6 @@ export class TestContext {
       headers: { ...lowercaseKeys(options.headers) },
       async *[Symbol.asyncIterator]() {
         yield *options.body;
-       // yield "{}";
       }
     };
   }
@@ -30,6 +29,7 @@ export class TestContext {
 
   throw(code) {
     this.raisedError = code;
+    this.code = code;
   }
 }
 
