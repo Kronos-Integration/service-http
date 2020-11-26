@@ -1,8 +1,5 @@
 import test from "ava";
 import { TestContext } from "./helpers/context.mjs";
-
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 import jwt from "jsonwebtoken";
 
@@ -13,8 +10,9 @@ import {
   CTXJWTVerifyInterceptor
 } from "@kronos-integration/service-http";
 
-const here = dirname(fileURLToPath(import.meta.url));
-const pubKey = readFileSync(join(here, "fixtures", "demo.rsa.pub"));
+const pubKey = readFileSync(
+  new URL("fixtures/demo.rsa.pub", import.meta.url).pathname
+);
 
 test("jwt malformed", async t => {
   const sp = new StandaloneServiceProvider();
@@ -72,7 +70,7 @@ test("jwt verify none alg as not supported", async t => {
 
   const token = jwt.sign(
     {},
-    "" /*readFileSync(join(here, "fixtures", "demo.rsa"))*/,
+    "",
     {
       algorithm: "none",
       expiresIn: "12h"
@@ -112,10 +110,14 @@ test("jwt verify ok", async t => {
   const endpoint = new SendEndpoint("e", http);
   const interceptor = new CTXJWTVerifyInterceptor();
 
-  const token = jwt.sign({}, readFileSync(join(here, "fixtures", "demo.rsa")), {
-    algorithm: "RS256",
-    expiresIn: "12h"
-  });
+  const token = jwt.sign(
+    {},
+    readFileSync(new URL("fixtures/demo.rsa", import.meta.url).pathname),
+    {
+      algorithm: "RS256",
+      expiresIn: "12h"
+    }
+  );
 
   const ctx = new TestContext({
     headers: { authorization: `Bearer ${token}` }

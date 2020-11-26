@@ -1,6 +1,4 @@
 import test from "ava";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
 import jwt from "jsonwebtoken";
@@ -10,12 +8,14 @@ import { Interceptor } from "@kronos-integration/interceptor";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import { ServiceHTTP, WSEndpoint } from "@kronos-integration/service-http";
 
-const here = dirname(fileURLToPath(import.meta.url));
-
-const token = jwt.sign({}, readFileSync(join(here, "fixtures", "demo.rsa")), {
-  algorithm: "RS256",
-  expiresIn: "12h"
-});
+const token = jwt.sign(
+  {},
+  readFileSync(new URL("fixtures/demo.rsa", import.meta.url).pathname),
+  {
+    algorithm: "RS256",
+    expiresIn: "12h"
+  }
+);
 
 async function wait(msecs = 1000) {
   return new Promise((resolve, reject) => setTimeout(() => resolve(), msecs));
@@ -77,7 +77,9 @@ test("ws send", async t => {
       socket: 1250
     },
     jwt: {
-      public: readFileSync(join(here, "fixtures", "demo.rsa.pub"))
+      public: readFileSync(
+        new URL("fixtures/demo.rsa.pub", import.meta.url).pathname
+      )
     },
     endpoints: {
       "/w1": {
