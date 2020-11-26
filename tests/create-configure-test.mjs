@@ -1,8 +1,6 @@
 import test from "ava";
 import address from "network-address";
 import got from "got";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
 import { ReceiveEndpoint } from "@kronos-integration/endpoint";
@@ -15,8 +13,6 @@ import {
   HTTPEndpoint,
   CTXInterceptor
 } from "@kronos-integration/service-http";
-
-const here = dirname(fileURLToPath(import.meta.url));
 
 async function skt(t, config, ...args) {
   let expected = args.pop() || {};
@@ -178,10 +174,10 @@ test(
   skt,
   {
     key: readFileSync(
-      join(here, "..", "tests", "fixtures", "www.example.com.key")
+      new URL("fixtures/www.example.com.key",import.meta.url).pathname
     ),
     cert: readFileSync(
-      join(here, "..", "tests", "fixtures", "www.example.com.cert")
+      new URL("fixtures/www.example.com.cert",import.meta.url).pathname
     ),
     listen: {
       address: "localhost",
