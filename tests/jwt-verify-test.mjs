@@ -32,7 +32,7 @@ test("jwt malformed", async t => {
   await interceptor.receive(endpoint, (ctx, a, b, c) => {}, ctx, 1, 2, 3);
 
   t.is(ctx.code, 401);
-  t.regex(ctx.headers["WWW-Authenticate"], /Bearer,error/);
+  t.regex(ctx.headers["www-authenticate"], /Bearer,error/);
   t.is(ctx.end, "error: jwt malformed");
 
   //t.is(raisedError, 401);
@@ -57,7 +57,7 @@ test("jwt not configured", async t => {
   await interceptor.receive(endpoint, (ctx, a, b, c) => {}, ctx, 1, 2, 3);
 
   t.is(ctx.code, 401);
-  t.regex(ctx.headers["WWW-Authenticate"], /Bearer,error/);
+  t.regex(ctx.headers["www-authenticate"], /Bearer,error/);
   t.is(ctx.end, "error: secret or public key must be provided");
 });
 
@@ -99,7 +99,7 @@ test("jwt verify none alg as not supported", async t => {
   t.false(next);
 
   t.is(ctx.code, 401);
-  t.regex(ctx.headers["WWW-Authenticate"], /Bearer,error/);
+  t.regex(ctx.headers["www-authenticate"], /Bearer,error/);
   t.is(ctx.end, "error: jwt signature is required");
 });
 

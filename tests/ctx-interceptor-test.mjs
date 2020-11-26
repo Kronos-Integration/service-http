@@ -31,5 +31,5 @@ test("default headers", async t => {
   await interceptor.receive(endpoint, (ctx, a, b, c) => {}, ctx, 1, 2, 3);
 
   t.is(ctx.code, 200);
-  t.is(ctx.headers["Cache-Control"], "no-store, no-cache, must-revalidate");
+  t.is(ctx.headers["cache-control"], "no-store, no-cache, must-revalidate");
 });

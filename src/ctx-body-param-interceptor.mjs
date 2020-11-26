@@ -1,7 +1,9 @@
 import { Interceptor } from "@kronos-integration/interceptor";
 
 /**
- * Extracts params from request body
+ * Extracts params from request body.
+ * Supported content types are:
+ * - application/json
  */
 export class CTXBodyParamInterceptor extends Interceptor {
   /**
