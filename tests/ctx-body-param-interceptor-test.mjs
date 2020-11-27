@@ -55,12 +55,6 @@ test("CTXBodyParamInterceptor application/json", async t => {
   t.is(ctx.code, 200);
 });
 
-function encode(params) {
-  return Object.entries(params)
-    .map(([k, v]) => encodeURIComponent(k) + "=" + encodeURIComponent(v))
-    .join("&");
-}
-
 test("CTXBodyParamInterceptor application/x-www-form-urlencoded", async t => {
   const sp = new StandaloneServiceProvider();
   const http = await sp.declareService({
@@ -71,7 +65,7 @@ test("CTXBodyParamInterceptor application/x-www-form-urlencoded", async t => {
 
   const deliverdContent = { a: "1" };
   const ctx = new TestContext({
-    body: encode(deliverdContent),
+    body: new URLSearchParams(deliverdContent).toString(),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     }
