@@ -70,6 +70,17 @@ test("endpoint route basics", async t => {
   });
   t.is(response.statusCode, 200);
 
+  response = await got("http://localhost:1240/s2", {
+    form: { prop1: "value1", prop2: 2 },
+    method: "POST"
+  });
+  t.deepEqual(JSON.parse(response.body), {
+    prop1: "value1",
+    prop2: "2",
+    message: "OK R2"
+  });
+  t.is(response.statusCode, 200);
+
   await ks.stop();
 });
 
