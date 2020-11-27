@@ -125,6 +125,7 @@ Extracts params from request body.
 Supported content types are:
 
 -   application/json
+-   application/x-www-form-urlencoded
 
 ### name
 
