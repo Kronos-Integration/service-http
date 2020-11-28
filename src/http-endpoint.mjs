@@ -58,7 +58,7 @@ export function endpointRouter(httpService) {
     const ctx = {
       req,
       res,
-      is: (mime) => req.headers['content-type'] === mime,
+      is: mime => req.headers["content-type"] === mime,
       throw(code) {
         throw new Error(code);
       }
@@ -72,7 +72,9 @@ export function endpointRouter(httpService) {
 
       if (m && route.method === method) {
         try {
-          const params = Object.fromEntries(route.keys.map((k, i) => [k, m[i + 1]]))
+          const params = Object.fromEntries(
+            route.keys.map((k, i) => [k, m[i + 1]])
+          );
           await route.send(ctx, params);
         } catch (e) {
           httpService.error({
