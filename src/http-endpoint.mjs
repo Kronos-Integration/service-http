@@ -8,7 +8,7 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
  * @param {Object} owner owner of the endpoint
  * @param {Object} options
  * @param {string} options.path url path defaults to endpoint name
- * @param {string} options.method http methos defaults to GET
+ * @param {string} options.method http method defaults to GET
  */
 export class HTTPEndpoint extends SendEndpoint {
   constructor(name, owner, options = {}) {
@@ -82,7 +82,7 @@ export function endpointRouter(httpService) {
             error: e
           });
 
-          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.writeHead(500, { "content-type": "text/plain" });
           res.end(e.message);
         }
 
@@ -90,7 +90,7 @@ export function endpointRouter(httpService) {
       }
     }
 
-    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.writeHead(404, { "content-type": "text/plain" });
     res.end();
   };
 }
