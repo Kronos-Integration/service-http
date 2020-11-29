@@ -50,6 +50,9 @@ test("endpoint route basics", async t => {
   t.truthy(s2.hasInterceptors);
 
   r2.receive = async body => {
+    if (body.error) {
+      throw "this is an error";
+    }
     return { ...body, message: "OK R2" };
   };
 
@@ -80,6 +83,15 @@ test("endpoint route basics", async t => {
     message: "OK R2"
   });
   t.is(response.statusCode, 200);
+
+  try {
+    response = await got("http://localhost:1240/s2", {
+      form: { error: true },
+      method: "POST"
+    });
+  } catch (e) {
+    t.is(e.message, "Response code 500 (Internal Server Error)");
+  }
 
   await ks.stop();
 });
