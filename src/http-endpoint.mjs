@@ -54,12 +54,15 @@ export function endpointRouter(httpService) {
   );
 
   return async (req, res) => {
+    let statusCode = 500;
+
     const ctx = {
       req,
       res,
       is: mime => req.headers["content-type"] === mime,
-      throw(code) {
-        throw new Error(code);
+      throw(code, message) {
+        statusCode = code;
+        throw new Error(message);
       }
     };
 
@@ -82,7 +85,7 @@ export function endpointRouter(httpService) {
             error: e
           });
 
-          res.writeHead(500, { "content-type": "text/plain" });
+          res.writeHead(statusCode, { "content-type": "text/plain" });
           res.end(e.message);
         }
 
