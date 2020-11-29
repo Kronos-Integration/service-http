@@ -2,16 +2,15 @@ import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
 /**
- * Endpoint to link against a http route
+ * Endpoint to link against a http route.
+ *
+ * @param {string} name endpoint name
+ * @param {Object} owner owner of the endpoint
+ * @param {Object} options
+ * @param {string} options.path url path defaults to endpoint name
+ * @param {string} options.method http methos defaults to GET
  */
 export class HTTPEndpoint extends SendEndpoint {
-  /**
-   * @param {string} name endpoint name
-   * @param {Object} owner owner of the endpoint
-   * @param {Object} options
-   * @param {string} options.path url path defaults to endpoint name
-   * @param {string} options.method http methos defaults to GET
-   */
   constructor(name, owner, options = {}) {
     super(name, owner, options);
 
