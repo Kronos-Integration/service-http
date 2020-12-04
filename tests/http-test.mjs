@@ -111,7 +111,8 @@ test("endpoint factory", async t => {
       "/s1": { connected: r1, interceptors: [CTXInterceptor] },
       "/s2": { method: "post" },
       "/s3": { method: "PATCH" },
-      "/s4": { path: "/somwhere" }
+      "/s4": { path: "/somwhere" },
+      "/s4b": { path: "/somwhere" }
     }
   });
 
@@ -123,6 +124,10 @@ test("endpoint factory", async t => {
   t.is(http.endpoints["/s2"].method, "POST");
   t.is(http.endpoints["/s3"].method, "PATCH");
   t.is(http.endpoints["/s4"].path, "/somwhere");
+  t.is(http.endpoints["/s4b"].path, "/somwhere");
+
+  //t.is(http.endpoints["DELETE:/resource"].path, "/resource");
+  //t.is(http.endpoints["DELETE:/resource"].method, "DELETE");
 
   await http.start();
 
