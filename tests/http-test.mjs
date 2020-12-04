@@ -112,7 +112,10 @@ test("endpoint factory", async t => {
       "/s2": { method: "post" },
       "/s3": { method: "PATCH" },
       "/s4": { path: "/somwhere" },
-      "/s4b": { path: "/somwhere" }
+      "/s4b": { path: "/somwhere" },
+      "DELETE:/resource": { },
+      "/resource": {},
+      "PUT:/resource": { }
     }
   });
 
@@ -126,8 +129,14 @@ test("endpoint factory", async t => {
   t.is(http.endpoints["/s4"].path, "/somwhere");
   t.is(http.endpoints["/s4b"].path, "/somwhere");
 
-  //t.is(http.endpoints["DELETE:/resource"].path, "/resource");
-  //t.is(http.endpoints["DELETE:/resource"].method, "DELETE");
+  t.is(http.endpoints["/resource"].path, "/resource");
+  t.is(http.endpoints["/resource"].method, "GET");
+
+  t.is(http.endpoints["DELETE:/resource"].path, "/resource");
+  t.is(http.endpoints["DELETE:/resource"].method, "DELETE");
+
+  t.is(http.endpoints["PUT:/resource"].path, "/resource");
+  t.is(http.endpoints["PUT:/resource"].method, "PUT");
 
   await http.start();
 

@@ -122,7 +122,7 @@ export class ServiceHTTP extends Service {
       return WSEndpoint;
     }
 
-    if (definition.method || definition.path || name[0] === "/") {
+    if (definition.method || definition.path || name[0] === "/" || name.match(/^\w+:\//)) {
       return HTTPEndpoint;
     }
 

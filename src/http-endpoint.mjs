@@ -13,15 +13,19 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
 export class HTTPEndpoint extends SendEndpoint {
   constructor(name, owner, options = {}) {
     super(name, owner, options);
+    
+    const m = name.match(/^(?<method>\w+):(?<path>.*)/);
 
-    if (options.path !== undefined) {
+    let { method, path } = m ? m.groups : options;
+
+    if (path !== undefined) {
       Object.defineProperty(this, "path", {
-        value: options.path
+        value: path
       });
     }
 
-    if (options.method !== undefined) {
-      const method = options.method.toUpperCase();
+    if (method !== undefined) {
+      method = method.toUpperCase();
 
       if (method !== "GET") {
         Object.defineProperty(this, "method", {
