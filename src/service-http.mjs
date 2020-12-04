@@ -22,6 +22,10 @@ export class ServiceHTTP extends Service {
     return "http";
   }
 
+  static get description() {
+    return "http server";
+  }
+
   static get configurationAttributes() {
     return mergeAttributes(
       Service.configurationAttributes,
@@ -108,7 +112,7 @@ export class ServiceHTTP extends Service {
   }
 
   /**
-   * On demand create RouteSendEndpoint´s
+   * On demand create RouteSendEndpoint´s.
    * @param {string} name
    * @param {Object|string} definition
    * @return {Class} RouteSendEndpoint if path is present of name starts with '/'
