@@ -23,11 +23,16 @@ koa backed http server
     -   [name](#name)
 -   [HTTPEndpoint](#httpendpoint)
     -   [Parameters](#parameters-1)
--   [WSEndpoint](#wsendpoint)
-    -   [Parameters](#parameters-2)
     -   [Properties](#properties-1)
--   [authenticate](#authenticate)
+-   [HTTPEndpoint](#httpendpoint-1)
+    -   [Parameters](#parameters-2)
+-   [endpointRouter](#endpointrouter)
     -   [Parameters](#parameters-3)
+-   [WSEndpoint](#wsendpoint)
+    -   [Parameters](#parameters-4)
+    -   [Properties](#properties-2)
+-   [authenticate](#authenticate)
+    -   [Parameters](#parameters-5)
 -   [CTXInterceptor](#ctxinterceptor)
     -   [name](#name-1)
 -   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
@@ -35,7 +40,7 @@ koa backed http server
 -   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
     -   [name](#name-3)
 -   [reportError](#reporterror)
-    -   [Parameters](#parameters-4)
+    -   [Parameters](#parameters-6)
 
 ## ServiceHTTP
 
@@ -71,6 +76,21 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends SendEndpoint**
 
+### Parameters
+
+-   `name`  
+-   `owner`  
+-   `options`   (optional, default `{}`)
+
+### Properties
+
+-   `res` **http.ServerResponse** 
+-   `req` **http.ServerRequest** 
+
+## HTTPEndpoint
+
+**Extends SendEndpoint**
+
 Endpoint to link against a http route.
 
 ### Parameters
@@ -81,11 +101,19 @@ Endpoint to link against a http route.
     -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path defaults to endpoint name
     -   `options.method` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** http method defaults to GET
 
+## endpointRouter
+
+### Parameters
+
+-   `httpService` **HTTPServer** 
+
+Returns **RequestListener** 
+
 ## WSEndpoint
 
 **Extends SendEndpoint**
 
-Endpoint to link against a websocket route
+Endpoint to link against a websocket route.
 
 ### Parameters
 
@@ -100,9 +128,9 @@ Endpoint to link against a websocket route
 
 ## authenticate
 
-check sec-websocket-protocol header for presence of
+Check sec-websocket-protocol header for presence of
 'access_token' and the token.
-Throws if no valid token is present
+Throws if no valid token is present.
 
 ### Parameters
 
@@ -145,13 +173,14 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## reportError
 
-Write WWW-Authenticate header
+Write WWW-Authenticate header.
 
 ### Parameters
 
 -   `ctx` **any** 
+-   `code`  
 -   `error` **any** 
--   `description` **any** 
+-   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 # install
 
