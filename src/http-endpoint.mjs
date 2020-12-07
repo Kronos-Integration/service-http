@@ -2,6 +2,12 @@ import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
 /**
+ * @typedef CTX {Object}
+ * @property {http.ServerResponse} res
+ * @property {http.ServerRequest} req
+ */
+
+/**
  * Endpoint to link against a http route.
  *
  * @param {string} name endpoint name
@@ -52,6 +58,11 @@ export class HTTPEndpoint extends SendEndpoint {
   }
 }
 
+/**
+ * 
+ * @param {HTTPServer} httpService
+ * @return {RequestListener}
+ */
 export function endpointRouter(httpService) {
   const routingEndpoints = compile(
     Object.values(httpService.endpoints).filter(e => e instanceof HTTPEndpoint)

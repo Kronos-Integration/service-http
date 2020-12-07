@@ -45,11 +45,11 @@ function tokenFromAuthorizationHeader(headers) {
 }
 
 /**
- * Write WWW-Authenticate header
+ * Write WWW-Authenticate header.
  *
  * @param {*} ctx
  * @param {*} error
- * @param {*} description
+ * @param {string} description
  */
 function reportError(ctx, error, description) {
 
