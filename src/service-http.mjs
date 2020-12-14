@@ -122,7 +122,12 @@ export class ServiceHTTP extends Service {
       return WSEndpoint;
     }
 
-    if (definition.method || definition.path || name[0] === "/" || name.match(/^\w+:\//)) {
+    if (
+      definition.method ||
+      definition.path ||
+      name[0] === "/" ||
+      name.match(/^\w+:\//)
+    ) {
       return HTTPEndpoint;
     }
 
@@ -175,34 +180,34 @@ export class ServiceHTTP extends Service {
   }
 
   get socket() {
-    if (this.listen === undefined) {
-      return undefined;
-    }
+    const listen = this.listen;
 
-    const socket = this.listen.socket;
-    if (socket) {
-      return socket;
-    }
-    const url = this.listen.url;
-    if (url) {
-      const u = new URL(url);
-      return Number(u.port);
+    if (listen) {
+      const socket = listen.socket;
+      if (socket) {
+        return socket;
+      }
+      const url = listen.url;
+      if (url) {
+        const u = new URL(url);
+        return Number(u.port);
+      }
     }
   }
 
   get address() {
-    if (this.listen === undefined) {
-      return undefined;
-    }
+    const listen = this.listen;
 
-    const address = this.listen.address;
-    if (address) {
-      return address;
-    }
-    const url = this.listen.url;
-    if (url) {
-      const u = new URL(url);
-      return u.hostname;
+    if (listen) {
+      const address = listen.address;
+      if (address) {
+        return address;
+      }
+      const url = listen.url;
+      if (url) {
+        const u = new URL(url);
+        return u.hostname;
+      }
     }
   }
 
