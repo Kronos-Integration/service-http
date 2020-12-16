@@ -69,7 +69,7 @@ export function endpointRouter(httpService) {
   );
 
   return async (req, res) => {
-    let statusCode = 500;
+    let statusCode;
 
     const ctx = {
       req,
@@ -100,7 +100,7 @@ export function endpointRouter(httpService) {
             error: e
           });
 
-          res.writeHead(statusCode, { "content-type": "text/plain" });
+          res.writeHead(statusCode || 500, TEXT_PLAIN);
           res.end(e.message);
         }
 
@@ -108,7 +108,9 @@ export function endpointRouter(httpService) {
       }
     }
 
-    res.writeHead(404, { "content-type": "text/plain" });
+    res.writeHead(404, TEXT_PLAIN);
     res.end();
   };
 }
+
+const TEXT_PLAIN = { "content-type": "text/plain" }
