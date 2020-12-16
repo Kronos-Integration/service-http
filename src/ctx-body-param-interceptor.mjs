@@ -1,4 +1,5 @@
 import { CTXInterceptor } from "./ctx-interceptor.mjs";
+import { APPLICATION_JSON, TEXT_PLAIN } from "./constants.mjs";
 
 /**
  * Extracts params from request body.
@@ -19,13 +20,13 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
       if (typeof response === "string") {
         ctx.res.writeHead(200, {
           ...this.headers,
-          "Content-Type": "test/plain"
+          ...TEXT_PLAIN
         });
         ctx.res.end(response);
       } else {
         ctx.res.writeHead(200, {
           ...this.headers,
-          "Content-Type": "application/json"
+          ...APPLICATION_JSON
         });
         ctx.res.end(JSON.stringify(response));
       }

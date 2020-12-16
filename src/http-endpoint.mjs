@@ -1,5 +1,6 @@
 import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
+import { TEXT_PLAIN } from "./constants.mjs";
 
 /**
  * @typedef CTX {Object}
@@ -118,4 +119,3 @@ export function endpointRouter(httpService) {
   };
 }
 
-const TEXT_PLAIN = { "content-type": "text/plain" };

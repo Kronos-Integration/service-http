@@ -1,6 +1,7 @@
-import { verifyJWT } from "./util.mjs";
 import { Interceptor } from "@kronos-integration/interceptor";
 import { mergeAttributes, createAttributes } from "model-attributes";
+import { verifyJWT } from "./util.mjs";
+import { TEXT_PLAIN } from "./constants.mjs";
 
 /**
  * Only forward requests if a valid JWT token is present.
@@ -85,7 +86,7 @@ function reportError(ctx, code, error, description) {
     "WWW-Authenticate":
       "Bearer," +
       entries.map(([name, value]) => `${name}="${value}"`).join(","),
-    "Content-Type": "text/plain"
+    ...TEXT_PLAIN
   });
 
   ctx.res.end(entries.map(([name, value]) => `${name}: ${value}`).join("\n"));

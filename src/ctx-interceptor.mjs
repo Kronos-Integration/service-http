@@ -1,5 +1,6 @@
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Interceptor } from "@kronos-integration/interceptor";
+import { APPLICATION_JSON, TEXT_PLAIN } from "./constants.mjs";
 
 /**
  * Basic interceptor providing/consuming http request/response.
@@ -34,7 +35,7 @@ export class CTXInterceptor extends Interceptor {
       case "string":
         ctx.res.writeHead(200, {
           ...this.headers,
-          "Content-Type": "text"
+          ...TEXT_PLAIN
         });
         ctx.res.end(result);
         break;
@@ -43,7 +44,7 @@ export class CTXInterceptor extends Interceptor {
       default:
         ctx.res.writeHead(200, {
           ...this.headers,
-          "Content-Type": "application/json"
+          ...APPLICATION_JSON
         });
         ctx.res.end(JSON.stringify(result));
         break;
