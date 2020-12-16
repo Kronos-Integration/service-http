@@ -11,7 +11,7 @@ export { CTXJWTVerifyInterceptor } from "./ctx-jwt-verivy-interceptor.mjs";
 export { HTTPEndpoint, WSEndpoint };
 
 /**
- * HTTP server
+ * HTTP server.
  * @property {http.Server} server only present if state is running
  */
 export class ServiceHTTP extends Service {
@@ -239,15 +239,11 @@ export class ServiceHTTP extends Service {
         server.on("error", listenHandler);
 
         try {
-          if (this.listen.address === undefined) {
-            server.listen(this.listen.socket, listenHandler);
-          } else {
-            server.listen(
-              this.listen.socket,
-              this.listen.address,
-              listenHandler
-            );
-          }
+          server.listen(
+            ...[this.listen.socket, this.listen.address, listenHandler].filter(
+              x => x !== undefined
+            )
+          );
         } catch (err) {
           delete this.server;
           this.error(err);
