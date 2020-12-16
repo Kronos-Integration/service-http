@@ -59,7 +59,7 @@ test("jwt not configured", async t => {
   t.is(ctx.end, "error: secret or public key must be provided");
 });
 
-test("jwt verify none alg as not supported", async t => {
+test("jwt verify none alg not supported", async t => {
   const sp = new StandaloneServiceProvider();
   const http = await sp.declareService({
     type: ServiceHTTP,
@@ -111,7 +111,7 @@ test("jwt verify ok", async t => {
   const interceptor = new CTXJWTVerifyInterceptor();
 
   const token = jwt.sign(
-    {},
+    { entitlements: ['a','b','c'] },
     readFileSync(new URL("fixtures/demo.rsa", import.meta.url).pathname),
     {
       algorithm: "RS256",
@@ -137,4 +137,45 @@ test("jwt verify ok", async t => {
   );
 
   t.true(next);
+});
+
+test("jwt verify insufficient entitlements", async t => {
+  const sp = new StandaloneServiceProvider();
+  const http = await sp.declareService({
+    type: ServiceHTTP,
+    jwt: { public: pubKey }
+  });
+  const endpoint = new SendEndpoint("e", http);
+  const interceptor = new CTXJWTVerifyInterceptor({requiredEntitlements:['a','b','c','d']});
+
+  const token = jwt.sign(
+    { entitlements: ['a','b','c'] },
+    readFileSync(new URL("fixtures/demo.rsa", import.meta.url).pathname),
+    {
+      algorithm: "RS256",
+      expiresIn: "12h"
+    }
+  );
+
+  const ctx = new TestContext({
+    headers: { authorization: `Bearer ${token}` }
+  });
+
+  let next = false;
+
+  await interceptor.receive(
+    endpoint,
+    (ctx, a, b, c) => {
+      next = true;
+    },
+    ctx,
+    1,
+    2,
+    3
+  );
+  t.false(next);
+
+  t.is(ctx.code, 403);
+  t.regex(ctx.headers["www-authenticate"], /Bearer,error/);
+  t.is(ctx.end, "error: Insufficient entitlements");
 });

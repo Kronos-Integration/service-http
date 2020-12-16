@@ -8,7 +8,7 @@ import utf8Validate from "utf-8-validate";
 import { verifyJWT } from "./util.mjs";
 
 /**
- * Endpoint to link against a websocket route
+ * Endpoint to link against a websocket route.
  * @param {string} name endpoint name
  * @param {Object} owner owner of the endpoint
  * @param {Object} options
@@ -71,7 +71,7 @@ export class WSEndpoint extends SendEndpoint {
   }
 
   async receive(arg) {
-    this.owner.trace(`${this}: send ${arg}`);
+    this.owner.trace(`${this}: send ${JSON.stringify(arg)}`);
 
     const interceptors = this.receivingInterceptors;
     let c = 0;
@@ -111,9 +111,9 @@ export class WSEndpoint extends SendEndpoint {
 }
 
 /**
- * check sec-websocket-protocol header for presence of
+ * Check sec-websocket-protocol header for presence of
  * 'access_token' and the token.
- * Throws if no valid token is present
+ * Throws if no valid token is present.
  * @param {Service} service
  * @param {*} request
  */

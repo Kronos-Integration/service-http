@@ -2,8 +2,12 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![minified size](https://badgen.net/bundlephobia/min/@kronos-integration/service-http)](https://bundlephobia.com/result?p=@kronos-integration/service-http)
 [![downloads](http://img.shields.io/npm/dm/@kronos-integration/service-http.svg?style=flat-square)](https://npmjs.org/package/@kronos-integration/service-http)
+[![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/service-http.svg?style=flat-square)](https://github.com/Kronos-Integration/service-http/issues)
+[![Build Action Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FKronos-Integration%2Fservice-http%2Fbadge&style=flat)](https://actions-badge.atrox.dev/Kronos-Integration/service-http/goto)
 [![Styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![Known Vulnerabilities](https://snyk.io/test/github/Kronos-Integration/service-http/badge.svg)](https://snyk.io/test/github/Kronos-Integration/service-http)
+[![Coverage Status](https://coveralls.io/repos/Kronos-Integration/service-http/badge.svg)](https://coveralls.io/github/Kronos-Integration/service-http)
 
 # kronos-service-koa
 
@@ -23,11 +27,16 @@ koa backed http server
     -   [name](#name)
 -   [HTTPEndpoint](#httpendpoint)
     -   [Parameters](#parameters-1)
--   [WSEndpoint](#wsendpoint)
-    -   [Parameters](#parameters-2)
     -   [Properties](#properties-1)
--   [authenticate](#authenticate)
+-   [HTTPEndpoint](#httpendpoint-1)
+    -   [Parameters](#parameters-2)
+-   [endpointRouter](#endpointrouter)
     -   [Parameters](#parameters-3)
+-   [WSEndpoint](#wsendpoint)
+    -   [Parameters](#parameters-4)
+    -   [Properties](#properties-2)
+-   [authenticate](#authenticate)
+    -   [Parameters](#parameters-5)
 -   [CTXInterceptor](#ctxinterceptor)
     -   [name](#name-1)
 -   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
@@ -35,7 +44,7 @@ koa backed http server
 -   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
     -   [name](#name-3)
 -   [reportError](#reporterror)
-    -   [Parameters](#parameters-4)
+    -   [Parameters](#parameters-6)
 
 ## ServiceHTTP
 
@@ -53,7 +62,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### endpointFactoryFromConfig
 
-On demand create RouteSendEndpoint´s
+On demand create RouteSendEndpoint´s.
 
 #### Parameters
 
@@ -71,19 +80,44 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends SendEndpoint**
 
-Endpoint to link against a http route
+### Parameters
+
+-   `name`  
+-   `owner`  
+-   `options`   (optional, default `{}`)
+
+### Properties
+
+-   `res` **http.ServerResponse** 
+-   `req` **http.ServerRequest** 
+
+## HTTPEndpoint
+
+**Extends SendEndpoint**
+
+Endpoint to link against a http route.
 
 ### Parameters
 
 -   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
 -   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path defaults to endpoint name
+    -   `options.method` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** http method defaults to GET
+
+## endpointRouter
+
+### Parameters
+
+-   `httpService` **HTTPServer** 
+
+Returns **RequestListener** 
 
 ## WSEndpoint
 
 **Extends SendEndpoint**
 
-Endpoint to link against a websocket route
+Endpoint to link against a websocket route.
 
 ### Parameters
 
@@ -98,9 +132,9 @@ Endpoint to link against a websocket route
 
 ## authenticate
 
-check sec-websocket-protocol header for presence of
+Check sec-websocket-protocol header for presence of
 'access_token' and the token.
-Throws if no valid token is present
+Throws if no valid token is present.
 
 ### Parameters
 
@@ -125,6 +159,7 @@ Extracts params from request body.
 Supported content types are:
 
 -   application/json
+-   application/x-www-form-urlencoded
 
 ### name
 
@@ -142,13 +177,14 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## reportError
 
-Write WWW-Authenticate header
+Write WWW-Authenticate header.
 
 ### Parameters
 
 -   `ctx` **any** 
+-   `code`  
 -   `error` **any** 
--   `description` **any** 
+-   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 # install
 

@@ -2,7 +2,19 @@ import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 
 /**
+ * @typedef CTX {Object}
+ * @property {http.ServerResponse} res
+ * @property {http.ServerRequest} req
+ * @property {Function} is
+ * @property {Function} throw
+ */
+
+/**
  * Endpoint to link against a http route.
+ *
+ * The endpoint name may be in the form of '<METHOD>:<path>'.
+ * Then <METHOD> will be used as http method
+ * and <path> as the url path component.
  * @param {string} name endpoint name
  * @param {Object} owner owner of the endpoint
  * @param {Object} options
@@ -13,14 +25,18 @@ export class HTTPEndpoint extends SendEndpoint {
   constructor(name, owner, options = {}) {
     super(name, owner, options);
 
-    if (options.path !== undefined) {
+    const m = name.match(/^(?<method>\w+):(?<path>.*)/);
+
+    let { method, path } = m ? m.groups : options;
+
+    if (path !== undefined) {
       Object.defineProperty(this, "path", {
-        value: options.path
+        value: path
       });
     }
 
-    if (options.method !== undefined) {
-      const method = options.method.toUpperCase();
+    if (method !== undefined) {
+      method = method.toUpperCase();
 
       if (method !== "GET") {
         Object.defineProperty(this, "method", {
@@ -47,18 +63,26 @@ export class HTTPEndpoint extends SendEndpoint {
   }
 }
 
+/**
+ *
+ * @param {HTTPServer} httpService
+ * @return {RequestListener}
+ */
 export function endpointRouter(httpService) {
   const routingEndpoints = compile(
     Object.values(httpService.endpoints).filter(e => e instanceof HTTPEndpoint)
   );
 
   return async (req, res) => {
+    let statusCode;
+
     const ctx = {
       req,
       res,
-      is: (mime) => req.headers['content-type'] === mime,
-      throw(code) {
-        throw new Error(code);
+      is: mime => req.headers["content-type"] === mime,
+      throw(code, message) {
+        statusCode = code;
+        throw new Error(message);
       }
     };
 
@@ -70,24 +94,28 @@ export function endpointRouter(httpService) {
 
       if (m && route.method === method) {
         try {
-          const params = Object.fromEntries(route.keys.map((k, i) => [k, m[i + 1]]))
-          await route.send(ctx, params);
-        } catch (e) {
+          await route.send(
+            ctx,
+            Object.fromEntries(route.keys.map((k, i) => [k, m[i + 1]]))
+          );
+        } catch (error) {
           httpService.error({
             method,
             path,
-            error: e
+            error
           });
 
-          res.writeHead(500, { "Content-Type": "text/plain" });
-          res.end(e.message);
+          res.writeHead(statusCode || 500, TEXT_PLAIN);
+          res.end(error.message);
         }
 
         return;
       }
     }
 
-    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.writeHead(404, TEXT_PLAIN);
     res.end();
   };
 }
+
+const TEXT_PLAIN = { "content-type": "text/plain" };

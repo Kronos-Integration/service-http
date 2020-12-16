@@ -50,6 +50,9 @@ test("endpoint route basics", async t => {
   t.truthy(s2.hasInterceptors);
 
   r2.receive = async body => {
+    if (body.error) {
+      throw "this is an error";
+    }
     return { ...body, message: "OK R2" };
   };
 
@@ -81,6 +84,15 @@ test("endpoint route basics", async t => {
   });
   t.is(response.statusCode, 200);
 
+  try {
+    response = await got("http://localhost:1240/s2", {
+      form: { error: true },
+      method: "POST"
+    });
+  } catch (e) {
+    t.is(e.message, "Response code 500 (Internal Server Error)");
+  }
+
   await ks.stop();
 });
 
@@ -98,7 +110,12 @@ test("endpoint factory", async t => {
     endpoints: {
       "/s1": { connected: r1, interceptors: [CTXInterceptor] },
       "/s2": { method: "post" },
-      "/s3": { path: "/somwhere" }
+      "/s3": { method: "PATCH" },
+      "/s4": { path: "/somwhere" },
+      "/s4b": { path: "/somwhere" },
+      "DELETE:/resource": { },
+      "/resource": {},
+      "PUT:/resource": { }
     }
   });
 
@@ -108,7 +125,18 @@ test("endpoint factory", async t => {
   t.true(http.endpoints["/s1"] instanceof HTTPEndpoint);
 
   t.is(http.endpoints["/s2"].method, "POST");
-  t.is(http.endpoints["/s3"].path, "/somwhere");
+  t.is(http.endpoints["/s3"].method, "PATCH");
+  t.is(http.endpoints["/s4"].path, "/somwhere");
+  t.is(http.endpoints["/s4b"].path, "/somwhere");
+
+  t.is(http.endpoints["/resource"].path, "/resource");
+  t.is(http.endpoints["/resource"].method, "GET");
+
+  t.is(http.endpoints["DELETE:/resource"].path, "/resource");
+  t.is(http.endpoints["DELETE:/resource"].method, "DELETE");
+
+  t.is(http.endpoints["PUT:/resource"].path, "/resource");
+  t.is(http.endpoints["PUT:/resource"].method, "PUT");
 
   await http.start();
 
