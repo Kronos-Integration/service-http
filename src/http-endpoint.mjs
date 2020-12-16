@@ -19,7 +19,7 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
 export class HTTPEndpoint extends SendEndpoint {
   constructor(name, owner, options = {}) {
     super(name, owner, options);
-    
+
     const m = name.match(/^(?<method>\w+):(?<path>.*)/);
 
     let { method, path } = m ? m.groups : options;
@@ -59,7 +59,7 @@ export class HTTPEndpoint extends SendEndpoint {
 }
 
 /**
- * 
+ *
  * @param {HTTPServer} httpService
  * @return {RequestListener}
  */
@@ -89,19 +89,19 @@ export function endpointRouter(httpService) {
 
       if (m && route.method === method) {
         try {
-          const params = Object.fromEntries(
-            route.keys.map((k, i) => [k, m[i + 1]])
+          await route.send(
+            ctx,
+            Object.fromEntries(route.keys.map((k, i) => [k, m[i + 1]]))
           );
-          await route.send(ctx, params);
-        } catch (e) {
+        } catch (error) {
           httpService.error({
             method,
             path,
-            error: e
+            error
           });
 
           res.writeHead(statusCode || 500, TEXT_PLAIN);
-          res.end(e.message);
+          res.end(error.message);
         }
 
         return;
@@ -113,4 +113,4 @@ export function endpointRouter(httpService) {
   };
 }
 
-const TEXT_PLAIN = { "content-type": "text/plain" }
+const TEXT_PLAIN = { "content-type": "text/plain" };
