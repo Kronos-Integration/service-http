@@ -90,6 +90,8 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 -   `res` **http.ServerResponse** 
 -   `req` **http.ServerRequest** 
+-   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
 
 ## HTTPEndpoint
 
@@ -97,12 +99,16 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 Endpoint to link against a http route.
 
+The endpoint name may be in the form of '<METHOD>:<path>'.
+Then <METHOD> will be used as http method
+and <path> as the url path component.
+
 ### Parameters
 
 -   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
 -   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
-    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path defaults to endpoint name
+    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path component defaults to endpoint name
     -   `options.method` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** http method defaults to GET
 
 ## endpointRouter
