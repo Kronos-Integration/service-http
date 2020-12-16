@@ -152,31 +152,30 @@ export class ServiceHTTP extends Service {
   }
 
   get url() {
-    if (this.listen === undefined) {
-      return undefined;
-    }
+    const listen = this.listen;
 
-    const socket = this.socket;
+    if (listen) {
+      const socket = this.socket;
+      const url = listen.url;
 
-    const url = this.listen.url;
+      if (url) {
+        if (Number.isInteger(socket)) {
+          const u = new URL(url);
+          u.port = socket;
+          return u.toString().replace(/\/$/, "");
+        }
 
-    if (url) {
-      if (Number.isInteger(this.listen.socket)) {
-        const u = new URL(url);
-        u.port = socket;
-        return u.toString().replace(/\/$/, "");
+        return url;
       }
 
-      return url;
-    }
+      if (socket === undefined) {
+        return undefined;
+      }
 
-    if (socket === undefined) {
-      return undefined;
+      return Number.isInteger(socket)
+        ? `${this.scheme}://${this.address}:${socket}`
+        : `fd:///${socket.fd}`;
     }
-
-    return Number.isInteger(socket)
-      ? `${this.scheme}://${this.address}:${socket}`
-      : `fd:///${socket.fd}`;
   }
 
   get socket() {
