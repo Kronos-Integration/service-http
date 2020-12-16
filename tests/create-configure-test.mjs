@@ -71,13 +71,13 @@ async function skt(t, config, ...args) {
   t.is(ks.state, "stopped");
 }
 
-skt.title = (providedTitle = "", config, updates) => {
+skt.title = (providedTitle = "http", config, updates) => {
   const c = { ...config };
   delete c.key;
   delete c.cert;
 
-  return `http ${providedTitle} ${
-    config === undefined ? "" : JSON.stringify(c)
+  return `${providedTitle} ${
+    config === undefined ? "undefined" : JSON.stringify(c)
   }${Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""}`.trim();
 };
 
