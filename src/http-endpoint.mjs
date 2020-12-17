@@ -3,7 +3,7 @@ import { SendEndpoint } from "@kronos-integration/endpoint";
 import { TEXT_PLAIN } from "./constants.mjs";
 
 /**
- * @typedef CTX {Object}
+ * @typedef {Object} CTX
  * @property {http.ServerResponse} res
  * @property {http.ServerRequest} req
  * @property {Function} is
