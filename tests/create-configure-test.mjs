@@ -129,13 +129,12 @@ test(
   skt,
   {
     listen: {
-      url: `http://${address()}:1301`
+      socket: 1301
     }
   },
   {
-    adrress: address(),
     socket: 1301,
-    url: `http://${address()}:1301`
+    url: `http://localhost:1301`
   }
 );
 
@@ -143,13 +142,13 @@ test(
   skt,
   {
     listen: {
-      url: `http://localhost:1302`
+      url: `http://${address()}:1302`
     }
   },
   {
     adrress: address(),
     socket: 1302,
-    url: `http://localhost:1302`
+    url: `http://${address()}:1302`
   }
 );
 
@@ -157,13 +156,27 @@ test(
   skt,
   {
     listen: {
-      url: `http://${address()}:1303`
+      url: `http://localhost:1303`
+    }
+  },
+  {
+    adrress: address(),
+    socket: 1303,
+    url: `http://localhost:1303`
+  }
+);
+
+test(
+  skt,
+  {
+    listen: {
+      url: `http://${address()}:1304`
     }
   },
   [
     {
       listen: {
-        socket: 1304
+        socket: 1305
       }
     },
     {
@@ -174,8 +187,8 @@ test(
   ],
   {
     adrress: address(),
-    socket: 1304,
-    url: `http://${address()}:1304`,
+    socket: 1305,
+    url: `http://${address()}:1305`,
     timeout: {
       server: 123.45
     }
@@ -193,12 +206,12 @@ test(
     ),
     listen: {
       address: "localhost",
-      socket: 1305
+      socket: 1306
     }
   },
   {
     isSecure: true,
-    url: `https://localhost:1305`
+    url: `https://localhost:1306`
   }
 );
 

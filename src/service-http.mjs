@@ -207,6 +207,8 @@ export class ServiceHTTP extends Service {
         const u = new URL(url);
         return u.hostname;
       }
+
+      return "localhost";
     }
   }
 
