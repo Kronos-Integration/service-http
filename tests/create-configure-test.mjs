@@ -89,7 +89,7 @@ skt.title = (providedTitle = "http", config, updates) => {
 
   return `${providedTitle} ${
     config === undefined ? "undefined" : JSON.stringify(c)
-  }${Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""}`.trim();
+  }${Array.isArray(updates) ? " updates " + JSON.stringify(updates) : ""}`.trim();
 };
 
 test(
@@ -143,13 +143,27 @@ test(
   skt,
   {
     listen: {
-      url: `http://${address()}:1302`
+      url: `http://localhost:1302`
+    }
+  },
+  {
+    adrress: address(),
+    socket: 1302,
+    url: `http://localhost:1302`
+  }
+);
+
+test(
+  skt,
+  {
+    listen: {
+      url: `http://${address()}:1303`
     }
   },
   [
     {
       listen: {
-        socket: 1303
+        socket: 1304
       }
     },
     {
@@ -160,8 +174,8 @@ test(
   ],
   {
     adrress: address(),
-    socket: 1303,
-    url: `http://${address()}:1303`,
+    socket: 1304,
+    url: `http://${address()}:1304`,
     timeout: {
       server: 123.45
     }
@@ -179,12 +193,12 @@ test(
     ),
     listen: {
       address: "localhost",
-      socket: 1304
+      socket: 1305
     }
   },
   {
     isSecure: true,
-    url: `https://localhost:1304`
+    url: `https://localhost:1305`
   }
 );
 
