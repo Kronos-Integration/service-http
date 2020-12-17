@@ -134,17 +134,25 @@ export class ServiceHTTP extends Service {
     return super.endpointFactoryFromConfig(name, definition, ic);
   }
 
+  /**
+   * Should we make a secure connection.
+   *
+   * @return {boolean} true if key is present
+   */
   get isSecure() {
     return this.key !== undefined;
   }
 
+  /**
+   * Options passed to @see {http.createServer} or @see {https.createServer}.
+   *
+   * @return {Object}
+   */
   get serverOptions() {
-    if (this.isSecure) {
-      return {
-        key: this.key,
-        cert: this.cert
-      };
-    }
+    return {
+      key: this.key,
+      cert: this.cert
+    };
   }
 
   get scheme() {
@@ -216,9 +224,9 @@ export class ServiceHTTP extends Service {
     await super._start();
 
     try {
-      const server = (this.server = this.isSecure
-        ? httpsCreateServer(this.serverOptions, endpointRouter(this))
-        : httpCreateServer(endpointRouter(this)));
+      const server = (this.server = (this.isSecure
+        ? httpsCreateServer
+        : httpCreateServer)(this.serverOptions, endpointRouter(this)));
 
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
