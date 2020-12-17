@@ -9,7 +9,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/Kronos-Integration/service-http/badge.svg)](https://snyk.io/test/github/Kronos-Integration/service-http)
 [![Coverage Status](https://coveralls.io/repos/Kronos-Integration/service-http/badge.svg)](https://coveralls.io/github/Kronos-Integration/service-http)
 
-# kronos-service-koa
+# @kronos-integration/service-http
 
 koa backed http server
 
@@ -197,7 +197,7 @@ Write WWW-Authenticate header.
 With [npm](http://npmjs.org) do:
 
 ```shell
-npm install kronos-service-koa
+npm install @kronos-integration/service-http
 ```
 
 # license
