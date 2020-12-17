@@ -240,9 +240,7 @@ export class ServiceHTTP extends Service {
 
         try {
           server.listen(
-            ...[this.listen.socket, this.listen.address, listenHandler].filter(
-              x => x !== undefined
-            )
+            ...[this.socket, this.address, listenHandler].filter(x => x)
           );
         } catch (err) {
           delete this.server;

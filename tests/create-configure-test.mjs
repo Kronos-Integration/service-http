@@ -18,7 +18,12 @@ async function skt(t, config, ...args) {
   let expected = args.pop() || {};
   const updates = args.pop() || [];
 
-  expected = { isSecure: false, timeout: { server: 120 }, ...expected };
+  expected = {
+    testConnection: true,
+    isSecure: false,
+    timeout: { server: 120 },
+    ...expected
+  };
   const sp = new StandaloneServiceProvider();
   const ic = new InitializationContext(sp);
   const ks = new ServiceHTTP(config, ic);
@@ -58,15 +63,21 @@ async function skt(t, config, ...args) {
   }
 
   t.is(ks.state, "stopped");
-  await ks.start();
-  t.is(ks.state, "running");
 
-  const response = await got(ks.url, {
-    https: { certificateAuthority: config.cert }
-  });
-  t.is(response.body, "OK");
-  t.is(response.statusCode, 200);
+  if (expected.testConnection) {
+    await ks.start();
+    t.is(ks.state, "running");
 
+    try {
+      const response = await got(ks.url, {
+        https: { certificateAuthority: config.cert }
+      });
+      t.is(response.body, "OK", "body");
+      t.is(response.statusCode, 200, "status");
+    } catch (e) {
+      t.true(false, ks.url);
+    }
+  }
   await ks.stop();
   t.is(ks.state, "stopped");
 }
@@ -80,23 +91,6 @@ skt.title = (providedTitle = "http", config, updates) => {
     config === undefined ? "undefined" : JSON.stringify(c)
   }${Array.isArray(updates) ? " with " + JSON.stringify(updates) : ""}`.trim();
 };
-
-test(
-  skt,
-  {
-    name: "my-name",
-    listen: {
-      socket: 1234,
-      address: address()
-    }
-  },
-  {
-    name: "my-name",
-    adrress: address(),
-    socket: 1234,
-    url: `http://${address()}:1234`
-  }
-);
 
 test(
   skt,
@@ -114,16 +108,20 @@ test(skt, undefined, {
   socket: undefined
 });
 
-test.skip(
+test(
   skt,
   {
+    name: "my-name",
     listen: {
-      socket: { fd: 4, name: "service.http" }
+      socket: 1300,
+      address: address()
     }
   },
   {
-    socket: { fd: 4, name: "service.http" },
-    url: `fd:///4`
+    name: "my-name",
+    adrress: address(),
+    socket: 1300,
+    url: `http://${address()}:1300`
   }
 );
 
@@ -131,13 +129,13 @@ test(
   skt,
   {
     listen: {
-      url: `http://${address()}:1234`
+      url: `http://${address()}:1301`
     }
   },
   {
     adrress: address(),
-    socket: 1234,
-    url: `http://${address()}:1234`
+    socket: 1301,
+    url: `http://${address()}:1301`
   }
 );
 
@@ -145,13 +143,13 @@ test(
   skt,
   {
     listen: {
-      url: `http://${address()}:1234`
+      url: `http://${address()}:1302`
     }
   },
   [
     {
       listen: {
-        socket: 1235
+        socket: 1303
       }
     },
     {
@@ -162,8 +160,8 @@ test(
   ],
   {
     adrress: address(),
-    socket: 1235,
-    url: `http://${address()}:1235`,
+    socket: 1303,
+    url: `http://${address()}:1303`,
     timeout: {
       server: 123.45
     }
@@ -174,18 +172,32 @@ test(
   skt,
   {
     key: readFileSync(
-      new URL("fixtures/www.example.com.key",import.meta.url).pathname
+      new URL("fixtures/www.example.com.key", import.meta.url).pathname
     ),
     cert: readFileSync(
-      new URL("fixtures/www.example.com.cert",import.meta.url).pathname
+      new URL("fixtures/www.example.com.cert", import.meta.url).pathname
     ),
     listen: {
       address: "localhost",
-      socket: 1236
+      socket: 1304
     }
   },
   {
     isSecure: true,
-    url: `https://localhost:1236`
+    url: `https://localhost:1304`
+  }
+);
+
+test(
+  skt,
+  {
+    listen: {
+      socket: { fd: 4, name: "service.http" }
+    }
+  },
+  {
+    testConnection: false,
+    socket: { fd: 4, name: "service.http" },
+    url: `fd:///4`
   }
 );
