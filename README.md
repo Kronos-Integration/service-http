@@ -24,19 +24,20 @@ koa backed http server
     -   [extendetName](#extendetname)
     -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
         -   [Parameters](#parameters)
+    -   [isSecure](#issecure)
+    -   [serverOptions](#serveroptions)
     -   [name](#name)
+-   [CTX](#ctx)
+    -   [Properties](#properties-1)
 -   [HTTPEndpoint](#httpendpoint)
     -   [Parameters](#parameters-1)
-    -   [Properties](#properties-1)
--   [HTTPEndpoint](#httpendpoint-1)
-    -   [Parameters](#parameters-2)
 -   [endpointRouter](#endpointrouter)
-    -   [Parameters](#parameters-3)
+    -   [Parameters](#parameters-2)
 -   [WSEndpoint](#wsendpoint)
-    -   [Parameters](#parameters-4)
+    -   [Parameters](#parameters-3)
     -   [Properties](#properties-2)
 -   [authenticate](#authenticate)
-    -   [Parameters](#parameters-5)
+    -   [Parameters](#parameters-4)
 -   [CTXInterceptor](#ctxinterceptor)
     -   [name](#name-1)
 -   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
@@ -44,13 +45,13 @@ koa backed http server
 -   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
     -   [name](#name-3)
 -   [reportError](#reporterror)
-    -   [Parameters](#parameters-6)
+    -   [Parameters](#parameters-5)
 
 ## ServiceHTTP
 
 **Extends Service**
 
-HTTP server
+HTTP server.
 
 ### Properties
 
@@ -72,19 +73,25 @@ On demand create RouteSendEndpoint´s.
 
 Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
 
+### isSecure
+
+Should we make a secure connection.
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if key is present
+
+### serverOptions
+
+Options passed to @see {http.createServer} or @see {https.createServer}.
+
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'http'
 
-## HTTPEndpoint
+## CTX
 
-**Extends SendEndpoint**
-
-### Parameters
-
--   `name`  
--   `owner`  
--   `options`   (optional, default `{}`)
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
 ### Properties
 
