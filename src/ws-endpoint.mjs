@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import { compile } from "multi-path-matcher";
-import { SendEndpoint } from "@kronos-integration/endpoint";
+import { SendReceiveEndpoint } from "@kronos-integration/endpoint";
 
 import bufferutil from "bufferutil";
 import utf8Validate from "utf-8-validate";
@@ -16,7 +16,7 @@ import { verifyJWT } from "./util.mjs";
  *
  * @property {Set<WebSocket>} sockets
  */
-export class WSEndpoint extends SendEndpoint {
+export class WSEndpoint extends SendReceiveEndpoint {
   sockets = new Set();
 
   constructor(name, owner, options = {}) {
@@ -87,10 +87,6 @@ export class WSEndpoint extends SendEndpoint {
     };
 
     return next(arg);
-  }
-
-  get isIn() {
-    return true;
   }
 
   get path() {
