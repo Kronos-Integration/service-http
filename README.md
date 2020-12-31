@@ -128,7 +128,7 @@ Returns **RequestListener**
 
 ## WSEndpoint
 
-**Extends SendEndpoint**
+**Extends SendReceiveEndpoint**
 
 Endpoint to link against a websocket route.
 
