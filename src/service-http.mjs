@@ -28,7 +28,6 @@ export class ServiceHTTP extends Service {
 
   static get configurationAttributes() {
     return mergeAttributes(
-      Service.configurationAttributes,
       createAttributes({
         jwt: {
           description: "jwt related",
@@ -100,7 +99,8 @@ export class ServiceHTTP extends Service {
             }
           }
         }
-      })
+      }),
+      Service.configurationAttributes
     );
   }
 
