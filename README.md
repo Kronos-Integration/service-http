@@ -19,33 +19,115 @@ koa backed http server
 
 ### Table of Contents
 
--   [ServiceHTTP](#servicehttp)
-    -   [Properties](#properties)
-    -   [extendetName](#extendetname)
-    -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
-        -   [Parameters](#parameters)
-    -   [isSecure](#issecure)
-    -   [serverOptions](#serveroptions)
+-   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
     -   [name](#name)
+-   [CTXInterceptor](#ctxinterceptor)
+    -   [name](#name-1)
+-   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
+    -   [name](#name-2)
+-   [reportError](#reporterror)
+    -   [Parameters](#parameters)
 -   [CTX](#ctx)
-    -   [Properties](#properties-1)
+    -   [Properties](#properties)
 -   [HTTPEndpoint](#httpendpoint)
     -   [Parameters](#parameters-1)
 -   [endpointRouter](#endpointrouter)
     -   [Parameters](#parameters-2)
+-   [ServiceHTTP](#servicehttp)
+    -   [Properties](#properties-1)
+    -   [extendetName](#extendetname)
+    -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
+        -   [Parameters](#parameters-3)
+    -   [isSecure](#issecure)
+    -   [serverOptions](#serveroptions)
+    -   [name](#name-3)
 -   [WSEndpoint](#wsendpoint)
-    -   [Parameters](#parameters-3)
+    -   [Parameters](#parameters-4)
     -   [Properties](#properties-2)
 -   [authenticate](#authenticate)
-    -   [Parameters](#parameters-4)
--   [CTXInterceptor](#ctxinterceptor)
-    -   [name](#name-1)
--   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
-    -   [name](#name-2)
--   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
-    -   [name](#name-3)
--   [reportError](#reporterror)
     -   [Parameters](#parameters-5)
+
+## CTXBodyParamInterceptor
+
+**Extends CTXInterceptor**
+
+Extracts params from request body.
+Supported content types are:
+
+-   application/json
+-   application/x-www-form-urlencoded
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
+
+## CTXInterceptor
+
+**Extends Interceptor**
+
+Basic interceptor providing/consuming http request/response.
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
+
+## CTXJWTVerifyInterceptor
+
+**Extends Interceptor**
+
+Only forward requests if a valid JWT token is present.
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-jwt-verify'
+
+## reportError
+
+Write WWW-Authenticate header.
+
+### Parameters
+
+-   `ctx` **any** 
+-   `code`  
+-   `error` **any** 
+-   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+## CTX
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+### Properties
+
+-   `res` **http.ServerResponse** 
+-   `req` **http.ServerRequest** 
+-   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+
+## HTTPEndpoint
+
+**Extends SendEndpoint**
+
+Endpoint to link against a http route.
+
+The endpoint name may be in the form of '<METHOD>:<path>'.
+Then <METHOD> will be used as http method
+and <path> as the url path component.
+
+### Parameters
+
+-   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
+-   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
+-   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path component defaults to endpoint name
+    -   `options.method` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** http method defaults to GET
+
+## endpointRouter
+
+### Parameters
+
+-   `httpService` **HTTPServer** 
+
+Returns **RequestListener** 
 
 ## ServiceHTTP
 
@@ -89,43 +171,6 @@ Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'http'
 
-## CTX
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-### Properties
-
--   `res` **http.ServerResponse** 
--   `req` **http.ServerRequest** 
--   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
--   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
-
-## HTTPEndpoint
-
-**Extends SendEndpoint**
-
-Endpoint to link against a http route.
-
-The endpoint name may be in the form of '<METHOD>:<path>'.
-Then <METHOD> will be used as http method
-and <path> as the url path component.
-
-### Parameters
-
--   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
--   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
--   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
-    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path component defaults to endpoint name
-    -   `options.method` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** http method defaults to GET
-
-## endpointRouter
-
-### Parameters
-
--   `httpService` **HTTPServer** 
-
-Returns **RequestListener** 
-
 ## WSEndpoint
 
 **Extends SendReceiveEndpoint**
@@ -153,51 +198,6 @@ Throws if no valid token is present.
 
 -   `service` **Service** 
 -   `request` **any** 
-
-## CTXInterceptor
-
-**Extends Interceptor**
-
-Basic interceptor providing/consuming http request/response.
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
-
-## CTXBodyParamInterceptor
-
-**Extends CTXInterceptor**
-
-Extracts params from request body.
-Supported content types are:
-
--   application/json
--   application/x-www-form-urlencoded
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
-
-## CTXJWTVerifyInterceptor
-
-**Extends Interceptor**
-
-Only forward requests if a valid JWT token is present.
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-jwt-verify'
-
-## reportError
-
-Write WWW-Authenticate header.
-
-### Parameters
-
--   `ctx` **any** 
--   `code`  
--   `error` **any** 
--   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 # install
 
