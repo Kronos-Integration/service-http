@@ -46,7 +46,7 @@
     "ws": "^7.4.2"
   },
   "devDependencies": {
-    "@kronos-integration/test-interceptor": "^7.0.10",
+    "@kronos-integration/test-interceptor": "^7.0.11",
     "ava": "^3.15.0",
     "c8": "^7.6.0",
     "documentation": "github:arlac77/documentation",
