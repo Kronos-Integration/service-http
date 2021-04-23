@@ -3,7 +3,7 @@
 [![minified size](https://badgen.net/bundlephobia/min/@kronos-integration/service-http)](https://bundlephobia.com/result?p=@kronos-integration/service-http)
 [![downloads](http://img.shields.io/npm/dm/@kronos-integration/service-http.svg?style=flat-square)](https://npmjs.org/package/@kronos-integration/service-http)
 [![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/service-http.svg?style=flat-square)](https://github.com/Kronos-Integration/service-http/issues)
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FKronos-Integration%2Fservice-http%2Fbadge&style=flat)](https://actions-badge.atrox.dev/Kronos-Integration/service-http/goto)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FKronos-Integration%2Fservice-http%2Fbadge\&style=flat)](https://actions-badge.atrox.dev/Kronos-Integration/service-http/goto)
 [![Styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Known Vulnerabilities](https://snyk.io/test/github/Kronos-Integration/service-http/badge.svg)](https://snyk.io/test/github/Kronos-Integration/service-http)
@@ -19,33 +19,33 @@ koa backed http server
 
 ### Table of Contents
 
--   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
-    -   [name](#name)
--   [CTXInterceptor](#ctxinterceptor)
-    -   [name](#name-1)
--   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
-    -   [name](#name-2)
--   [reportError](#reporterror)
-    -   [Parameters](#parameters)
--   [CTX](#ctx)
-    -   [Properties](#properties)
--   [HTTPEndpoint](#httpendpoint)
-    -   [Parameters](#parameters-1)
--   [endpointRouter](#endpointrouter)
-    -   [Parameters](#parameters-2)
--   [ServiceHTTP](#servicehttp)
-    -   [Properties](#properties-1)
-    -   [extendetName](#extendetname)
-    -   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
-        -   [Parameters](#parameters-3)
-    -   [isSecure](#issecure)
-    -   [serverOptions](#serveroptions)
-    -   [name](#name-3)
--   [WSEndpoint](#wsendpoint)
-    -   [Parameters](#parameters-4)
-    -   [Properties](#properties-2)
--   [authenticate](#authenticate)
-    -   [Parameters](#parameters-5)
+*   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
+    *   [name](#name)
+*   [CTXInterceptor](#ctxinterceptor)
+    *   [name](#name-1)
+*   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
+    *   [name](#name-2)
+*   [reportError](#reporterror)
+    *   [Parameters](#parameters)
+*   [CTX](#ctx)
+    *   [Properties](#properties)
+*   [HTTPEndpoint](#httpendpoint)
+    *   [Parameters](#parameters-1)
+*   [endpointRouter](#endpointrouter)
+    *   [Parameters](#parameters-2)
+*   [ServiceHTTP](#servicehttp)
+    *   [Properties](#properties-1)
+    *   [extendetName](#extendetname)
+    *   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
+        *   [Parameters](#parameters-3)
+    *   [isSecure](#issecure)
+    *   [serverOptions](#serveroptions)
+    *   [name](#name-3)
+*   [WSEndpoint](#wsendpoint)
+    *   [Parameters](#parameters-4)
+    *   [Properties](#properties-2)
+*   [authenticate](#authenticate)
+    *   [Parameters](#parameters-5)
 
 ## CTXBodyParamInterceptor
 
@@ -54,8 +54,8 @@ koa backed http server
 Extracts params from request body.
 Supported content types are:
 
--   application/json
--   application/x-www-form-urlencoded
+*   application/json
+*   application/x-www-form-urlencoded
 
 ### name
 
@@ -87,10 +87,10 @@ Write WWW-Authenticate header.
 
 ### Parameters
 
--   `ctx` **any** 
--   `code`  
--   `error` **any** 
--   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `ctx` **any** 
+*   `code`  
+*   `error` **any** 
+*   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 ## CTX
 
@@ -98,10 +98,10 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### Properties
 
--   `res` **http.ServerResponse** 
--   `req` **http.ServerRequest** 
--   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
--   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+*   `res` **http.ServerResponse** 
+*   `req` **http.ServerRequest** 
+*   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+*   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
 
 ## HTTPEndpoint
 
@@ -115,17 +115,18 @@ and <path> as the url path component.
 
 ### Parameters
 
--   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
--   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
--   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
-    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path component defaults to endpoint name
-    -   `options.method` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** http method defaults to GET
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
+*   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+
+    *   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path component defaults to endpoint name
+    *   `options.method` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** http method defaults to GET
 
 ## endpointRouter
 
 ### Parameters
 
--   `httpService` **HTTPServer** 
+*   `httpService` **HTTPServer** 
 
 Returns **RequestListener** 
 
@@ -137,7 +138,7 @@ HTTP server.
 
 ### Properties
 
--   `server` **http.Server** only present if state is running
+*   `server` **http.Server** only present if state is running
 
 ### extendetName
 
@@ -149,9 +150,9 @@ On demand create RouteSendEndpoint´s.
 
 #### Parameters
 
--   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `definition` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) \| [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))** 
--   `ic`  
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `definition` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))** 
+*   `ic`  
 
 Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
 
@@ -179,14 +180,15 @@ Endpoint to link against a websocket route.
 
 ### Parameters
 
--   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
--   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
--   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
-    -   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path defaults to endpoint name
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** endpoint name
+*   `owner` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** owner of the endpoint
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+
+    *   `options.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** url path defaults to endpoint name
 
 ### Properties
 
--   `sockets` **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)&lt;[WebSocket](https://developer.mozilla.org/docs/WebSockets)>** 
+*   `sockets` **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)<[WebSocket](https://developer.mozilla.org/docs/WebSockets)>** 
 
 ## authenticate
 
@@ -196,8 +198,8 @@ Throws if no valid token is present.
 
 ### Parameters
 
--   `service` **Service** 
--   `request` **any** 
+*   `service` **Service** 
+*   `request` **any** 
 
 # install
 
