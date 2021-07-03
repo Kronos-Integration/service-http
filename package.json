@@ -55,7 +55,7 @@
     "semantic-release": "^17.4.4"
   },
   "engines": {
-    "node": ">=14.17.0"
+    "node": ">=14.17.2"
   },
   "repository": {
     "type": "git",
