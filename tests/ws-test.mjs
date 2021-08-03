@@ -2,7 +2,7 @@ import test from "ava";
 import { readFileSync } from "fs";
 
 import jwt from "jsonwebtoken";
-import WebSocket from "ws";
+import { WebSocket } from "ws";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { Interceptor } from "@kronos-integration/interceptor";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
@@ -108,9 +108,9 @@ test("ws send", async t => {
 
   for (const c of clients) {
     t.is(c.opened, 1, "opened");
-    t.is(c.messages[0], `form ${c.name} OK R1`, "server message 0");
-    t.is(c.messages[1], "<OK R1>", "server message 1");
-    t.is(c.messages[2], "<OK R1>", "server message 2");
+    t.is(c.messages[0].toString(), `form ${c.name} OK R1`, "server message 0");
+    t.is(c.messages[1].toString(), "<OK R1>", "server message 1");
+    t.is(c.messages[2].toString(), "<OK R1>", "server message 2");
   }
 
   await http.stop();

@@ -1,4 +1,4 @@
-import WebSocket from "ws";
+import { WebSocketServer } from "ws";
 import { compile } from "multi-path-matcher";
 import { SendReceiveEndpoint } from "@kronos-integration/endpoint";
 
@@ -137,7 +137,7 @@ export function initializeWS(service) {
 
   const server = service.server;
 
-  const wss = new WebSocket.Server({ server });
+  const wss = new WebSocketServer({ server });
   service.wss = wss;
 
   wss.on("error", error => service.error(error));
