@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^9.4.19",
-    "@kronos-integration/interceptor": "^10.2.15",
-    "@kronos-integration/service": "^10.4.14",
+    "@kronos-integration/interceptor": "^10.2.16",
+    "@kronos-integration/service": "^10.4.15",
     "bufferutil": "^4.0.5",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.12",
@@ -46,7 +46,7 @@
     "ws": "^8.4.2"
   },
   "devDependencies": {
-    "@kronos-integration/test-interceptor": "^7.0.16",
+    "@kronos-integration/test-interceptor": "^7.0.19",
     "ava": "^4.0.1",
     "c8": "^7.11.0",
     "documentation": "^13.2.5",
