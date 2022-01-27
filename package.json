@@ -35,9 +35,9 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.4.1",
+    "@kronos-integration/endpoint": "^9.4.19",
     "@kronos-integration/interceptor": "^10.2.15",
-    "@kronos-integration/service": "^10.4.12",
+    "@kronos-integration/service": "^10.4.14",
     "bufferutil": "^4.0.5",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.12",
