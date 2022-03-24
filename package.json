@@ -36,12 +36,12 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^9.4.24",
-    "@kronos-integration/interceptor": "^10.2.18",
+    "@kronos-integration/interceptor": "^10.2.21",
     "@kronos-integration/service": "^10.4.20",
     "bufferutil": "^4.0.5",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.1.15",
-    "multi-path-matcher": "^2.1.9",
+    "multi-path-matcher": "^2.1.10",
     "utf-8-validate": "^5.0.7",
     "ws": "^8.5.0"
   },
