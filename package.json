@@ -40,7 +40,7 @@
     "@kronos-integration/service": "^10.4.31",
     "bufferutil": "^4.0.6",
     "jsonwebtoken": "^8.5.1",
-    "model-attributes": "^4.1.18",
+    "model-attributes": "^4.1.19",
     "multi-path-matcher": "^2.2.0",
     "utf-8-validate": "^5.0.9",
     "ws": "^8.8.1"
