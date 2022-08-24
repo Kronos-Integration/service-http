@@ -87,10 +87,10 @@ Write WWW-Authenticate header.
 
 ### Parameters
 
-*   `ctx` **any** 
-*   `code`  
-*   `error` **any** 
-*   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `ctx` **any**&#x20;
+*   `code` &#x20;
+*   `error` **any**&#x20;
+*   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 ## CTX
 
@@ -98,10 +98,10 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### Properties
 
-*   `res` **http.ServerResponse** 
-*   `req` **http.ServerRequest** 
-*   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
-*   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+*   `res` **http.ServerResponse**&#x20;
+*   `req` **http.ServerRequest**&#x20;
+*   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**&#x20;
+*   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**&#x20;
 
 ## HTTPEndpoint
 
@@ -126,9 +126,9 @@ and <path> as the url path component.
 
 ### Parameters
 
-*   `httpService` **HTTPServer** 
+*   `httpService` **HTTPServer**&#x20;
 
-Returns **RequestListener** 
+Returns **RequestListener**&#x20;
 
 ## ServiceHTTP
 
@@ -150,9 +150,9 @@ On demand create RouteSendEndpoint´s.
 
 #### Parameters
 
-*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `definition` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))** 
-*   `ic`  
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `definition` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
+*   `ic` &#x20;
 
 Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
 
@@ -166,7 +166,7 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Options passed to @see {http.createServer} or @see {https.createServer}.
 
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ### name
 
@@ -188,18 +188,18 @@ Endpoint to link against a websocket route.
 
 ### Properties
 
-*   `sockets` **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)<[WebSocket](https://developer.mozilla.org/docs/WebSockets)>** 
+*   `sockets` **[Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)<[WebSocket](https://developer.mozilla.org/docs/WebSockets)>**&#x20;
 
 ## authenticate
 
 Check sec-websocket-protocol header for presence of
-'access_token' and the token.
+'access\_token' and the token.
 Throws if no valid token is present.
 
 ### Parameters
 
-*   `service` **Service** 
-*   `request` **any** 
+*   `service` **Service**&#x20;
+*   `request` **any**&#x20;
 
 # install
 
