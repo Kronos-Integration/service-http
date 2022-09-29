@@ -35,12 +35,12 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.4.34",
+    "@kronos-integration/endpoint": "^9.4.35",
     "@kronos-integration/interceptor": "^10.2.28",
-    "@kronos-integration/service": "^10.4.33",
+    "@kronos-integration/service": "^10.4.34",
     "bufferutil": "^4.0.6",
     "jsonwebtoken": "^8.5.1",
-    "model-attributes": "^4.1.19",
+    "model-attributes": "^4.2.0",
     "multi-path-matcher": "^2.3.0",
     "utf-8-validate": "^5.0.9",
     "ws": "^8.9.0"
