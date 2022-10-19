@@ -41,7 +41,7 @@
     "bufferutil": "^4.0.7",
     "jsonwebtoken": "^8.5.1",
     "model-attributes": "^4.2.0",
-    "multi-path-matcher": "^2.3.0",
+    "multi-path-matcher": "^2.3.1",
     "utf-8-validate": "^5.0.10",
     "ws": "^8.9.0"
   },
