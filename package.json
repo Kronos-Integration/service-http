@@ -42,7 +42,7 @@
     "jsonwebtoken": "^9.0.0",
     "model-attributes": "^4.2.2",
     "multi-path-matcher": "^2.3.2",
-    "utf-8-validate": "^6.0.1",
+    "utf-8-validate": "^6.0.2",
     "ws": "^8.12.0"
   },
   "devDependencies": {
