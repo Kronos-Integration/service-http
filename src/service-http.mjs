@@ -1,5 +1,5 @@
-import { createServer as httpCreateServer } from "http";
-import { createServer as httpsCreateServer } from "https";
+import { createServer as httpCreateServer } from "node:http";
+import { createServer as httpsCreateServer } from "node:https";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { Service } from "@kronos-integration/service";
 import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";

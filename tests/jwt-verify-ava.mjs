@@ -1,8 +1,7 @@
 import test from "ava";
-import { TestContext } from "./helpers/context.mjs";
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import jwt from "jsonwebtoken";
-
+import { TestContext } from "./helpers/context.mjs";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { StandaloneServiceProvider } from "@kronos-integration/service";
 import {

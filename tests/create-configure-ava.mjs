@@ -1,7 +1,7 @@
 import test from "ava";
+import { readFileSync } from "node:fs";
 import address from "network-address";
 import got from "got";
-import { readFileSync } from "fs";
 
 import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 import {

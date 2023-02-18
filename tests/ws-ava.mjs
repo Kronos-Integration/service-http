@@ -1,6 +1,5 @@
 import test from "ava";
-import { readFileSync } from "fs";
-
+import { readFileSync } from "node:fs";
 import jwt from "jsonwebtoken";
 import { WebSocket } from "ws";
 import { SendEndpoint } from "@kronos-integration/endpoint";
