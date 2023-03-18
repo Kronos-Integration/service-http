@@ -176,13 +176,11 @@ export class ServiceHTTP extends Service {
         return url;
       }
 
-      if (socket === undefined) {
-        return undefined;
+      if (socket !== undefined) {
+        return Number.isInteger(socket)
+          ? `${this.scheme}://${this.address}:${socket}`
+          : `fd:///${socket.fd}`;
       }
-
-      return Number.isInteger(socket)
-        ? `${this.scheme}://${this.address}:${socket}`
-        : `fd:///${socket.fd}`;
     }
   }
 
@@ -224,9 +222,9 @@ export class ServiceHTTP extends Service {
     await super._start();
 
     try {
-      const server = (this.server = (this.isSecure
-        ? httpsCreateServer
-        : httpCreateServer)(this.serverOptions, endpointRouter(this)));
+      const server = (this.server = (
+        this.isSecure ? httpsCreateServer : httpCreateServer
+      )(this.serverOptions, endpointRouter(this)));
 
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
