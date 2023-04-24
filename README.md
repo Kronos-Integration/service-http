@@ -11,7 +11,7 @@
 
 # @kronos-integration/service-http
 
-koa backed http server
+http server
 
 # API
 
@@ -19,33 +19,38 @@ koa backed http server
 
 ### Table of Contents
 
-*   [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
-    *   [name](#name)
-*   [CTXInterceptor](#ctxinterceptor)
-    *   [name](#name-1)
-*   [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
-    *   [name](#name-2)
-*   [reportError](#reporterror)
-    *   [Parameters](#parameters)
-*   [CTX](#ctx)
-    *   [Properties](#properties)
-*   [HTTPEndpoint](#httpendpoint)
-    *   [Parameters](#parameters-1)
-*   [endpointRouter](#endpointrouter)
-    *   [Parameters](#parameters-2)
-*   [ServiceHTTP](#servicehttp)
-    *   [Properties](#properties-1)
-    *   [extendetName](#extendetname)
-    *   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
-        *   [Parameters](#parameters-3)
-    *   [isSecure](#issecure)
-    *   [serverOptions](#serveroptions)
-    *   [name](#name-3)
-*   [WSEndpoint](#wsendpoint)
-    *   [Parameters](#parameters-4)
-    *   [Properties](#properties-2)
-*   [authenticate](#authenticate)
-    *   [Parameters](#parameters-5)
+- [@kronos-integration/service-http](#kronos-integrationservice-http)
+- [API](#api)
+    - [Table of Contents](#table-of-contents)
+  - [CTXBodyParamInterceptor](#ctxbodyparaminterceptor)
+    - [name](#name)
+  - [CTXInterceptor](#ctxinterceptor)
+    - [name](#name-1)
+  - [CTXJWTVerifyInterceptor](#ctxjwtverifyinterceptor)
+    - [name](#name-2)
+  - [reportError](#reporterror)
+    - [Parameters](#parameters)
+  - [CTX](#ctx)
+    - [Properties](#properties)
+  - [HTTPEndpoint](#httpendpoint)
+    - [Parameters](#parameters-1)
+  - [endpointRouter](#endpointrouter)
+    - [Parameters](#parameters-2)
+  - [ServiceHTTP](#servicehttp)
+    - [Properties](#properties-1)
+    - [extendetName](#extendetname)
+    - [endpointFactoryFromConfig](#endpointfactoryfromconfig)
+      - [Parameters](#parameters-3)
+    - [isSecure](#issecure)
+    - [serverOptions](#serveroptions)
+    - [name](#name-3)
+  - [WSEndpoint](#wsendpoint)
+    - [Parameters](#parameters-4)
+    - [Properties](#properties-2)
+  - [authenticate](#authenticate)
+    - [Parameters](#parameters-5)
+- [install](#install)
+- [license](#license)
 
 ## CTXBodyParamInterceptor
 
