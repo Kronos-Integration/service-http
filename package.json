@@ -52,7 +52,7 @@
     "documentation": "^14.0.1",
     "got": "^12.6.0",
     "network-address": "^1.1.2",
-    "semantic-release": "^21.0.1"
+    "semantic-release": "^21.0.2"
   },
   "engines": {
     "node": ">=18.16.0"
