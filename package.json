@@ -52,10 +52,10 @@
     "documentation": "^14.0.2",
     "got": "^13.0.0",
     "network-address": "^1.1.2",
-    "semantic-release": "^21.0.9"
+    "semantic-release": "^21.1.0"
   },
   "engines": {
-    "node": ">=20.5.0"
+    "node": ">=20.5.1"
   },
   "repository": {
     "type": "git",
