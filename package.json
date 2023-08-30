@@ -39,7 +39,7 @@
     "@kronos-integration/interceptor": "^10.2.35",
     "@kronos-integration/service": "^10.4.49",
     "bufferutil": "^4.0.7",
-    "jsonwebtoken": "^9.0.1",
+    "jsonwebtoken": "^9.0.2",
     "model-attributes": "^4.2.2",
     "multi-path-matcher": "^2.3.3",
     "utf-8-validate": "^6.0.3",
