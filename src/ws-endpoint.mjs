@@ -18,14 +18,13 @@ import { verifyJWT } from "./util.mjs";
  */
 export class WSEndpoint extends SendReceiveEndpoint {
   sockets = new Set();
+  #path;
 
-  constructor(name, owner, options = {}) {
+  constructor(name, owner, options) {
     super(name, owner, options);
 
-    if (options.path !== undefined) {
-      Object.defineProperty(this, "path", {
-        value: options.path
-      });
+    if (options?.path !== undefined) {
+      this.#path = options.path;
     }
   }
 
@@ -90,7 +89,7 @@ export class WSEndpoint extends SendReceiveEndpoint {
   }
 
   get path() {
-    return this.name;
+    return this.#path || this.name;
   }
 
   get ws() {

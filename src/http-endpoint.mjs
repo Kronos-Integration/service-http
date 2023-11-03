@@ -23,7 +23,10 @@ import { TEXT_PLAIN } from "./constants.mjs";
  * @param {string} options.method http method defaults to GET
  */
 export class HTTPEndpoint extends SendEndpoint {
-  constructor(name, owner, options = {}) {
+  #path;
+  #method;
+
+  constructor(name, owner, options) {
     super(name, owner, options);
 
     const m = name.match(/^(?<method>\w+):(?<path>.*)/);
@@ -31,28 +34,24 @@ export class HTTPEndpoint extends SendEndpoint {
     let { method, path } = m ? m.groups : options;
 
     if (path !== undefined) {
-      Object.defineProperty(this, "path", {
-        value: path
-      });
+      this.#path = path;
     }
 
     if (method !== undefined) {
       method = method.toUpperCase();
 
       if (method !== "GET") {
-        Object.defineProperty(this, "method", {
-          value: method
-        });
+        this.#method = method;
       }
     }
   }
 
   get method() {
-    return "GET";
+    return this.#method || "GET";
   }
 
   get path() {
-    return this.name;
+    return this.#path || this.name;
   }
 
   get toStringAttributes() {
