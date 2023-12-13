@@ -42,7 +42,7 @@
     "model-attributes": "^4.2.2",
     "multi-path-matcher": "^3.0.1",
     "utf-8-validate": "^6.0.3",
-    "ws": "^8.14.2"
+    "ws": "^8.15.1"
   },
   "devDependencies": {
     "@kronos-integration/test-interceptor": "^7.0.27",
