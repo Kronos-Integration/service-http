@@ -48,7 +48,7 @@
     "@kronos-integration/test-interceptor": "^7.0.27",
     "ava": "^6.1.1",
     "c8": "^9.1.0",
-    "documentation": "^14.0.2",
+    "documentation": "^14.0.3",
     "got": "^14.0.0",
     "network-address": "^1.1.2",
     "semantic-release": "^23.0.0"
