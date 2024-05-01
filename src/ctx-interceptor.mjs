@@ -28,7 +28,7 @@ export class CTXInterceptor extends Interceptor {
     );
   }
 
-  headers = {};
+  //headers = {};
 
   async receive(endpoint, next, ctx, params) {
     const result = await next(params);
