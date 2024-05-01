@@ -70,7 +70,7 @@ Basic interceptor providing/consuming http request/response.
 
 ### name
 
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx'
 
 ## CTXJWTVerifyInterceptor
 
@@ -90,8 +90,8 @@ Write WWW-Authenticate header.
 
 *   `ctx` **any**&#x20;
 *   `code` &#x20;
-*   `error` **any**&#x20;
-*   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `error` **any?**&#x20;
+*   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
 
 ## CTX
 
@@ -99,8 +99,8 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### Properties
 
-*   `res` **http.ServerResponse**&#x20;
-*   `req` **http.ServerRequest**&#x20;
+*   `res` **ServerResponse**&#x20;
+*   `req` **ServerRequest**&#x20;
 *   `is` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**&#x20;
 *   `throw` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**&#x20;
 
@@ -147,7 +147,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### endpointFactoryFromConfig
 
-On demand create RouteSendEndpointÂ´s.
+On demand create RouteSendEndpoint´s.
 
 #### Parameters
 
