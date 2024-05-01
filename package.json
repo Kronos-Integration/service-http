@@ -6,7 +6,9 @@
     "provenance": true
   },
   "exports": {
-    ".": "./src/service-http.mjs"
+    ".": {
+      "default": "./src/service-http.mjs"
+    }
   },
   "description": "http server",
   "keywords": [
@@ -27,12 +29,15 @@
   ],
   "license": "BSD-2-Clause",
   "scripts": {
+    "prepare": "npm run prepare:typescript",
+    "prepare:typescript": "tsc --allowJs --declaration --emitDeclarationOnly --declarationDir types --resolveJsonModule -t esnext -m esnext --module nodenext --moduleResolution nodenext --rootDir src ./src**/*.mjs",
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 4m tests/*-ava.mjs tests/*-ava-node.mjs",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 4m tests/*-ava.mjs tests/*-ava-node.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme --section=API ./src/**/*.mjs",
-    "lint": "npm run lint:docs",
-    "lint:docs": "documentation lint ./src/**/*.mjs"
+    "lint": "npm run lint:docs && npm run lint:typescript",
+    "lint:docs": "documentation lint ./src/**/*.mjs",
+    "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs"
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^9.5.4",
@@ -52,7 +57,8 @@
     "documentation": "^14.0.3",
     "got": "^14.2.1",
     "network-address": "^1.1.2",
-    "semantic-release": "^23.0.8"
+    "semantic-release": "^23.0.8",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=20.12.2"
@@ -68,7 +74,8 @@
   "template": {
     "inheritFrom": [
       "arlac77/template-arlac77-github",
-      "arlac77/template-kronos-component"
+      "arlac77/template-kronos-component",
+      "arlac77/template-typescript"
     ]
   }
 }
