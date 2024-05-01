@@ -70,7 +70,7 @@ Basic interceptor providing/consuming http request/response.
 
 ### name
 
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx-body-param'
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'ctx'
 
 ## CTXJWTVerifyInterceptor
 
