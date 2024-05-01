@@ -25,7 +25,7 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     );
   }
 
-  requiredEntitlements = new Set();
+  //requiredEntitlements = new Set();
 
   async receive(endpoint, next, ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.req.headers);
