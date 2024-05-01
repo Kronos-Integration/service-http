@@ -25,6 +25,8 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     );
   }
 
+  requiredEntitlements = new Set();
+
   async receive(endpoint, next, ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.req.headers);
     if (token) {
@@ -73,12 +75,12 @@ function tokenFromAuthorizationHeader(headers) {
  *
  * @param {*} ctx
  * @param {number} error code
- * @param {*} error
- * @param {string} description
+ * @param {*} [error]
+ * @param {string} [description]
  */
 function reportError(ctx, code, error, description) {
   const entries = Object.entries({
-    error: error ? error.message : "Missing token",
+    error: error?.message || "Missing token",
     description
   }).filter(([name, value]) => value !== undefined);
 
