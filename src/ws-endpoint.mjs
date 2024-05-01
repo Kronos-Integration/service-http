@@ -1,6 +1,7 @@
 import { WebSocketServer } from "ws";
 import { compile } from "multi-path-matcher";
 import { SendReceiveEndpoint } from "@kronos-integration/endpoint";
+import { Service } from "@kronos-integration/service";
 
 import bufferutil from "bufferutil";
 import utf8Validate from "utf-8-validate";

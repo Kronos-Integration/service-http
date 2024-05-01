@@ -1,11 +1,12 @@
 import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { TEXT_PLAIN } from "./constants.mjs";
+import {Server as HTTPServer } from "node:http";
 
 /**
  * @typedef {Object} CTX
- * @property {http.ServerResponse} res
- * @property {http.ServerRequest} req
+ * @property {ServerResponse} res
+ * @property {ServerRequest} req
  * @property {Function} is
  * @property {Function} throw
  */
