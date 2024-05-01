@@ -143,4 +143,7 @@ test("endpoint factory", async t => {
   let response = await got("http://localhost:1241/s1");
   t.is(response.body, "OK R1");
   t.is(response.statusCode, 200);
+
+
+  await http.stop();
 });
