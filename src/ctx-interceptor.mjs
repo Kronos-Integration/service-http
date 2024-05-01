@@ -7,7 +7,7 @@ import { APPLICATION_JSON, TEXT_PLAIN } from "./constants.mjs";
  */
 export class CTXInterceptor extends Interceptor {
   /**
-   * @return {string} 'ctx-body-param'
+   * @return {string} 'ctx'
    */
   static get name() {
     return "ctx";
