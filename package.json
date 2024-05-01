@@ -5,9 +5,12 @@
     "access": "public",
     "provenance": true
   },
+
+  "types": "./types/service-http.d.mts",
   "exports": {
     ".": {
-      "default": "./src/service-http.mjs"
+      "default": "./src/service-http.mjs",
+      "types": "./types/service-http.d.mts"
     }
   },
   "description": "http server",
