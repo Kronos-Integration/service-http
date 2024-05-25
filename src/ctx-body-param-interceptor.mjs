@@ -49,7 +49,7 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
 
       sendResponse(await next(JSON.parse(chunks.join("")), ...args));
     } else {
-      ctx.throw(415, "no json");
+      ctx.throw(415, `Unsupported content type ${ctx.req.headers["content-type"]}`);
     }
   }
 }
