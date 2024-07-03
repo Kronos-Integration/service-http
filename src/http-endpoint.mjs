@@ -1,7 +1,7 @@
 import { compile } from "multi-path-matcher";
 import { SendEndpoint } from "@kronos-integration/endpoint";
 import { TEXT_PLAIN } from "./constants.mjs";
-import {Server as HTTPServer } from "node:http";
+import { Server as HTTPServer } from "node:http";
 
 /**
  * @typedef {Object} CTX
@@ -118,4 +118,3 @@ export function endpointRouter(httpService) {
     res.end();
   };
 }
-
