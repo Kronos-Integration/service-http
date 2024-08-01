@@ -1,7 +1,7 @@
 import { CTXInterceptor } from "./ctx-interceptor.mjs";
 import { APPLICATION_JSON, TEXT_PLAIN } from "./constants.mjs";
 
-const typeDecoder = {
+const _typeDecoders = {
   "application/x-www-form-urlencoded": async ctx => {
     const chunks = [];
     for await (const chunk of ctx.req) {
@@ -33,8 +33,10 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
     return "ctx-body-param";
   }
 
+  typeDecoders = _typeDecoders;
+
   async receive(endpoint, next, ctx, ...args) {
-    for (const [type, decoder] of Object.entries(typeDecoder)) {
+    for (const [type, decoder] of Object.entries(this.typeDecoders)) {
       if (ctx.is(type)) {
         const response = await next(await decoder(ctx), ...args);
 
@@ -57,7 +59,7 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
 
     ctx.throw(
       415,
-      `Unsupported content type ${ctx.req.headers["content-type"]} [${Object.keys(typeDecoder)}]`
+      `Unsupported content type ${ctx.req.headers["content-type"]} [${Object.keys(this.typeDecoders)}]`
     );
   }
 }
