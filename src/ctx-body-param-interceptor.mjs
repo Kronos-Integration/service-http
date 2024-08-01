@@ -1,6 +1,24 @@
 import { CTXInterceptor } from "./ctx-interceptor.mjs";
 import { APPLICATION_JSON, TEXT_PLAIN } from "./constants.mjs";
 
+const typeDecoder = {
+  "application/x-www-form-urlencoded": async ctx => {
+    const chunks = [];
+    for await (const chunk of ctx.req) {
+      chunks.push(chunk);
+    }
+
+    return Object.fromEntries(new URLSearchParams(chunks.join("")).entries());
+  },
+  "application/json": async ctx => {
+    const chunks = [];
+    for await (const chunk of ctx.req) {
+      chunks.push(chunk);
+    }
+    return JSON.parse(chunks.join(""));
+  }
+};
+
 /**
  * Extracts params from request body.
  * Supported content types are:
@@ -16,40 +34,30 @@ export class CTXBodyParamInterceptor extends CTXInterceptor {
   }
 
   async receive(endpoint, next, ctx, ...args) {
-    const sendResponse = response => {
-      if (typeof response === "string") {
-        ctx.res.writeHead(200, {
-          ...this.headers,
-          ...TEXT_PLAIN
-        });
-        ctx.res.end(response);
-      } else {
-        ctx.res.writeHead(200, {
-          ...this.headers,
-          ...APPLICATION_JSON
-        });
-        ctx.res.end(JSON.stringify(response));
-      }
-    };
+    for (const [type, decoder] of Object.entries(typeDecoder)) {
+      if (ctx.is(type)) {
+        const response = await next(await decoder(ctx), ...args);
 
-    if (ctx.is("application/x-www-form-urlencoded")) {
-      const chunks = [];
-      for await (const chunk of ctx.req) {
-        chunks.push(chunk);
+        if (typeof response === "string") {
+          ctx.res.writeHead(200, {
+            ...this.headers,
+            ...TEXT_PLAIN
+          });
+          ctx.res.end(response);
+        } else {
+          ctx.res.writeHead(200, {
+            ...this.headers,
+            ...APPLICATION_JSON
+          });
+          ctx.res.end(JSON.stringify(response));
+        }
+        return;
       }
-
-      sendResponse(await next(Object.fromEntries(
-        new URLSearchParams(chunks.join("")).entries()
-      ), ...args));
-    } else if (ctx.is("application/json")) {
-      const chunks = [];
-      for await (const chunk of ctx.req) {
-        chunks.push(chunk);
-      }
-
-      sendResponse(await next(JSON.parse(chunks.join("")), ...args));
-    } else {
-      ctx.throw(415, `Unsupported content type ${ctx.req.headers["content-type"]}`);
     }
+
+    ctx.throw(
+      415,
+      `Unsupported content type ${ctx.req.headers["content-type"]} [${Object.keys(typeDecoder)}]`
+    );
   }
 }
