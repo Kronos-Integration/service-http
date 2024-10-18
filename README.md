@@ -1,8 +1,5 @@
-[![npm](https://img.shields.io/npm/v/@kronos-integration/service-http.svg)](https://www.npmjs.com/package/@kronos-integration/service-http)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Typed with TypeScript](https://flat.badgen.net/badge/icon/Typed?icon=typescript\&label\&labelColor=blue\&color=555555)](https://typescriptlang.org)
-[![bundlejs](https://deno.bundlejs.com/?q=@kronos-integration/service-http\&badge=detailed)](https://bundlejs.com/?q=@kronos-integration/service-http)
-[![downloads](http://img.shields.io/npm/dm/@kronos-integration/service-http.svg?style=flat-square)](https://npmjs.org/package/@kronos-integration/service-http)
 [![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/service-http.svg?style=flat-square)](https://github.com/Kronos-Integration/service-http/issues)
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FKronos-Integration%2Fservice-http%2Fbadge\&style=flat)](https://actions-badge.atrox.dev/Kronos-Integration/service-http/goto)
 [![Styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
@@ -147,7 +144,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### endpointFactoryFromConfig
 
-On demand create RouteSendEndpoint´s.
+On demand create RouteSendEndpointÂ´s.
 
 #### Parameters
 
