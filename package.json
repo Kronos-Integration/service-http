@@ -42,9 +42,9 @@
     "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule --target es2024 --lib es2024 -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.5.6",
+    "@kronos-integration/endpoint": "^9.5.7",
     "@kronos-integration/interceptor": "^10.3.4",
-    "@kronos-integration/service": "^11.2.7",
+    "@kronos-integration/service": "^11.2.8",
     "bufferutil": "^4.0.8",
     "jsonwebtoken": "^9.0.2",
     "model-attributes": "^4.2.4",
