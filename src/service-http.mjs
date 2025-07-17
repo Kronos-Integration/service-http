@@ -79,7 +79,7 @@ export class ServiceHTTP extends Service {
               description: "server timeout",
               type: "duration",
               default: 120,
-              setter(value, attribute) {
+              set(value, attribute) {
                 if (value === undefined) {
                   value = attribute.default;
                 }

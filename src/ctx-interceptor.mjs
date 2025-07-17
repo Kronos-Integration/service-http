@@ -19,7 +19,7 @@ export class CTXInterceptor extends Interceptor {
         headers: {
           description: "http headers",
           default: {},
-          setter(value) {
+          set(value) {
             this.headers = { ...value };
           }
         }
