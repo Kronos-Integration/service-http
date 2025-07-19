@@ -89,7 +89,9 @@ skt.title = (providedTitle = "http", config, updates) => {
 
   return `${providedTitle} ${
     config === undefined ? "undefined" : JSON.stringify(c)
-  }${Array.isArray(updates) ? " updates " + JSON.stringify(updates) : ""}`.trim();
+  }${
+    Array.isArray(updates) ? " updates " + JSON.stringify(updates) : ""
+  }`.trim();
 };
 
 test(
