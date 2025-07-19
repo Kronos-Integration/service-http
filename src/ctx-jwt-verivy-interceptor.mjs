@@ -31,7 +31,7 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
     const token = tokenFromAuthorizationHeader(ctx.req.headers);
     if (token) {
       try {
-        const key = endpoint.owner.jwt.public;
+        const key = endpoint.owner.jwt?.public;
         const decoded = await verifyJWT(token, key);
 
         if (this.requiredEntitlements) {
