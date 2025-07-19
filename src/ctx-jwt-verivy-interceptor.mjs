@@ -1,5 +1,5 @@
 import { Interceptor } from "@kronos-integration/interceptor";
-import { mergeAttributes, createAttributes } from "model-attributes";
+import { prepareAttributesDefinitions, mergeAttributeDefinitions } from "pacc";
 import { verifyJWT } from "./util.mjs";
 import { TEXT_PLAIN } from "./constants.mjs";
 
@@ -15,8 +15,8 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
   }
 
   static get configurationAttributes() {
-    return mergeAttributes(
-      createAttributes({
+    return mergeAttributeDefinitions(
+      prepareAttributesDefinitions({
         requiredEntitlements: {
           description: "entitlements to be present in the token"
         }

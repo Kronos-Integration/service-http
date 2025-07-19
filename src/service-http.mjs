@@ -1,6 +1,6 @@
 import { createServer as httpCreateServer } from "node:http";
 import { createServer as httpsCreateServer } from "node:https";
-import { mergeAttributes, createAttributes } from "model-attributes";
+import { prepareAttributesDefinitions, mergeAttributeDefinitions } from "pacc";
 import { Service } from "@kronos-integration/service";
 import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";
 import { WSEndpoint, initializeWS, closeWS } from "./ws-endpoint.mjs";
@@ -27,8 +27,8 @@ export class ServiceHTTP extends Service {
   }
 
   static get configurationAttributes() {
-    return mergeAttributes(
-      createAttributes({
+    return mergeAttributeDefinitions(
+      prepareAttributesDefinitions({
         jwt: {
           description: "jwt related",
           attributes: {

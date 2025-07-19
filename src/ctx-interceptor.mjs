@@ -1,4 +1,4 @@
-import { mergeAttributes, createAttributes } from "model-attributes";
+import { prepareAttributesDefinitions, mergeAttributeDefinitions } from "pacc";
 import { Interceptor } from "@kronos-integration/interceptor";
 import { APPLICATION_JSON, TEXT_PLAIN } from "./constants.mjs";
 
@@ -14,8 +14,8 @@ export class CTXInterceptor extends Interceptor {
   }
 
   static get configurationAttributes() {
-    return mergeAttributes(
-      createAttributes({
+    return mergeAttributeDefinitions(
+      prepareAttributesDefinitions({
         headers: {
           description: "http headers",
           default: {},
