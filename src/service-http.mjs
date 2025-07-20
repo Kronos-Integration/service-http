@@ -26,83 +26,81 @@ export class ServiceHTTP extends Service {
     return "http server";
   }
 
-  static get configurationAttributes() {
-    return mergeAttributeDefinitions(
-      prepareAttributesDefinitions({
-        jwt: {
-          description: "jwt related",
-          attributes: {
-            public: {
-              description: "public key to check token against",
-              mandatory: true,
-              private: true,
-              type: "blob"
-            }
+  static attributes = mergeAttributeDefinitions(
+    prepareAttributesDefinitions({
+      jwt: {
+        description: "jwt related",
+        attributes: {
+          public: {
+            description: "public key to check token against",
+            mandatory: true,
+            private: true,
+            type: "blob"
           }
-        },
-        listen: {
-          description: "server listen definition",
+        }
+      },
+      listen: {
+        description: "server listen definition",
 
-          attributes: {
-            url: {
-              description: "url of the http(s) server",
-              needsRestart: true,
-              type: "url"
-            },
-            address: {
-              description: "hostname/ip-address of the http(s) server",
-              needsRestart: true,
-              type: "hostname"
-            },
-            socket: {
-              description: "listening port|socket of the http(s) server",
-              needsRestart: true,
-              type: "listen-socket"
-            }
+        attributes: {
+          url: {
+            description: "url of the http(s) server",
+            needsRestart: true,
+            type: "url"
+          },
+          address: {
+            description: "hostname/ip-address of the http(s) server",
+            needsRestart: true,
+            type: "hostname"
+          },
+          socket: {
+            description: "listening port|socket of the http(s) server",
+            needsRestart: true,
+            type: "listen-socket"
           }
-        },
-        key: {
-          description: "ssl key",
-          needsRestart: true,
-          private: true,
-          type: "blob"
-        },
-        cert: {
-          description: "ssl cert",
-          needsRestart: true,
-          private: true,
-          type: "blob"
-        },
-        timeout: {
-          attributes: {
-            server: {
-              description: "server timeout",
-              type: "duration",
-              default: 120,
-              set(value, attribute) {
-                if (value === undefined) {
-                  value = attribute.default;
-                }
-
-                if (this.timeout === undefined) {
-                  this.timeout = {};
-                }
-
-                this.timeout.server = value;
-
-                if (this.server) {
-                  this.server.setTimeout(value * 1000);
-                  return true;
-                }
-                return false;
+        }
+      },
+      key: {
+        description: "ssl key",
+        needsRestart: true,
+        private: true,
+        type: "blob"
+      },
+      cert: {
+        description: "ssl cert",
+        needsRestart: true,
+        private: true,
+        type: "blob"
+      },
+      timeout: {
+        attributes: {
+          server: {
+            description: "server timeout",
+            type: "duration",
+            default: 120,
+            set(value, attribute) {
+              if (value === undefined) {
+                value = attribute.default;
               }
+
+              if (this.timeout === undefined) {
+                this.timeout = {};
+              }
+
+              this.timeout.server = value;
+
+              if (this.server) {
+                this.server.setTimeout(value * 1000);
+                return true;
+              }
+              return false;
             }
           }
         }
-      }),
-      Service.configurationAttributes
-    );
-  }
+      }
+    }),
+    Service.attributes
+  );
 
   /**
    * @return {string} name with url

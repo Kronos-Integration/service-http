@@ -1,4 +1,4 @@
-import { prepareAttributesDefinitions, mergeAttributeDefinitions } from "pacc";
+import { prepareAttributesDefinitions } from "pacc";
 import { Interceptor } from "@kronos-integration/interceptor";
 import { APPLICATION_JSON, TEXT_PLAIN } from "./constants.mjs";
 
@@ -13,20 +13,16 @@ export class CTXInterceptor extends Interceptor {
     return "ctx";
   }
 
-  static get configurationAttributes() {
-    return mergeAttributeDefinitions(
-      prepareAttributesDefinitions({
-        headers: {
-          description: "http headers",
-          default: {},
-          set(value) {
-            this.headers = { ...value };
-          }
-        }
-      }),
-      Interceptor.configurationAttributes
-    );
-  }
+  static attributes = prepareAttributesDefinitions({
+    headers: {
+      description: "http headers",
+      default: {},
+      set(value) {
+        this.headers = { ...value };
+      }
+    },
+    ...Interceptor.attributes
+  });
 
   //headers = {};
 
