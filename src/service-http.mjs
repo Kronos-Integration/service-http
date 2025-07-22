@@ -1,6 +1,12 @@
 import { createServer as httpCreateServer } from "node:http";
 import { createServer as httpsCreateServer } from "node:https";
-import { prepareAttributesDefinitions, mergeAttributeDefinitions } from "pacc";
+import {
+  prepareAttributesDefinitions,
+  public_key_attribute,
+  private_key_attribute,
+  certificate_attribute,
+  timeout_attribute
+} from "pacc";
 import { Service } from "@kronos-integration/service";
 import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";
 import { WSEndpoint, initializeWS, closeWS } from "./ws-endpoint.mjs";
@@ -26,15 +32,15 @@ export class ServiceHTTP extends Service {
     return "http server";
   }
 
-  static attributes = mergeAttributeDefinitions(
-    prepareAttributesDefinitions({
+  static attributes = prepareAttributesDefinitions(
+    {
       jwt: {
         description: "jwt related",
         attributes: {
           public: {
+            ...public_key_attribute,
             description: "public key to check token against",
             mandatory: true,
-            private: true,
             type: "blob"
           }
         }
@@ -61,22 +67,22 @@ export class ServiceHTTP extends Service {
         }
       },
       key: {
+        ...private_key_attribute,
         description: "ssl key",
         needsRestart: true,
-        private: true,
         type: "blob"
       },
       cert: {
+        ...certificate_attribute,
         description: "ssl cert",
         needsRestart: true,
-        private: true,
         type: "blob"
       },
       timeout: {
         attributes: {
           server: {
+            ...timeout_attribute,
             description: "server timeout",
-            type: "duration",
             default: 120,
             set(value, attribute) {
               if (value === undefined) {
@@ -98,7 +104,7 @@ export class ServiceHTTP extends Service {
           }
         }
       }
-    }),
+    },
     Service.attributes
   );
 
@@ -139,18 +145,6 @@ export class ServiceHTTP extends Service {
    */
   get isSecure() {
     return this.key !== undefined;
-  }
-
-  /**
-   * Options passed to @see {http.createServer} or @see {https.createServer}.
-   *
-   * @return {Object}
-   */
-  get serverOptions() {
-    return {
-      key: this.key,
-      cert: this.cert
-    };
   }
 
   get scheme() {
@@ -220,9 +214,14 @@ export class ServiceHTTP extends Service {
     await super._start();
 
     try {
+      const serverOptions = {
+        key: this.key,
+        cert: this.cert
+      };
+
       const server = (this.server = (
         this.isSecure ? httpsCreateServer : httpCreateServer
-      )(this.serverOptions, endpointRouter(this)));
+      )(serverOptions, endpointRouter(this)));
 
       if (this.timeout !== undefined) {
         server.setTimeout(this.timeout * 1000);
