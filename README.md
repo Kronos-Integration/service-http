@@ -37,7 +37,6 @@ http server
     *   [endpointFactoryFromConfig](#endpointfactoryfromconfig)
         *   [Parameters](#parameters-3)
     *   [isSecure](#issecure)
-    *   [serverOptions](#serveroptions)
     *   [name](#name-3)
 *   [WSEndpoint](#wsendpoint)
     *   [Parameters](#parameters-4)
@@ -159,12 +158,6 @@ Returns **Class** RouteSendEndpoint if path is present of name starts with '/'
 Should we make a secure connection.
 
 Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if key is present
-
-### serverOptions
-
-Options passed to @see {http.createServer} or @see {https.createServer}.
-
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ### name
 
