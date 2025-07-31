@@ -44,11 +44,11 @@
   "dependencies": {
     "@kronos-integration/endpoint": "^10.1.4",
     "@kronos-integration/interceptor": "^12.1.2",
-    "@kronos-integration/service": "^13.1.14",
+    "@kronos-integration/service": "^13.1.15",
     "bufferutil": "^4.0.9",
     "jsonwebtoken": "^9.0.2",
     "multi-path-matcher": "^4.1.6",
-    "pacc": "^4.5.2",
+    "pacc": "^4.5.3",
     "utf-8-validate": "^6.0.5",
     "ws": "^8.18.3"
   },
