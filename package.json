@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^10.1.19",
-    "@kronos-integration/interceptor": "^12.2.4",
+    "@kronos-integration/interceptor": "^12.2.5",
     "@kronos-integration/service": "^13.2.39",
     "bufferutil": "^4.0.9",
     "jsonwebtoken": "^9.0.2",
