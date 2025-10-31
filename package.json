@@ -61,10 +61,10 @@
     "got": "^14.6.1",
     "network-address": "^1.1.2",
     "semantic-release": "^25.0.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=22.17.1"
+    "node": ">=24.11.0"
   },
   "repository": {
     "type": "git",
