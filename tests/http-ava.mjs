@@ -90,7 +90,7 @@ test("endpoint route basics", async t => {
       method: "POST"
     });
   } catch (e) {
-    t.is(e.message, "Response code 500 (Internal Server Error)");
+    t.is(e.message, "Request failed with status code 500 (Internal Server Error): POST http://localhost:1240/s2");
   }
 
   await ks.stop();
