@@ -35,13 +35,12 @@ export class ServiceHTTP extends Service {
   static attributes = prepareAttributesDefinitions(
     {
       jwt: {
-        description: "jwt related",
+        description: "jwt public key",
         attributes: {
           public: {
             ...public_key_attribute,
             description: "public key to check token against",
-            mandatory: true,
-            type: "blob"
+            mandatory: true
           }
         }
       },
@@ -69,14 +68,12 @@ export class ServiceHTTP extends Service {
       key: {
         ...private_key_attribute,
         description: "ssl key",
-        needsRestart: true,
-        type: "blob"
+        needsRestart: true
       },
       cert: {
         ...certificate_attribute,
         description: "ssl cert",
-        needsRestart: true,
-        type: "blob"
+        needsRestart: true
       },
       timeout: {
         attributes: {
