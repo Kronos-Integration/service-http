@@ -2,10 +2,13 @@ import { createServer as httpCreateServer } from "node:http";
 import { createServer as httpsCreateServer } from "node:https";
 import {
   prepareAttributesDefinitions,
+  default_attribute,
   public_key_attribute,
   private_key_attribute,
   certificate_attribute,
-  timeout_attribute
+  timeout_attribute,
+  hostname_attribute,
+  url_attribute
 } from "pacc";
 import { Service } from "@kronos-integration/service";
 import { HTTPEndpoint, endpointRouter } from "./http-endpoint.mjs";
@@ -49,19 +52,19 @@ export class ServiceHTTP extends Service {
 
         attributes: {
           url: {
+            ...url_attribute,
             description: "url of the http(s) server",
             needsRestart: true,
-            type: "url"
           },
           address: {
+            ...hostname_attribute,
             description: "hostname/ip-address of the http(s) server",
             needsRestart: true,
-            type: "hostname"
           },
           socket: {
+            ...default_attribute,
             description: "listening port|socket of the http(s) server",
             needsRestart: true,
-            type: "listen-socket"
           }
         }
       },
