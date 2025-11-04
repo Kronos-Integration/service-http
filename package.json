@@ -43,7 +43,7 @@
     "bufferutil": "^4.0.9",
     "jsonwebtoken": "^9.0.2",
     "multi-path-matcher": "^4.1.6",
-    "pacc": "^4.41.0",
+    "pacc": "^4.41.1",
     "utf-8-validate": "^6.0.5",
     "ws": "^8.18.3"
   },
