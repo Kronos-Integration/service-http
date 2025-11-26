@@ -42,8 +42,8 @@
     "@kronos-integration/service": "^14.0.1",
     "bufferutil": "^4.0.9",
     "jsonwebtoken": "^9.0.2",
-    "multi-path-matcher": "^4.1.6",
-    "pacc": "^4.41.2",
+    "multi-path-matcher": "^4.1.7",
+    "pacc": "^4.41.3",
     "utf-8-validate": "^6.0.5",
     "ws": "^8.18.3"
   },
