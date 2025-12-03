@@ -2,6 +2,7 @@ import { createServer as httpCreateServer } from "node:http";
 import { createServer as httpsCreateServer } from "node:https";
 import {
   prepareAttributesDefinitions,
+  object_attribute,
   default_attribute,
   public_key_attribute,
   private_key_attribute,
@@ -38,6 +39,7 @@ export class ServiceHTTP extends Service {
   static attributes = prepareAttributesDefinitions(
     {
       jwt: {
+        ...object_attribute,
         description: "jwt public key",
         attributes: {
           public: {
@@ -48,6 +50,7 @@ export class ServiceHTTP extends Service {
         }
       },
       listen: {
+        ...object_attribute,
         description: "server listen definition",
 
         attributes: {
@@ -79,6 +82,7 @@ export class ServiceHTTP extends Service {
         needsRestart: true
       },
       timeout: {
+        ...object_attribute,
         attributes: {
           server: {
             ...timeout_attribute,
