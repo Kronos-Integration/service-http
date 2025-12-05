@@ -48,7 +48,7 @@
     "ws": "^8.18.3"
   },
   "devDependencies": {
-    "@kronos-integration/test-interceptor": "^7.0.32",
+    "@kronos-integration/test-interceptor": "^7.0.33",
     "@types/node": "^24.10.1",
     "ava": "^6.4.1",
     "c8": "^10.1.3",
