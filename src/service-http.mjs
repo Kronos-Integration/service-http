@@ -96,9 +96,7 @@ export class ServiceHTTP extends Service {
                 value = attribute.default;
               }
 
-              if (this.timeout === undefined) {
-                this.timeout = {};
-              }
+              this.timeout ||= {};
 
               this.timeout.server = value;
 
@@ -242,9 +240,7 @@ export class ServiceHTTP extends Service {
             this.error(err);
             reject(err);
           } else {
-            this.trace(
-              `Listening on ${this.url} (${JSON.stringify(this.socket)})`
-            );
+            this.trace(level=>`Listening (${this.server.listening}) on ${this.url} (${JSON.stringify(this.socket)})`);
             resolve();
           }
         };
