@@ -1,6 +1,7 @@
 import { createServer as httpCreateServer } from "node:http";
 import { createServer as httpsCreateServer } from "node:https";
 import {
+  getAttributesJSON,
   prepareAttributesDefinitions,
   object_attribute,
   default_attribute,
@@ -57,29 +58,31 @@ export class ServiceHTTP extends Service {
           url: {
             ...url_attribute,
             description: "url of the http(s) server",
-            needsRestart: true,
+            needsRestart: true
           },
           address: {
             ...hostname_attribute,
             description: "hostname/ip-address of the http(s) server",
-            needsRestart: true,
+            needsRestart: true
           },
           socket: {
             ...default_attribute,
             description: "listening port|socket of the http(s) server",
-            needsRestart: true,
+            needsRestart: true
           }
         }
       },
       key: {
         ...private_key_attribute,
-        description: "ssl key",
-        needsRestart: true
+        description: "ssl private key",
+        needsRestart: true,
+        serverOption: true
       },
       cert: {
         ...certificate_attribute,
-        description: "ssl cert",
-        needsRestart: true
+        description: "ssl certificate",
+        needsRestart: true,
+        serverOption: true
       },
       timeout: {
         ...object_attribute,
@@ -218,10 +221,11 @@ export class ServiceHTTP extends Service {
     await super._start();
 
     try {
-      const serverOptions = {
-        key: this.key,
-        cert: this.cert
-      };
+      const serverOptions = getAttributesJSON(
+        this,
+        this.attributes,
+        (name, attribute) => attribute.serverOption
+      );
 
       const server = (this.server = (
         this.isSecure ? httpsCreateServer : httpCreateServer
