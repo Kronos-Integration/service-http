@@ -83,7 +83,7 @@ export function endpointRouter(httpService) {
       is: mime => req.headers["content-type"] === mime,
       throw(code, message) {
         statusCode = code;
-        throw new Error(message);
+        throw new Error(message, { cause: code });
       }
     };
 
