@@ -46,8 +46,7 @@ export class ServiceHTTP extends Service {
           public: {
             ...public_key_attribute,
             description: "public key to check token against",
-            mandatory: true,
-            credential: true
+            mandatory: true
           }
         }
       },
@@ -77,15 +76,13 @@ export class ServiceHTTP extends Service {
         ...private_key_attribute,
         description: "ssl private key",
         needsRestart: true,
-        serverOption: true,
-        credential: true
+        serverOption: true
       },
       cert: {
         ...certificate_attribute,
         description: "ssl certificate",
         needsRestart: true,
-        serverOption: true,
-        credential: true
+        serverOption: true
       },
       timeout: {
         ...object_attribute,
@@ -243,7 +240,12 @@ export class ServiceHTTP extends Service {
             this.error(err);
             reject(err);
           } else {
-            this.trace(level=>`Listening (${this.server.listening}) on ${this.url} (${JSON.stringify(this.socket)})`);
+            this.trace(
+              level =>
+                `Listening (${this.server.listening}) on ${
+                  this.url
+                } (${JSON.stringify(this.socket)})`
+            );
             resolve();
           }
         };
