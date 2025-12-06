@@ -46,7 +46,8 @@ export class ServiceHTTP extends Service {
           public: {
             ...public_key_attribute,
             description: "public key to check token against",
-            mandatory: true
+            mandatory: true,
+            credential: true
           }
         }
       },
@@ -76,13 +77,15 @@ export class ServiceHTTP extends Service {
         ...private_key_attribute,
         description: "ssl private key",
         needsRestart: true,
-        serverOption: true
+        serverOption: true,
+        credential: true
       },
       cert: {
         ...certificate_attribute,
         description: "ssl certificate",
         needsRestart: true,
-        serverOption: true
+        serverOption: true,
+        credential: true
       },
       timeout: {
         ...object_attribute,
