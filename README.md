@@ -85,7 +85,7 @@ Write WWW-Authenticate header.
 
 *   `ctx` **any**&#x20;
 *   `code` &#x20;
-*   `error` **any?**&#x20;
+*   `error` **[Error](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error)?**&#x20;
 *   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
 
 ## CTX
