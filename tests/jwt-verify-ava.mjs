@@ -67,14 +67,10 @@ test("jwt verify none alg not supported", async t => {
   const endpoint = new SendEndpoint("e", http);
   const interceptor = new CTXJWTVerifyInterceptor();
 
-  const token = jwt.sign(
-    {},
-    "",
-    {
-      algorithm: "none",
-      expiresIn: "12h"
-    }
-  );
+  const token = jwt.sign({}, "", {
+    algorithm: "none",
+    expiresIn: "12h"
+  });
 
   const ctx = new TestContext({
     headers: { authorization: `Bearer ${token}` }
@@ -100,17 +96,19 @@ test("jwt verify none alg not supported", async t => {
   t.is(ctx.end, "error: jwt signature is required");
 });
 
-test("jwt verify ok", async t => {
+async function jwtt(t, requiredEntitlements, entitlements, sufficient) {
   const sp = new StandaloneServiceProvider();
   const http = await sp.declareService({
     type: ServiceHTTP,
     jwt: { public: pubKey }
   });
   const endpoint = new SendEndpoint("e", http);
-  const interceptor = new CTXJWTVerifyInterceptor();
+  const interceptor = new CTXJWTVerifyInterceptor({
+    requiredEntitlements
+  });
 
   const token = jwt.sign(
-    { entitlements: ['a','b','c'] },
+    { entitlements: ["a", "b", "c"] },
     readFileSync(new URL("fixtures/demo.rsa", import.meta.url).pathname),
     {
       algorithm: "RS256",
@@ -135,46 +133,22 @@ test("jwt verify ok", async t => {
     3
   );
 
-  t.true(next);
-});
+  if (sufficient) {
+    t.true(next);
+  } else {
+    t.false(next);
 
-test("jwt verify insufficient entitlements", async t => {
-  const sp = new StandaloneServiceProvider();
-  const http = await sp.declareService({
-    type: ServiceHTTP,
-    jwt: { public: pubKey }
-  });
-  const endpoint = new SendEndpoint("e", http);
-  const interceptor = new CTXJWTVerifyInterceptor({requiredEntitlements:['a','b','c','d']});
+    t.is(ctx.code, 403);
+    t.regex(ctx.headers["www-authenticate"], /Bearer,error/);
+    t.is(ctx.end, "error: Insufficient entitlements");
+  }
+}
 
-  const token = jwt.sign(
-    { entitlements: ['a','b','c'] },
-    readFileSync(new URL("fixtures/demo.rsa", import.meta.url).pathname),
-    {
-      algorithm: "RS256",
-      expiresIn: "12h"
-    }
-  );
+jwtt.title = (t, requiredEntitlements, entitlements, sufficient) =>
+  `JWT entitlements ${requiredEntitlements} <> ${entitlements} -> ${sufficient}`;
 
-  const ctx = new TestContext({
-    headers: { authorization: `Bearer ${token}` }
-  });
-
-  let next = false;
-
-  await interceptor.receive(
-    endpoint,
-    (ctx, a, b, c) => {
-      next = true;
-    },
-    ctx,
-    1,
-    2,
-    3
-  );
-  t.false(next);
-
-  t.is(ctx.code, 403);
-  t.regex(ctx.headers["www-authenticate"], /Bearer,error/);
-  t.is(ctx.end, "error: Insufficient entitlements");
-});
+test(jwtt, undefined, undefined, true);
+test(jwtt, undefined, ["a", "b", "c"], true);
+test(jwtt, [], ["a", "b", "c"], true);
+test(jwtt, ["a", "b", "c"], ["a", "b", "c"], true);
+test(jwtt, ["a", "b", "c", "d"], ["a", "b", "c"], false);

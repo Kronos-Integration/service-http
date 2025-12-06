@@ -1,5 +1,8 @@
 import { Interceptor } from "@kronos-integration/interceptor";
-import { prepareAttributesDefinitions } from "pacc";
+import {
+  prepareAttributesDefinitions,
+  string_collection_attribute_writable
+} from "pacc";
 import { verifyJWT } from "./util.mjs";
 import { TEXT_PLAIN } from "./constants.mjs";
 
@@ -16,12 +19,13 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
 
   static attributes = prepareAttributesDefinitions({
     requiredEntitlements: {
-      description: "entitlements to be present in the token"
+      ...string_collection_attribute_writable,
+      description: "entitlements to be present in the token",
+      prepareValue: value => new Set(value),
+      default: new Set()
     },
     ...Interceptor.attributes
   });
-
-  //requiredEntitlements = new Set();
 
   async receive(endpoint, next, ctx, ...args) {
     const token = tokenFromAuthorizationHeader(ctx.req.headers);
@@ -30,17 +34,18 @@ export class CTXJWTVerifyInterceptor extends Interceptor {
         const key = endpoint.owner.jwt?.public;
         const decoded = await verifyJWT(token, key);
 
-        if (this.requiredEntitlements) {
-          const entitlements = new Set(decoded.entitlements);
-
-          for (const e of this.requiredEntitlements) {
-            if (!entitlements.has(e)) {
-              reportError(ctx, 403, new Error("Insufficient entitlements"));
-              return;
-            }
-          }
+        if (
+          !this.requiredEntitlements.isSubsetOf(new Set(decoded.entitlements))
+        ) {
+          reportError(
+            ctx,
+            403,
+            new Error("Insufficient entitlements", {
+              cause: decoded.entitlements
+            })
+          );
+          return;
         }
-        // ctx.state[tokenKey] = decoded;
       } catch (error) {
         reportError(ctx, 401, error);
         return;
@@ -71,7 +76,7 @@ function tokenFromAuthorizationHeader(headers) {
  *
  * @param {*} ctx
  * @param {number} error code
- * @param {*} [error]
+ * @param {Error} [error]
  * @param {string} [description]
  */
 function reportError(ctx, code, error, description) {
