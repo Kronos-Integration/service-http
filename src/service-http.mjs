@@ -113,6 +113,18 @@ export class ServiceHTTP extends Service {
     Service.attributes
   );
 
+  _configure(config) {
+    // TODO mark credential attributes as required and persistend
+    this.getCredential("jwt.public").then(credential => {
+      if (credential) {
+        config.jwt ||= {};
+        config.jwt.public = credential;
+      }
+    });
+
+    return super._configure(config);
+  }
+
   /**
    * @return {string} name with url
    */
