@@ -117,8 +117,8 @@ export class ServiceHTTP extends Service {
     // TODO mark credential attributes as required and persistend
     this.getCredential("jwt.public").then(credential => {
       if (credential) {
-        config.jwt ||= {};
-        config.jwt.public = credential;
+        this.jwt ||= {};
+        this.jwt.public = credential;
       }
     });
 
