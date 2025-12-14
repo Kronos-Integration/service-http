@@ -46,7 +46,8 @@ export class ServiceHTTP extends Service {
           public: {
             ...public_key_attribute,
             description: "public key to check token against",
-            mandatory: true
+            mandatory: true,
+            persistent: true
           }
         }
       },
@@ -113,6 +114,7 @@ export class ServiceHTTP extends Service {
     Service.attributes
   );
 
+  /*
   _configure(config) {
     // TODO mark credential attributes as required and persistend
     this.getCredential("jwt.public").then(credential => {
@@ -124,6 +126,7 @@ export class ServiceHTTP extends Service {
 
     return super._configure(config);
   }
+*/
 
   /**
    * @return {string} name with url
