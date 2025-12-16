@@ -40,7 +40,7 @@
   "dependencies": {
     "@kronos-integration/endpoint": "^11.0.7",
     "@kronos-integration/interceptor": "^13.1.2",
-    "@kronos-integration/service": "^15.2.5",
+    "@kronos-integration/service": "^15.3.0",
     "bufferutil": "^4.0.9",
     "jsonwebtoken": "^9.0.3",
     "multi-path-matcher": "^4.1.7",
