@@ -44,7 +44,7 @@
     "bufferutil": "^4.1.0",
     "jsonwebtoken": "^9.0.3",
     "multi-path-matcher": "^4.1.7",
-    "pacc": "^6.7.0",
+    "pacc": "^6.7.2",
     "utf-8-validate": "^6.0.6",
     "ws": "^8.18.3"
   },
