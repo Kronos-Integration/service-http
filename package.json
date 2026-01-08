@@ -38,13 +38,13 @@
     "lint:docs": "documentation lint ./src**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^11.0.8",
-    "@kronos-integration/interceptor": "^13.1.6",
-    "@kronos-integration/service": "^15.4.4",
+    "@kronos-integration/endpoint": "^11.0.10",
+    "@kronos-integration/interceptor": "^13.1.7",
+    "@kronos-integration/service": "^15.4.5",
     "bufferutil": "^4.1.0",
     "jsonwebtoken": "^9.0.3",
     "multi-path-matcher": "^4.1.7",
-    "pacc": "^6.9.1",
+    "pacc": "^7.0.0",
     "utf-8-validate": "^6.0.6",
     "ws": "^8.19.0"
   },
