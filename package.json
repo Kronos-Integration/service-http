@@ -38,7 +38,7 @@
     "lint:docs": "documentation lint ./src**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^11.1.0",
+    "@kronos-integration/endpoint": "^11.1.1",
     "@kronos-integration/interceptor": "^13.2.0",
     "@kronos-integration/service": "^15.5.4",
     "bufferutil": "^4.1.0",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@kronos-integration/test-interceptor": "^7.0.33",
-    "@types/node": "^25.9.0",
+    "@types/node": "^25.9.1",
     "ava": "^8.0.1",
     "c8": "^11.0.0",
     "documentation": "^14.0.3",
