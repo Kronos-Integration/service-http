@@ -39,17 +39,17 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^11.2.0",
-    "@kronos-integration/interceptor": "^13.4.0",
-    "@kronos-integration/service": "^15.7.15",
+    "@kronos-integration/interceptor": "^13.4.5",
+    "@kronos-integration/service": "^15.7.22",
     "bufferutil": "^4.1.0",
     "jsonwebtoken": "^9.0.3",
     "multi-path-matcher": "^4.1.7",
-    "pacc": "^11.5.4",
+    "pacc": "^11.6.0",
     "utf-8-validate": "^6.0.6",
     "ws": "^8.21.3"
   },
   "devDependencies": {
-    "@kronos-integration/test-interceptor": "^7.2.2",
+    "@kronos-integration/test-interceptor": "^7.2.4",
     "@types/node": "^26.3.0",
     "ava": "^8.0.1",
     "c8": "^12.0.0",
